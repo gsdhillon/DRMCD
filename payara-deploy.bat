@@ -19,7 +19,7 @@ set ADMIN_PORT=4848
 set ADMIN_WAIT_SECONDS=5
 set APP_NAME=drmcd
 set WAR_FILE=target\drmcd.war
-set APP_URL=http://localhost:8080/drmcd/
+set APP_URL=https://localhost:8181/drmcd/
 
 if not exist "%PAYARA%" (
     set PAYARA=asadmin
