@@ -96,14 +96,13 @@ async function captureScreen() {
 export function VCChatPanel({ conferenceId }) {
   useRenderDebug("VCChatPanel");
 
-  const { settings, user } = useApp();
+  const { settings, showError, user } = useApp();
   const selfPersonId = Number(user?.personId || user?.id || 0);
   const maxFileSize = Number(settings?.chatFileMaxSize || 1048576);
   const maxMessageSize = Number(settings?.chatMsgMaxSize || 500);
   const [attachedFile, setAttachedFile] = useState(null);
   const [busy, setBusy] = useState(false);
   const [connected, setConnected] = useState(false);
-  const [error, setError] = useState("");
   const [messages, setMessages] = useState([]);
   const [text, setText] = useState("");
   const fileInputRef = useRef(null);
@@ -115,10 +114,10 @@ export function VCChatPanel({ conferenceId }) {
       onClose: event => {
         setConnected(false);
         if (event?.code && event.code !== 1000) {
-          setError("VC chat connection closed.");
+          showError("VC chat connection closed.");
         }
       },
-      onError: () => setError("Unable to connect VC chat."),
+      onError: () => showError("Unable to connect VC chat."),
       onMessage: data => {
         if (data.type === "history") {
           setMessages(data.messages || []);
@@ -131,19 +130,18 @@ export function VCChatPanel({ conferenceId }) {
         }
 
         if (data.type === "error") {
-          setError(data.message || "VC chat error.");
+          showError(data.message || "VC chat error.");
         }
       },
       onOpen: () => {
         setConnected(true);
-        setError("");
       }
     });
 
     socketRef.current = socket;
 
     if (!socket) {
-      setError("VC chat socket is not available.");
+      showError("VC chat socket is not available.");
     }
 
     return () => socket?.close();
@@ -164,32 +162,30 @@ export function VCChatPanel({ conferenceId }) {
     }
 
     if (file.size > maxFileSize) {
-      setError("File cannot be larger than " + formatKb(maxFileSize) + ".");
+      showError("File cannot be larger than " + formatKb(maxFileSize) + ".");
       return;
     }
 
     try {
-      setError("");
       setAttachedFile(await readFile(file));
     } catch (error) {
-      setError(error.message || "Unable to read file.");
+      showError(error.message || "Unable to read file.");
     }
   }
 
   async function attachScreenCapture() {
     try {
       setBusy(true);
-      setError("");
       const capture = await captureScreen();
 
       if (capture.fileSize > maxFileSize) {
-        setError("Screen capture cannot be larger than " + formatKb(maxFileSize) + ".");
+        showError("Screen capture cannot be larger than " + formatKb(maxFileSize) + ".");
         return;
       }
 
       setAttachedFile(capture);
     } catch (error) {
-      setError(error.message || "Unable to capture screen.");
+      showError(error.message || "Unable to capture screen.");
     } finally {
       setBusy(false);
     }
@@ -199,7 +195,7 @@ export function VCChatPanel({ conferenceId }) {
     event.preventDefault();
 
     if (socketRef.current?.readyState !== WebSocket.OPEN) {
-      setError("VC chat is not connected.");
+      showError("VC chat is not connected.");
       return;
     }
 
@@ -208,12 +204,12 @@ export function VCChatPanel({ conferenceId }) {
     }
 
     if (text.trim().length > maxMessageSize) {
-      setError("Message cannot be longer than " + maxMessageSize + " characters.");
+      showError("Message cannot be longer than " + maxMessageSize + " characters.");
       return;
     }
 
     if (attachedFile?.fileSize > maxFileSize) {
-      setError("File cannot be larger than " + formatKb(maxFileSize) + ".");
+      showError("File cannot be larger than " + formatKb(maxFileSize) + ".");
       return;
     }
 
@@ -237,15 +233,6 @@ export function VCChatPanel({ conferenceId }) {
         </div>
         <span className="text-secondary">{connected ? "Connected" : "Connecting"}</span>
       </div>
-
-      {error ? (
-        <div className="alert alert-danger alert-dismissible d-flex align-items-center justify-content-between gap-2 m-2 py-2">
-          <span>{error}</span>
-          <button type="button" className="btn btn-sm btn-outline-secondary alert-icon-button" title="Hide" onClick={() => setError("")}>
-            <i className="bi bi-x-lg" aria-hidden="true" />
-          </button>
-        </div>
-      ) : null}
 
       <div className="vc-chat-messages" ref={listRef}>
         {messages.length === 0 ? (

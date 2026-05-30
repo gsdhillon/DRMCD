@@ -26,7 +26,7 @@ function initialView() {
 export function VCRoom({ conference, onClose }) {
   useRenderDebug("VCRoom");
 
-  const { user } = useApp();
+  const { showError, user } = useApp();
   const selfPersonId = Number(user?.personId || user?.id || 0);
   const [view, setView] = useState(initialView);
   const [sidePanelWidth, setSidePanelWidth] = useState(28);
@@ -363,7 +363,7 @@ export function VCRoom({ conference, onClose }) {
     }
 
     if (data.type === "error") {
-      patchView({ error: data.message || "Video conference error." });
+      showError(data.message || "Video conference error.");
     }
   }
 
@@ -396,11 +396,11 @@ export function VCRoom({ conference, onClose }) {
         }
       });
     } catch (error) {
-      patchView({
-        error: error?.name === "NotAllowedError"
+      showError(
+        error?.name === "NotAllowedError"
           ? "Camera or microphone permission was denied."
           : "Unable to start camera or microphone."
-      });
+      );
     } finally {
       patchView({ busy: false });
     }
@@ -488,7 +488,7 @@ export function VCRoom({ conference, onClose }) {
       patchView({ sharingScreen: true, videoEnabled: true });
       setTimeout(sendMediaState, 0);
     } catch (error) {
-      patchView({ error: "Unable to share screen." });
+      showError("Unable to share screen.");
     }
   }
 
@@ -532,11 +532,14 @@ export function VCRoom({ conference, onClose }) {
 
   useEffect(() => {
     const socket = openVCSocket(conference.id, {
-      onClose: event => patchView({
-        socketReady: false,
-        error: event?.code && event.code !== 1000 ? "Video conference connection closed." : ""
-      }),
-      onError: () => patchView({ error: "Unable to connect video conference." }),
+      onClose: event => {
+        patchView({ socketReady: false, error: "" });
+
+        if (event?.code && event.code !== 1000) {
+          showError("Video conference connection closed.");
+        }
+      },
+      onError: () => showError("Unable to connect video conference."),
       onMessage: handleSignal,
       onOpen: () => patchView({ socketReady: true })
     });
@@ -544,7 +547,7 @@ export function VCRoom({ conference, onClose }) {
     callRef.current.socket = socket;
 
     if (!socket) {
-      patchView({ error: "Video conference socket is not available." });
+      showError("Video conference socket is not available.");
     }
 
     return () => {
@@ -574,8 +577,6 @@ export function VCRoom({ conference, onClose }) {
           Conferences
         </button>
       </div>
-
-      {view.error ? <div className="alert alert-danger py-2 m-2">{view.error}</div> : null}
 
       <div
         className="vc-stage"

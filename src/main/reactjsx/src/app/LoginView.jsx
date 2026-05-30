@@ -1,13 +1,14 @@
 import { useState } from "react";
 import { copyrightText, title } from "./AppText.js";
 import { useApp } from "../state/AppContext.jsx";
+import { AppMessages } from "./AppMessages.jsx";
 import { Footer } from "./Footer.jsx";
 import { useRenderDebug } from "./useRenderDebug.js";
 
 export function LoginView() {
   useRenderDebug("LoginView");
 
-  const { login, loginBusy, loginError, theme } = useApp();
+  const { login, loginBusy, theme } = useApp();
   const [personId, setPersonId] = useState("");
   const [password, setPassword] = useState("");
 
@@ -21,6 +22,7 @@ export function LoginView() {
 
   return (
     <div className="login-shell" style={theme.cssVars}>
+      <AppMessages />
       <main className="login-content">
         <form className="login-panel" onSubmit={submit}>
           <div className="login-brand">
@@ -53,7 +55,6 @@ export function LoginView() {
               onChange={event => setPassword(event.target.value)}
             />
           </label>
-          {loginError ? <div className="alert alert-danger">{loginError}</div> : null}
           <button type="submit" className="btn btn-primary w-100" disabled={loginBusy}>
             <i className="bi bi-box-arrow-in-right" aria-hidden="true" />
             {loginBusy ? "Signing in" : "Login"}

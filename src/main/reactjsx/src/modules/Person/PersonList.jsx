@@ -9,13 +9,12 @@ import { PersonTable } from "./PersonTable.jsx";
 export function PersonList({ backTitle = "Back", groupId, onBack, persons: providedPersons, title = "Persons" }) {
   useRenderDebug("PersonList");
 
-  const { auth } = useApp();
+  const { auth, showError } = useApp();
 
   const [persons, setPersons] = useState([]);
   const [roles, setRoles] = useState([]);
   const [personDialog, setPersonDialog] = useState(null);
   const [formError, setFormError] = useState("");
-  const [listError, setListError] = useState("");
 
   const isAdmin = auth?.role === "Admin" || auth?.role === "SuperAdmin";
   const isSuperAdmin = auth?.role === "SuperAdmin";
@@ -23,16 +22,14 @@ export function PersonList({ backTitle = "Back", groupId, onBack, persons: provi
 
   async function loadPersons() {
     if (Array.isArray(providedPersons)) {
-      setListError("");
       setPersons(providedPersons);
       return;
     }
 
     try {
-      setListError("");
       setPersons(await getPersons(groupId));
     } catch (error) {
-      setListError(error.message || "Unable to load persons");
+      showError(error.message || "Unable to load persons");
       setPersons([]);
     }
   }
@@ -121,11 +118,10 @@ export function PersonList({ backTitle = "Back", groupId, onBack, persons: provi
 
   async function removePerson(id) {
     try {
-      setListError("");
       await deletePerson(id);
       await loadPersons();
     } catch (error) {
-      setListError(error.message || "Unable to delete person");
+      showError(error.message || "Unable to delete person");
     }
   }
 
@@ -152,14 +148,6 @@ export function PersonList({ backTitle = "Back", groupId, onBack, persons: provi
 
   return (
     <div className="view-fill">
-      {listError ? (
-        <div className="alert alert-danger alert-dismissible d-flex align-items-center justify-content-between gap-2">
-          <span>{listError}</span>
-          <button type="button" className="btn btn-sm btn-outline-secondary alert-icon-button" title="Hide" onClick={() => setListError("")}>
-            <i className="bi bi-x-lg" aria-hidden="true" />
-          </button>
-        </div>
-      ) : null}
       <PersonTable
         onAdd={isAdmin && !readOnlyList ? openNewPerson : null}
         onView={viewPerson}

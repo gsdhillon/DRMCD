@@ -2,6 +2,7 @@ import React, { createContext, useCallback, useContext, useEffect, useMemo, useS
 import { getAuth, login as loginRequest, logout as logoutRequest } from "../services/auth.js";
 import { getPerson } from "../services/personService.js";
 import { getSettings } from "../services/settingsService.js";
+import { socketUrl } from "../services/endpoint.js";
 import { resolveReactTheme } from "../theme/reactTheme.js";
 
 const AppContext = createContext(null);
@@ -24,6 +25,7 @@ export function AppProvider({ children }) {
   const [currentPerson, setCurrentPerson] = useState(null);
   const [loginError, setLoginError] = useState("");
   const [loginBusy, setLoginBusy] = useState(false);
+  const [messages, setMessages] = useState([]);
   const [settings, setSettings] = useState({});
   const [themeMode, setThemeModeState] = useState(initialThemeMode);
 
@@ -36,6 +38,31 @@ export function AppProvider({ children }) {
     setThemeModeState(nextMode);
   }, []);
 
+  const hideMessage = useCallback(id => {
+    setMessages(current => current.filter(message => message.id !== id));
+  }, []);
+
+  const showMessage = useCallback((type, text) => {
+    const message = String(text || "").trim();
+
+    if (!message) {
+      return null;
+    }
+
+    const id = Date.now().toString(36) + Math.random().toString(36).slice(2);
+
+    setMessages(current => current.concat({
+      id,
+      text: message,
+      type
+    }));
+    return id;
+  }, []);
+
+  const showError = useCallback(message => showMessage("error", message), [showMessage]);
+  const showInfo = useCallback(message => showMessage("info", message), [showMessage]);
+  const showAlert = useCallback(message => showMessage("alert", message), [showMessage]);
+
   const login = useCallback(async (personId, password) => {
     setLoginBusy(true);
     setLoginError("");
@@ -46,7 +73,10 @@ export function AppProvider({ children }) {
       setAuth(nextAuth);
       return nextAuth;
     } catch (error) {
-      setLoginError(error.message || "Invalid login");
+      const message = error.message || "Invalid login";
+
+      setLoginError(message);
+      showError(message);
       return null;
     } finally {
       setLoginBusy(false);
@@ -82,6 +112,31 @@ export function AppProvider({ children }) {
   useEffect(() => {
     refreshSettings();
   }, [refreshSettings]);
+
+  useEffect(() => {
+    if (!auth?.token) {
+      return undefined;
+    }
+
+    const socket = new WebSocket(socketUrl("/settings/socket?token=" + encodeURIComponent(auth.token)));
+
+    socket.onmessage = event => {
+      let data = null;
+
+      try {
+        data = JSON.parse(event.data);
+      } catch (error) {
+        console.error("Invalid settings socket message", error);
+      }
+
+      if (data?.type === "settings-changed") {
+        refreshSettings();
+      }
+    };
+    socket.onerror = error => console.error("Settings socket error", error);
+
+    return () => socket.close();
+  }, [auth?.token, refreshSettings]);
 
   useEffect(() => {
     let cancelled = false;
@@ -131,17 +186,22 @@ export function AppProvider({ children }) {
   const value = useMemo(() => ({
     auth,
     currentPerson,
+    hideMessage,
     login,
     loginBusy,
     loginError,
     logout,
+    messages,
     refreshSettings,
     setThemeMode,
+    showAlert,
+    showError,
+    showInfo,
     settings,
     theme,
     themeMode,
     user
-  }), [auth, currentPerson, login, loginBusy, loginError, logout, refreshSettings, setThemeMode, settings, theme, themeMode, user]);
+  }), [auth, currentPerson, hideMessage, login, loginBusy, loginError, logout, messages, refreshSettings, setThemeMode, showAlert, showError, showInfo, settings, theme, themeMode, user]);
 
   return (
     <AppContext.Provider value={value}>

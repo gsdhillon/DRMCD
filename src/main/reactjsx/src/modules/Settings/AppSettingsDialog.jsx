@@ -57,13 +57,10 @@ function dialogDraft(settings) {
 export function AppSettingsDialog({ onClose }) {
   useRenderDebug("AppSettingsDialog");
 
-  const { refreshSettings, settings } = useApp();
+  const { refreshSettings, settings, showError, showInfo } = useApp();
   const [busy, setBusy] = useState(false);
   const [closing, setClosing] = useState("");
   const [draft, setDraft] = useState(() => dialogDraft(settings));
-  const [error, setError] = useState("");
-  const [message, setMessage] = useState("");
-  const [info, setInfo] = useState("");
 
   useEffect(() => {
     if (!closing) {
@@ -133,7 +130,7 @@ export function AppSettingsDialog({ onClose }) {
             onChange={event => change(field, event.target.checked)}
           />
           <strong className={enabled ? "text-success" : "text-secondary"}>{enabled ? "ON" : "OFF"}</strong>
-          <button type="button" className="btn btn-sm btn-link app-settings-info-button" title="Info" onClick={() => setInfo(helpText)}>
+          <button type="button" className="btn btn-sm btn-link app-settings-info-button" title="Info" onClick={() => showInfo(helpText)}>
             <i className="bi bi-info-circle" aria-hidden="true" />
           </button>
         </div>
@@ -144,8 +141,6 @@ export function AppSettingsDialog({ onClose }) {
   async function save(event) {
     event.preventDefault();
     setBusy(true);
-    setError("");
-    setMessage("");
 
     try {
       const { chatFileMaxSizeKb, ...settingsDraft } = draft;
@@ -166,10 +161,10 @@ export function AppSettingsDialog({ onClose }) {
 
       setDraft(dialogDraft(saved || {}));
       await refreshSettings();
-      setMessage("Settings saved");
+      showInfo("Settings saved");
       animateClose("submit");
     } catch (saveError) {
-      setError(saveError.message || "Unable to save app settings");
+      showError(saveError.message || "Unable to save app settings");
     } finally {
       setBusy(false);
     }
@@ -184,17 +179,6 @@ export function AppSettingsDialog({ onClose }) {
             App Settings
           </h2>
         </div>
-
-        {error ? <div className="alert alert-danger py-2">{error}</div> : null}
-        {message ? <div className="alert alert-success py-2">{message}</div> : null}
-        {info ? (
-          <div className="alert alert-info alert-dismissible d-flex align-items-center justify-content-between gap-2 py-2">
-            <span>{info}</span>
-            <button type="button" className="btn btn-sm btn-outline-secondary alert-icon-button" title="Hide" onClick={() => setInfo("")}>
-              <i className="bi bi-x-lg" aria-hidden="true" />
-            </button>
-          </div>
-        ) : null}
 
         <div className="app-settings-scroll">
           <label className="form-row">

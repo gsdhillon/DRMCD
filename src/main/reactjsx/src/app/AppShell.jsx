@@ -5,6 +5,7 @@ import { GroupList } from "../modules/Group/GroupList.jsx";
 import { PersonList } from "../modules/Person/PersonList.jsx";
 import { RoleList } from "../modules/Role/RoleList.jsx";
 import { VCList } from "../modules/VideoConference/VCList.jsx";
+import { AppMessages } from "./AppMessages.jsx";
 import { Footer } from "./Footer.jsx";
 import { Header } from "./Header.jsx";
 import { SideMenu } from "./SideMenu.jsx";
@@ -40,6 +41,7 @@ export function AppShell() {
 
   return (
     <div className="app-shell" style={theme.cssVars}>
+      <AppMessages />
       <Header menuOpen={menuOpen} onMenuToggle={() => setMenuOpen(open => !open)} />
       <div className={"app-body" + (menuCollapsed ? " app-menu-collapsed" : "")}>
         <SideMenu

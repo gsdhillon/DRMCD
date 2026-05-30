@@ -1,8 +1,10 @@
 import { useState } from "react";
 import { useRenderDebug } from "../../app/useRenderDebug.js";
 import { getVideoConferenceHelp } from "../../services/vcService.js";
+import { useApp } from "../../state/AppContext.jsx";
 
 export function useVCHelpDialog() {
+  const { showError } = useApp();
   const [helpDialog, setHelpDialog] = useState(null);
   const [helpError, setHelpError] = useState("");
   const [helpLoading, setHelpLoading] = useState(false);
@@ -18,7 +20,7 @@ export function useVCHelpDialog() {
     try {
       setHelpDialog(await getVideoConferenceHelp());
     } catch (error) {
-      setHelpError(error.message || "Unable to load VC help");
+      showError(error.message || "Unable to load VC help");
     } finally {
       setHelpLoading(false);
     }
@@ -55,7 +57,6 @@ export function VCHelpDialog({ help, error, loading, onClose }) {
           </h2>
         </div>
 
-        {error ? <div className="alert alert-danger py-2">{error}</div> : null}
         {loading ? <div className="notification-empty">Loading help...</div> : null}
 
         {!loading && !error ? (

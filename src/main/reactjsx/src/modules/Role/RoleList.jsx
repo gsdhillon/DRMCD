@@ -27,11 +27,10 @@ function matchesColumnFilters(item, columnFilters) {
 export function RoleList() {
   useRenderDebug("RoleList");
 
-  const { auth } = useApp();
+  const { auth, showError } = useApp();
   const [roles, setRoles] = useState([]);
   const [draft, setDraft] = useState(emptyRole);
   const [editingId, setEditingId] = useState(null);
-  const [error, setError] = useState("");
   const [columnFilters, setColumnFilters] = useState({});
 
   const isSuperAdmin = auth?.role === "SuperAdmin";
@@ -43,10 +42,9 @@ export function RoleList() {
 
   async function loadRoles() {
     try {
-      setError("");
       setRoles(await getRoles());
     } catch (loadError) {
-      setError(loadError.message || "Unable to load roles");
+      showError(loadError.message || "Unable to load roles");
       setRoles([]);
     }
   }
@@ -54,6 +52,12 @@ export function RoleList() {
   useEffect(() => {
     loadRoles();
   }, []);
+
+  useEffect(() => {
+    if (!isSuperAdmin) {
+      showError("SuperAdmin access required.");
+    }
+  }, [isSuperAdmin, showError]);
 
   const visibleRoles = useMemo(() => {
     return roles
@@ -101,7 +105,6 @@ export function RoleList() {
     };
 
     try {
-      setError("");
       if (editingId) {
         await updateRole(payload);
       } else {
@@ -110,17 +113,16 @@ export function RoleList() {
       resetForm();
       await loadRoles();
     } catch (saveError) {
-      setError(saveError.message || "Unable to save role");
+      showError(saveError.message || "Unable to save role");
     }
   }
 
   async function removeRole(role) {
     try {
-      setError("");
       await deleteRole(role.id);
       await loadRoles();
     } catch (deleteError) {
-      setError(deleteError.message || "Unable to delete role");
+      showError(deleteError.message || "Unable to delete role");
     }
   }
 
@@ -138,12 +140,11 @@ export function RoleList() {
   }
 
   if (!isSuperAdmin) {
-    return <div className="content-panel"><div className="alert alert-danger">SuperAdmin access required.</div></div>;
+    return <div className="content-panel" />;
   }
 
   return (
     <div className="view-fill roles-view">
-      {error ? <div className="alert alert-danger">{error}</div> : null}
       <form className="role-editor" onSubmit={saveRole}>
         <label className="form-row">
           <span>Role</span>

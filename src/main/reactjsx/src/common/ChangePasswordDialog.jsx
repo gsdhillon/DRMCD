@@ -1,29 +1,27 @@
 import { useState } from "react";
 import { useRenderDebug } from "../app/useRenderDebug.js";
 import { changePassword } from "../services/auth.js";
+import { useApp } from "../state/AppContext.jsx";
 
 export function ChangePasswordDialog({ onClose }) {
   useRenderDebug("ChangePasswordDialog");
 
+  const { showError, showInfo } = useApp();
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [message, setMessage] = useState("");
-  const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
 
   async function submitPassword(formEvent) {
     formEvent.preventDefault();
-    setError("");
-    setMessage("");
 
     if (!currentPassword || !newPassword) {
-      setError("Current password and new password are required.");
+      showError("Current password and new password are required.");
       return;
     }
 
     if (newPassword !== confirmPassword) {
-      setError("New password and confirm password must match.");
+      showError("New password and confirm password must match.");
       return;
     }
 
@@ -34,9 +32,9 @@ export function ChangePasswordDialog({ onClose }) {
       setCurrentPassword("");
       setNewPassword("");
       setConfirmPassword("");
-      setMessage(response.message || "Password changed");
+      showInfo(response.message || "Password changed");
     } catch (changeError) {
-      setError(changeError.message || "Unable to change password.");
+      showError(changeError.message || "Unable to change password.");
     } finally {
       setBusy(false);
     }
@@ -54,9 +52,6 @@ export function ChangePasswordDialog({ onClose }) {
             <i className="bi bi-x-lg" aria-hidden="true" />
           </button>
         </div>
-
-        {error ? <div className="alert alert-danger">{error}</div> : null}
-        {message ? <div className="alert alert-success">{message}</div> : null}
 
         <div className="password-form-grid">
           <label className="form-row">

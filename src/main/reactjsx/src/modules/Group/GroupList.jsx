@@ -39,13 +39,12 @@ function matchesColumnFilters(item, columnFilters) {
 export function GroupList() {
   useRenderDebug("GroupList");
 
-  const { auth } = useApp();
+  const { auth, showError } = useApp();
   const [groups, setGroups] = useState([]);
   const [persons, setPersons] = useState([]);
   const [editor, setEditor] = useState(null);
   const [personGroup, setPersonGroup] = useState(null);
   const [formError, setFormError] = useState("");
-  const [listError, setListError] = useState("");
   const [columnFilters, setColumnFilters] = useState({});
   const [sortField, setSortField] = useState("id");
   const [sortDirection, setSortDirection] = useState("asc");
@@ -55,10 +54,9 @@ export function GroupList() {
 
   async function loadGroups() {
     try {
-      setListError("");
       setGroups(await getGroups());
     } catch (error) {
-      setListError(error.message || "Unable to load groups");
+      showError(error.message || "Unable to load groups");
       setGroups([]);
     }
   }
@@ -154,11 +152,10 @@ export function GroupList() {
 
   async function removeGroup(id) {
     try {
-      setListError("");
       await deleteGroup(id);
       await loadGroups();
     } catch (error) {
-      setListError(error.message || "Unable to delete group");
+      showError(error.message || "Unable to delete group");
     }
   }
 
@@ -252,14 +249,6 @@ export function GroupList() {
 
   return (
     <div className="view-fill">
-      {listError ? (
-        <div className="alert alert-danger alert-dismissible d-flex align-items-center justify-content-between gap-2">
-          <span>{listError}</span>
-          <button type="button" className="btn btn-sm btn-outline-secondary alert-icon-button" title="Hide" onClick={() => setListError("")}>
-            <i className="bi bi-x-lg" aria-hidden="true" />
-          </button>
-        </div>
-      ) : null}
       <DataTable
         addIcon="bi bi-collection"
         addLabel="Add New Group"

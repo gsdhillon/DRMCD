@@ -1,20 +1,21 @@
+import { useEffect, useRef } from "react";
 import { useRenderDebug } from "../app/useRenderDebug.js";
+import { useApp } from "../state/AppContext.jsx";
 
 export function ErrorAlert({ error, onClear }) {
   useRenderDebug("ErrorAlert");
 
-  return (
-    <div className="editor-error-slot">
-      {error ? (
-        <div className="alert alert-danger alert-dismissible d-flex align-items-center justify-content-between gap-2 m-0">
-          <span>{error}</span>
-          {onClear ? (
-            <button type="button" className="btn btn-sm btn-outline-secondary alert-icon-button" title="Hide" onClick={onClear}>
-              <i className="bi bi-x-lg" aria-hidden="true" />
-            </button>
-          ) : null}
-        </div>
-      ) : null}
-    </div>
-  );
+  const { showError } = useApp();
+  const previousErrorRef = useRef("");
+
+  useEffect(() => {
+    if (error && error !== previousErrorRef.current) {
+      showError(error);
+      onClear?.();
+    }
+
+    previousErrorRef.current = error || "";
+  }, [error, onClear, showError]);
+
+  return <div className="editor-error-slot" />;
 }

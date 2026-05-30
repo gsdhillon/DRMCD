@@ -66,14 +66,13 @@ function toInputDateTime(value) {
 export function VCList() {
   useRenderDebug("VCList");
 
-  const { user } = useApp();
+  const { showError, user } = useApp();
   const [conferences, setConferences] = useState([]);
   const [persons, setPersons] = useState([]);
   const [activeConference, setActiveConference] = useState(null);
   const [editor, setEditor] = useState(null);
   const [personConference, setPersonConference] = useState(null);
   const [formError, setFormError] = useState("");
-  const [listError, setListError] = useState("");
   const [columnFilters, setColumnFilters] = useState({});
   const [sortField, setSortField] = useState("scheduledAt");
   const [sortDirection, setSortDirection] = useState("desc");
@@ -82,10 +81,9 @@ export function VCList() {
 
   async function loadConferences() {
     try {
-      setListError("");
       setConferences(await getVideoConferences());
     } catch (error) {
-      setListError(error.message || "Unable to load video conferences");
+      showError(error.message || "Unable to load video conferences");
       setConferences([]);
     }
   }
@@ -206,11 +204,10 @@ export function VCList() {
 
   async function removeConference(conference) {
     try {
-      setListError("");
       await deleteVideoConference(conference.id);
       await loadConferences();
     } catch (error) {
-      setListError(error.message || "Unable to delete video conference");
+      showError(error.message || "Unable to delete video conference");
     }
   }
 
@@ -285,14 +282,6 @@ export function VCList() {
 
   return (
     <div className="view-fill">
-      {listError ? (
-        <div className="alert alert-danger alert-dismissible d-flex align-items-center justify-content-between gap-2">
-          <span>{listError}</span>
-          <button type="button" className="btn btn-sm btn-outline-secondary alert-icon-button" title="Hide" onClick={() => setListError("")}>
-            <i className="bi bi-x-lg" aria-hidden="true" />
-          </button>
-        </div>
-      ) : null}
       <DataTable
         addIcon="bi bi-camera-video"
         addLabel="Schedule Video Conference"
