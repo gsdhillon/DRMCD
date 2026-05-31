@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useRenderDebug } from "../app/useRenderDebug.js";
+import { useRenderDebug } from "./useRenderDebug.js";
 import { deleteAllNotifications, deleteNotification, getNotifications } from "../services/notificationService.js";
 
 function formatNotificationDate(value) {

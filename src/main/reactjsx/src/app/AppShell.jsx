@@ -9,7 +9,7 @@ import { AppMessages } from "./AppMessages.jsx";
 import { Footer } from "./Footer.jsx";
 import { Header } from "./Header.jsx";
 import { SideMenu } from "./SideMenu.jsx";
-import { useRenderDebug } from "./useRenderDebug.js";
+import { useRenderDebug } from "../common/useRenderDebug.js";
 import { useApp } from "../state/AppContext.jsx";
 
 export function AppShell() {

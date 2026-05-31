@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useRenderDebug } from "../../app/useRenderDebug.js";
+import { useRenderDebug } from "../../common/useRenderDebug.js";
 import { createPerson, deletePerson, getPerson, getPersons, updatePerson } from "../../services/personService.js";
 import { getRoles } from "../../services/roleService.js";
 import { useApp } from "../../state/AppContext.jsx";
@@ -159,7 +159,7 @@ export function PersonList({ backTitle = "Back", groupId, onBack, persons: provi
 
       {personDialog ? (
         <PersonForm
-          allowPrivilegedRoles={isSuperAdmin}
+          isPrivileged={isSuperAdmin}
           editable={personDialog.mode !== "view"}
           mode={personDialog.mode}
           person={personDialog.person}

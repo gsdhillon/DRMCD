@@ -1,6 +1,6 @@
 import { copyrightText } from "./AppText.js";
 import { useApp } from "../state/AppContext.jsx";
-import { useRenderDebug } from "./useRenderDebug.js";
+import { useRenderDebug } from "../common/useRenderDebug.js";
 
 function formatAppVersion(appVersion) {
   const version = String(appVersion || "")

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useRenderDebug } from "../app/useRenderDebug.js";
+import { useRenderDebug } from "./useRenderDebug.js";
 import { changePassword } from "../services/auth.js";
 import { useApp } from "../state/AppContext.jsx";
 

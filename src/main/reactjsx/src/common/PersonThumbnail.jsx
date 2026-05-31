@@ -1,5 +1,5 @@
-import { photoSrc } from "../app/Helpers.js";
-import { useRenderDebug } from "../app/useRenderDebug.js";
+import { photoSrc } from "./Helpers.js";
+import { useRenderDebug } from "./useRenderDebug.js";
 
 function roleBorderColor(role, roleColor) {
   const color = String(roleColor || "").replace(/^#/, "");

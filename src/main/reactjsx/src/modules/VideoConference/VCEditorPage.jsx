@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
-import { valueOrEmpty } from "../../app/Helpers.js";
-import { useRenderDebug } from "../../app/useRenderDebug.js";
+import { valueOrEmpty } from "../../common/Helpers.js";
+import { useRenderDebug } from "../../common/useRenderDebug.js";
 import { getPerson } from "../../services/personService.js";
 import { PersonForm } from "../Person/PersonForm.jsx";
 import { PersonTable } from "../Person/PersonTable.jsx";

@@ -1,5 +1,5 @@
 import { Photo } from "../../common/Photo.jsx";
-import { useRenderDebug } from "../../app/useRenderDebug.js";
+import { useRenderDebug } from "../../common/useRenderDebug.js";
 import { useApp } from "../../state/AppContext.jsx";
 
 export function Dashboard() {

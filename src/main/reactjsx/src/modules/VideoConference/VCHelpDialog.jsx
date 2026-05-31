@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useRenderDebug } from "../../app/useRenderDebug.js";
+import { useRenderDebug } from "../../common/useRenderDebug.js";
 import { getVideoConferenceHelp } from "../../services/vcService.js";
 import { useApp } from "../../state/AppContext.jsx";
 

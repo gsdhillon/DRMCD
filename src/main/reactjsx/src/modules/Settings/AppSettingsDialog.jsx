@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { valueOrEmpty } from "../../app/Helpers.js";
-import { useRenderDebug } from "../../app/useRenderDebug.js";
+import { valueOrEmpty } from "../../common/Helpers.js";
+import { useRenderDebug } from "../../common/useRenderDebug.js";
 import { updateSettings } from "../../services/settingsService.js";
 import { useApp } from "../../state/AppContext.jsx";
 

@@ -3,7 +3,7 @@ import { copyrightText, title } from "./AppText.js";
 import { useApp } from "../state/AppContext.jsx";
 import { AppMessages } from "./AppMessages.jsx";
 import { Footer } from "./Footer.jsx";
-import { useRenderDebug } from "./useRenderDebug.js";
+import { useRenderDebug } from "../common/useRenderDebug.js";
 
 export function LoginView() {
   useRenderDebug("LoginView");

@@ -8,7 +8,7 @@ import { getNotifications } from "../services/notificationService.js";
 import { AppSettingsDialog } from "../modules/Settings/AppSettingsDialog.jsx";
 import { openNotificationSocket } from "../services/notificationSocket.js";
 import { useApp } from "../state/AppContext.jsx";
-import { useRenderDebug } from "./useRenderDebug.js";
+import { useRenderDebug } from "../common/useRenderDebug.js";
 
 export function Header({ menuOpen, onMenuToggle }) {
   useRenderDebug("Header");

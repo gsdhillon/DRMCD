@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
-import { useRenderDebug } from "../app/useRenderDebug.js";
-import { DataRow } from "./DataRow.jsx";
+import { useRenderDebug } from "./useRenderDebug.js";
 
 function sortIcon(sortField, sortDirection, field) {
   if (sortField !== field) {
@@ -12,6 +11,29 @@ function sortIcon(sortField, sortDirection, field) {
 
 function pageNumbers(totalPages) {
   return Array.from({ length: totalPages }, (_, index) => index + 1);
+}
+
+function highlightText(value, searchTerm) {
+  const text = value === undefined || value === null ? "" : String(value);
+  const term = (searchTerm || "").trim();
+
+  if (!term) {
+    return text;
+  }
+
+  const matchIndex = text.toLowerCase().indexOf(term.toLowerCase());
+
+  if (matchIndex === -1) {
+    return text;
+  }
+
+  return (
+    <>
+      {text.slice(0, matchIndex)}
+      <mark className="search-highlight">{text.slice(matchIndex, matchIndex + term.length)}</mark>
+      {text.slice(matchIndex + term.length)}
+    </>
+  );
 }
 
 function activeFilterCount(columnFilters) {
@@ -330,6 +352,39 @@ export function DataTable(props) {
     );
   }
 
+  function renderRow(item) {
+    return (
+      <tr key={item.id}>
+        {props.columns.map(column => {
+          const value = column.value ? column.value(item) : item[column.field];
+          const className = typeof column.className === "function" ? column.className(item) : column.className || "";
+          const columnSearchTerm = columnFilters[column.field] || "";
+          const rendered = column.render ? column.render(value, item) : null;
+          const content = column.render
+            ? columnSearchTerm && (typeof rendered === "string" || typeof rendered === "number")
+              ? highlightText(rendered, columnSearchTerm)
+              : rendered
+            : columnSearchTerm
+              ? highlightText(value, columnSearchTerm)
+              : props.searchFields?.includes(column.field)
+                ? highlightText(value, props.searchTerm)
+                : value === undefined || value === null ? "" : value;
+
+          return <td key={column.field} className={className}>{content}</td>;
+        })}
+        {props.renderActions ? (
+          <td className="text-end text-nowrap">
+            <div className="table-actions-desktop">{props.renderActions(item)}</div>
+            <details className="table-actions-mobile">
+              <summary title="Actions"><i className="bi bi-three-dots-vertical" aria-hidden="true" /></summary>
+              <div className="table-actions-popup">{props.renderActions(item)}</div>
+            </details>
+          </td>
+        ) : null}
+      </tr>
+    );
+  }
+
   return (
     <div className="card data-table-card shadow-sm border-0">
       <div className="card-header border-0">
@@ -396,17 +451,7 @@ export function DataTable(props) {
             <tbody>
             {props.rows.length === 0 ? (
               <tr><td colSpan={colSpan} className="text-secondary py-4 text-center">{props.emptyText}</td></tr>
-            ) : props.rows.map(item => (
-              <DataRow
-                key={item.id}
-                item={item}
-                columnFilters={columnFilters}
-                columns={props.columns}
-                renderActions={props.renderActions}
-                searchFields={props.searchFields}
-                searchTerm={props.searchTerm}
-              />
-            ))}
+            ) : props.rows.map(renderRow)}
             </tbody>
           </table>
         </div>

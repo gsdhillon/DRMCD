@@ -1,6 +1,6 @@
 import { AppShell } from "./AppShell.jsx";
 import { LoginView } from "./LoginView.jsx";
-import { useRenderDebug } from "./useRenderDebug.js";
+import { useRenderDebug } from "../common/useRenderDebug.js";
 import { useApp } from "../state/AppContext.jsx";
 
 export function App() {

@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { useRenderDebug } from "../../app/useRenderDebug.js";
+import { useRenderDebug } from "../../common/useRenderDebug.js";
 import { PersonThumbnail } from "../../common/PersonThumbnail.jsx";
 import { openVCSocket } from "../../services/vcSocket.js";
 import { useApp } from "../../state/AppContext.jsx";

@@ -1,5 +1,5 @@
-import { photoSrc, readPhoto } from "../app/Helpers.js";
-import { useRenderDebug } from "../app/useRenderDebug.js";
+import { photoSrc, readPhoto } from "./Helpers.js";
+import { useRenderDebug } from "./useRenderDebug.js";
 
 export function Photo({ editable = false, onChange, photo }) {
   useRenderDebug("Photo");

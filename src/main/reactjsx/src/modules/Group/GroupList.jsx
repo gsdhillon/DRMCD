@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { useRenderDebug } from "../../app/useRenderDebug.js";
+import { useRenderDebug } from "../../common/useRenderDebug.js";
 import { DataTable } from "../../common/DataTable.jsx";
 import { getPersons } from "../../services/personService.js";
 import { createGroup, deleteGroup, getGroup, getGroups, updateGroup } from "../../services/groupService.js";
