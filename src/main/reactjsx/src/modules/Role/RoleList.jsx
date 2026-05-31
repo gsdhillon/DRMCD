@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { useRenderDebug } from "../../common/useRenderDebug.js";
+import { Button } from "../../common/Button.jsx";
 import { DataTable } from "../../common/DataTable.jsx";
 import { createRole, deleteRole, getRoles, updateRole } from "../../services/roleService.js";
 import { useApp } from "../../state/AppContext.jsx";
@@ -108,12 +109,8 @@ export function RoleList() {
   function renderActions(role) {
     return (
       <div className="d-inline-flex align-items-center gap-2">
-        <button type="button" className="btn btn-sm btn-outline-secondary me-1" title="Edit" onClick={() => editRole(role)}>
-          <i className="bi bi-pencil-square" aria-hidden="true" />
-        </button>
-        <button type="button" className="btn btn-sm btn-outline-danger" title="Delete" onClick={() => removeRole(role)}>
-          <i className="bi bi-trash" aria-hidden="true" />
-        </button>
+        <Button className="btn btn-sm btn-outline-secondary me-1" icon="bi bi-pencil-square" title="Edit" onClick={() => editRole(role)} />
+        <Button className="btn btn-sm btn-outline-danger" icon="bi bi-trash" title="Delete" onClick={() => removeRole(role)} />
       </div>
     );
   }

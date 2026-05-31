@@ -1,3 +1,4 @@
+import { Button } from "../Button.jsx";
 import { useApp } from "../../state/AppContext.jsx";
 
 export function CheckBox({
@@ -24,9 +25,7 @@ export function CheckBox({
         />
         <strong className={checked ? "text-success" : "text-secondary"}>{checked ? options[0] : options[1]}</strong>
         {infoMsg ? (
-          <button type="button" className="btn btn-sm btn-link app-settings-info-button" title="Info" onClick={() => showInfo(infoMsg)}>
-            <i className="bi bi-info-circle" aria-hidden="true" />
-          </button>
+          <Button className="btn btn-sm btn-link app-settings-info-button" icon="bi bi-info-circle" title="Info" onClick={() => showInfo(infoMsg)} />
         ) : null}
       </div>
     </label>

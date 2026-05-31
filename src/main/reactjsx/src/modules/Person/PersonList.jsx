@@ -3,6 +3,7 @@ import { useRenderDebug } from "../../common/useRenderDebug.js";
 import { createPerson, deletePerson, getPerson, getPersons, updatePerson } from "../../services/personService.js";
 import { getRoles } from "../../services/roleService.js";
 import { useApp } from "../../state/AppContext.jsx";
+import { Button } from "../../common/Button.jsx";
 import { PersonDialog } from "./PersonDialog.jsx";
 import { PersonTable } from "./PersonTable.jsx";
 
@@ -163,9 +164,7 @@ export function PersonList({ backTitle = "Back", groupId, onBack, persons: provi
         searchInputId={groupId ? "group-person-search-" + groupId : "person-search"}
         title={title}
         toolbarActions={onBack ? (
-          <button type="button" className="btn btn-outline-secondary table-add-button table-nav-button" title={backTitle} aria-label={backTitle} onClick={onBack}>
-            <i className="bi bi-arrow-left" aria-hidden="true" />
-          </button>
+          <Button className="btn btn-outline-secondary table-add-button table-nav-button" icon="bi bi-arrow-left" title={backTitle} onClick={onBack} />
         ) : null}
         actions={actions}
       />

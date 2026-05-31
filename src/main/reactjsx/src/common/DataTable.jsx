@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Button } from "./Button.jsx";
 import { useRenderDebug } from "./useRenderDebug.js";
 
 function sortIcon(sortField, sortDirection, field) {
@@ -227,9 +228,7 @@ export function DataTable(props) {
   function pageButton(page, label, disabled, active) {
     return (
       <li key={label} className={"page-item" + (disabled ? " disabled" : "") + (active ? " active" : "")}>
-        <button type="button" className="page-link" disabled={disabled} onClick={() => !disabled && props.onPage(page)}>
-          {label}
-        </button>
+        <Button className="page-link" disabled={disabled} label={label} onClick={() => !disabled && props.onPage(page)} />
       </li>
     );
   }
@@ -269,34 +268,25 @@ export function DataTable(props) {
 
     return (
       <div className="table-tools" role="group" aria-label={props.title + " tools"}>
-        <button
-          type="button"
+        <Button
           className={"btn table-tool-button table-clear-filters" + (filterCount ? " active" : " btn-outline-secondary")}
+          icon="bi bi-eraser"
           title="Clear all filters"
-          aria-label="Clear all filters"
           disabled={!filterCount}
           onClick={clearAllFilters}
-        >
-          <i className="bi bi-eraser" aria-hidden="true" />
-        </button>
-        <button
-          type="button"
+        />
+        <Button
           className="btn btn-outline-secondary table-tool-button"
+          icon="bi bi-filetype-csv"
           title="Export CSV"
-          aria-label="Export CSV"
           onClick={exportCsv}
-        >
-          <i className="bi bi-filetype-csv" aria-hidden="true" />
-        </button>
-        <button
-          type="button"
+        />
+        <Button
           className="btn btn-outline-secondary table-tool-button"
+          icon="bi bi-filetype-pdf"
           title="Export PDF"
-          aria-label="Export PDF"
           onClick={exportPdf}
-        >
-          <i className="bi bi-filetype-pdf" aria-hidden="true" />
-        </button>
+        />
       </div>
     );
   }
@@ -308,19 +298,16 @@ export function DataTable(props) {
 
     return (
       <div className="table-column-filter-wrap">
-        <button
-          type="button"
+        <Button
           className={"btn btn-link table-column-filter-toggle" + (active ? " active" : "")}
+          icon={active ? "bi bi-funnel-fill" : "bi bi-funnel"}
           title={"Filter " + column.label}
-          aria-label={"Filter " + column.label}
           aria-expanded={open}
           onClick={() => {
             setColumnFilterCursor(value.length);
             setActiveColumnFilter(current => current === column.field ? null : column.field);
           }}
-        >
-          <i className={active ? "bi bi-funnel-fill" : "bi bi-funnel"} aria-hidden="true" />
-        </button>
+        />
         {open ? (
           <div className="input-group input-group-sm table-column-filter">
             <span className="input-group-text"><i className="bi bi-search" aria-hidden="true" /></span>
@@ -336,15 +323,12 @@ export function DataTable(props) {
               }}
             />
             {value ? (
-              <button
-                type="button"
+              <Button
                 className="btn btn-outline-secondary table-search-clear"
+                icon="bi bi-x-lg"
                 title="Clear filter"
-                aria-label="Clear filter"
                 onClick={() => updateColumnFilter(column.field, "")}
-              >
-                <i className="bi bi-x-lg" aria-hidden="true" />
-              </button>
+              />
             ) : null}
           </div>
         ) : null}
@@ -410,10 +394,10 @@ export function DataTable(props) {
             <div className="table-command-group" role="group" aria-label={props.title + " commands"}>
               {props.toolbarActions}
               {props.onAdd ? (
-                <button type="button" className="btn btn-primary table-add-button" title={props.addLabel} aria-label={props.addLabel} onClick={props.onAdd}>
+                <Button className="btn btn-primary table-add-button" title={props.addLabel} onClick={props.onAdd}>
                   <i className="bi bi-plus-lg" aria-hidden="true" />
                   <i className={props.addIcon || props.icon} aria-hidden="true" />
-                </button>
+                </Button>
               ) : null}
             </div>
           ) : null}
@@ -435,10 +419,10 @@ export function DataTable(props) {
                       {column.sortable === false || !props.onSort ? (
                         <span className="fw-semibold">{column.label}</span>
                       ) : (
-                        <button type="button" className="btn btn-link p-0 fw-semibold text-decoration-none text-dark" onClick={() => props.onSort(column.field)}>
+                        <Button className="btn btn-link p-0 fw-semibold text-decoration-none text-dark" onClick={() => props.onSort(column.field)}>
                           {column.label}
                           <i className={sortIcon(props.sortField, props.sortDirection, column.field)} aria-hidden="true" />
-                        </button>
+                        </Button>
                       )}
                       {props.onColumnFilter ? renderColumnFilter(column) : null}
                     </div>

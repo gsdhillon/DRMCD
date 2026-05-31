@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { Button } from "../common/Button.jsx";
 import { useApp } from "../state/AppContext.jsx";
 
 function messageIcon(type) {
@@ -39,9 +40,7 @@ function AppMessage({ message, timeoutMs, onHide }) {
         <strong>{messageTitle(message.type)}</strong>
         <span>{message.text}</span>
       </div>
-      <button type="button" className="app-message-close" title="Hide" aria-label="Hide message" onClick={onHide}>
-        <i className="bi bi-x-lg" aria-hidden="true" />
-      </button>
+      <Button className="app-message-close" icon="bi bi-x-lg" title="Hide" ariaLabel="Hide message" onClick={onHide} />
     </div>
   );
 }

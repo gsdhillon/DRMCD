@@ -1,4 +1,5 @@
 import { photoSrc } from "./Helpers.js";
+import { Button } from "./Button.jsx";
 import { useRenderDebug } from "./useRenderDebug.js";
 
 function roleBorderColor(role, roleColor) {
@@ -38,8 +39,7 @@ export function PersonThumbnail({ alt, className = "", name, onClick, photo, rol
     (className ? " " + className : "");
 
   return (
-    <button
-      type="button"
+    <Button
       className={thumbnailClass}
       style={{ borderColor: roleBorderColor(role, roleColor) }}
       title={title || name || "View"}
@@ -48,6 +48,6 @@ export function PersonThumbnail({ alt, className = "", name, onClick, photo, rol
       {photo
         ? <img className="person-thumbnail-image" src={photoSrc(photo)} alt={alt || name || "Person"} />
         : <span className="person-thumbnail-empty"><i className="bi bi-person" aria-hidden="true" /></span>}
-    </button>
+    </Button>
   );
 }

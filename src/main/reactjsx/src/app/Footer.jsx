@@ -1,4 +1,5 @@
 import { copyrightText } from "./AppText.js";
+import { Button } from "../common/Button.jsx";
 import { useApp } from "../state/AppContext.jsx";
 import { useRenderDebug } from "../common/useRenderDebug.js";
 
@@ -24,8 +25,7 @@ export function Footer({ footerText = copyrightText }) {
   return (
     <footer className="app-footer">
       <div className="app-footer-left">
-        <button
-          type="button"
+        <Button
           className={"footer-theme-toggle" + (darkMode ? " footer-theme-toggle-dark" : "")}
           aria-label={darkMode ? "Switch to light mode" : "Switch to dark mode"}
           aria-pressed={darkMode}
@@ -36,7 +36,7 @@ export function Footer({ footerText = copyrightText }) {
             <span className="footer-theme-toggle-knob" />
           </span>
           <span className="footer-theme-toggle-text">{darkMode ? "Dark" : "Light"}</span>
-        </button>
+        </Button>
       </div>
       <span>{footerText}</span>
       <div className="app-footer-right">

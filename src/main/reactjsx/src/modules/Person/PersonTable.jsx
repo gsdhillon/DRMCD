@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { useRenderDebug } from "../../common/useRenderDebug.js";
+import { Button } from "../../common/Button.jsx";
 import { DataTable } from "../../common/DataTable.jsx";
 import { PersonThumbnail } from "../../common/PersonThumbnail.jsx";
 
@@ -134,15 +135,13 @@ export function PersonTable({
           />
         ) : null}
         {visibleActions.map(action => (
-          <button
+          <Button
             key={action.title}
-            type="button"
             className={action.className || "btn btn-sm btn-outline-primary"}
+            icon={action.icon}
             title={action.title}
             onClick={() => action.onClick?.(person)}
-          >
-            <i className={action.icon} aria-hidden="true" />
-          </button>
+          />
         ))}
       </div>
     );

@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
+import { Button } from "../../common/Button.jsx";
 import { useRenderDebug } from "../../common/useRenderDebug.js";
 import { PersonThumbnail } from "../../common/PersonThumbnail.jsx";
 import { openVCSocket } from "../../services/vcSocket.js";
@@ -572,10 +573,7 @@ export function VCRoom({ conference, onClose }) {
           <h2 className="table-title">{conference.title || "Video Conference"}</h2>
           <span className="text-secondary text-nowrap">{view.socketReady ? "Connected" : "Connecting"}</span>
         </div>
-        <button type="button" className="btn btn-secondary" onClick={closeRoom}>
-          <i className="bi bi-arrow-left-circle me-2" aria-hidden="true" />
-          Conferences
-        </button>
+        <Button className="btn btn-secondary" icon="bi bi-arrow-left-circle" label="Conferences" onClick={closeRoom} />
       </div>
 
       <div
@@ -588,8 +586,7 @@ export function VCRoom({ conference, onClose }) {
           {!view.localReady ? <div className="vc-placeholder"><i className="bi bi-person-video3" /></div> : null}
           <span>{view.sharingScreen ? "Screen" : "You"}</span>
         </div>
-        <button
-          type="button"
+        <Button
           className="vc-splitter"
           title="Resize panels"
           aria-label="Resize video and side panel"
@@ -631,27 +628,18 @@ export function VCRoom({ conference, onClose }) {
       </div>
 
       <div className="vc-controls">
-        <button type="button" className="btn btn-primary" disabled={!view.socketReady || view.localReady || view.busy} onClick={startCall}>
-          <i className="bi bi-telephone-fill me-2" aria-hidden="true" />
-          Start
-        </button>
-        <button type="button" className="btn btn-outline-secondary" disabled={!view.localReady} onClick={toggleAudio}>
-          <i className={view.audioEnabled ? "bi bi-mic" : "bi bi-mic-mute"} aria-hidden="true" />
-        </button>
-        <button type="button" className="btn btn-outline-secondary" disabled={!view.localReady || view.sharingScreen} onClick={toggleVideo}>
-          <i className={view.videoEnabled ? "bi bi-camera-video" : "bi bi-camera-video-off"} aria-hidden="true" />
-        </button>
-        <button type="button" className="btn btn-outline-primary" disabled={!view.localReady} onClick={toggleScreenShare}>
-          <i className={(view.sharingScreen ? "bi bi-display-fill" : "bi bi-display") + " me-2"} aria-hidden="true" />
-          {view.sharingScreen ? "Stop Share" : "Share"}
-        </button>
-        <button type="button" className={"btn " + (view.chatOpen ? "btn-primary" : "btn-outline-secondary")} onClick={() => patchView(current => ({ chatOpen: !current.chatOpen }))}>
-          <i className="bi bi-chat-dots" aria-hidden="true" />
-        </button>
-        <button type="button" className="btn btn-outline-danger" disabled={!callActive} onClick={hangUp}>
-          <i className="bi bi-telephone-x me-2" aria-hidden="true" />
-          End
-        </button>
+        <Button
+            className="btn btn-primary"
+            disabled={!view.socketReady || view.localReady || view.busy}
+            icon="bi bi-telephone-fill"
+            label="Start"
+            onClick={startCall}
+        />
+        <Button className="btn btn-outline-secondary" disabled={!view.localReady} icon={view.audioEnabled ? "bi bi-mic" : "bi bi-mic-mute"} title={view.audioEnabled ? "Mute" : "Unmute"} onClick={toggleAudio} />
+        <Button className="btn btn-outline-secondary" disabled={!view.localReady || view.sharingScreen} icon={view.videoEnabled ? "bi bi-camera-video" : "bi bi-camera-video-off"} title={view.videoEnabled ? "Turn camera off" : "Turn camera on"} onClick={toggleVideo} />
+        <Button className="btn btn-outline-primary" disabled={!view.localReady} icon={view.sharingScreen ? "bi bi-display-fill" : "bi bi-display"} label={view.sharingScreen ? "Stop Share" : "Share"} onClick={toggleScreenShare} />
+        <Button className={"btn " + (view.chatOpen ? "btn-primary" : "btn-outline-secondary")} icon="bi bi-chat-dots" title={view.chatOpen ? "Hide chat" : "Show chat"} onClick={() => patchView(current => ({ chatOpen: !current.chatOpen }))} />
+        <Button className="btn btn-outline-danger" disabled={!callActive} icon="bi bi-telephone-x" label="End" onClick={hangUp} />
       </div>
     </div>
   );

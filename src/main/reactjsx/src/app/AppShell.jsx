@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Route, Routes } from "react-router-dom";
 import { Dashboard } from "../modules/Dashboard/Dashboard.jsx";
+import { Button } from "../common/Button.jsx";
 import { GroupList } from "../modules/Group/GroupList.jsx";
 import { PersonList } from "../modules/Person/PersonList.jsx";
 import { RoleList } from "../modules/Role/RoleList.jsx";
@@ -52,18 +53,16 @@ export function AppShell() {
             setMenuOpen(false);
           }}
         />
-        {menuOpen ? <button type="button" className="app-menu-backdrop" onClick={() => setMenuOpen(false)} /> : null}
+        {menuOpen ? <Button className="app-menu-backdrop" title="Close menu" onClick={() => setMenuOpen(false)} /> : null}
         <main className="main-panel">
           <div id="main-panel" ref={mainPanelRef}>
-            <button
-              type="button"
+            <Button
               className="main-panel-fullscreen-button"
+              icon={mainPanelFullscreen ? "bi bi-fullscreen-exit" : "bi bi-fullscreen"}
               title={mainPanelFullscreen ? "Exit full screen" : "Full screen"}
               aria-label={mainPanelFullscreen ? "Exit full screen" : "Full screen"}
               onClick={toggleMainPanelFullscreen}
-            >
-              <i className={mainPanelFullscreen ? "bi bi-fullscreen-exit" : "bi bi-fullscreen"} aria-hidden="true" />
-            </button>
+            />
             <Routes>
               <Route path="/" element={<Dashboard />} />
               <Route path="/persons" element={<PersonList />} />

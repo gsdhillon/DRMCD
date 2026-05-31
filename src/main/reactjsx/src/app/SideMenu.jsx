@@ -1,4 +1,5 @@
 import { NavLink } from "react-router-dom";
+import { Button } from "../common/Button.jsx";
 import { useRenderDebug } from "../common/useRenderDebug.js";
 
 export function SideMenu({ collapsed, onCollapseToggle, open }) {
@@ -6,15 +7,13 @@ export function SideMenu({ collapsed, onCollapseToggle, open }) {
 
   return (
     <aside className={"app-menu" + (open ? " app-menu-open" : "")}>
-      <button
-        type="button"
+      <Button
         className="app-menu-collapse-button"
+        icon={collapsed ? "bi bi-chevron-right" : "bi bi-chevron-left"}
         title={collapsed ? "Expand menu" : "Collapse menu"}
         aria-label={collapsed ? "Expand menu" : "Collapse menu"}
         onClick={onCollapseToggle}
-      >
-        <i className={collapsed ? "bi bi-chevron-right" : "bi bi-chevron-left"} aria-hidden="true" />
-      </button>
+      />
       <NavLink className={({ isActive }) => "app-menu-item" + (isActive ? " active" : "")} to="/">
         <i className="bi bi-speedometer2" aria-hidden="true" />
         <span>Dashboard</span>

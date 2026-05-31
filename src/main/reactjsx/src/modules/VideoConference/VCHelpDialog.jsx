@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Button } from "../../common/Button.jsx";
 import { useRenderDebug } from "../../common/useRenderDebug.js";
 import { getVideoConferenceHelp } from "../../services/vcService.js";
 import { useApp } from "../../state/AppContext.jsx";
@@ -68,10 +69,7 @@ export function VCHelpDialog({ help, error, loading, onClose }) {
         ) : null}
 
         <div className="d-flex justify-content-end mt-3">
-          <button type="button" className="btn btn-secondary dialog-close-button" onClick={onClose}>
-            <i className="bi bi-x-circle me-2" aria-hidden="true" />
-            Close
-          </button>
+          <Button className="btn btn-secondary dialog-close-button" icon="bi bi-x-circle" label="Close" onClick={onClose} />
         </div>
       </div>
     </div>

@@ -142,7 +142,11 @@ export function AppSettingsDialog({ onClose }) {
         title={<><i className="bi bi-gear-fill me-2" aria-hidden="true" />App Settings</>}
       >
         <div className="app-settings-scroll">
-          <Input label="App Version:" editable={false} value={draft.appVersion} />
+          <Input
+              label="App Version:"
+              editable={false}
+              value={draft.appVersion}
+          />
           <Input label="Started On:" editable={false} value={draft.startedOn} />
           {devModeField("clientInDevMode", "Client Dev Mode:", "It will set the client console logs to debug mode")}
           {devModeField("serverInDevMode", "Server Dev Mode:", "It will set the server console logs to debug mode")}

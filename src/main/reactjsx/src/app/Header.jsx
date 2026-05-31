@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Avatar } from "../common/Avatar.jsx";
+import { Button } from "../common/Button.jsx";
 import { ChangePasswordDialog } from "../common/ChangePasswordDialog.jsx";
 import { Notifications } from "../common/Notifications.jsx";
 import { subTitle, title } from "./AppText.js";
@@ -117,12 +118,12 @@ export function Header({ menuOpen, onMenuToggle }) {
         </div>
       </div>
       <div className="notification-bar">
-        <button type="button" className="header-icon-button" title="Notifications" onClick={toggleNotifications}>
+        <Button className="header-icon-button" title="Notifications" onClick={toggleNotifications}>
           <i className="bi bi-bell" aria-hidden="true" />
           {notifications.length > 0 ? (
             <span className="notification-badge">{notificationCountLabel(notifications.length)}</span>
           ) : null}
-        </button>
+        </Button>
       </div>
       <div className="header-user">
         <div className="header-user-text">
@@ -137,32 +138,30 @@ export function Header({ menuOpen, onMenuToggle }) {
                 <strong>{user?.name || "User"}</strong>
                 <span>{user?.role || ""}</span>
               </div>
-              <button type="button" className="profile-menu-item" onClick={openChangePassword}>
+              <Button className="profile-menu-item" onClick={openChangePassword}>
                 <i className="bi bi-key" aria-hidden="true" />
                 <span>Change Password</span>
-              </button>
+              </Button>
               {user?.role === "SuperAdmin" ? (
                 <>
-                  <button type="button" className="profile-menu-item" onClick={openSettings}>
+                  <Button className="profile-menu-item" onClick={openSettings}>
                     <i className="bi bi-gear" aria-hidden="true" />
                     <span>App Settings</span>
-                  </button>
-                  <button type="button" className="profile-menu-item" onClick={openRoles}>
+                  </Button>
+                  <Button className="profile-menu-item" onClick={openRoles}>
                     <i className="bi bi-palette" aria-hidden="true" />
                     <span>Edit Roles</span>
-                  </button>
+                  </Button>
                 </>
               ) : null}
-              <button type="button" className="profile-menu-item profile-menu-danger" onClick={logout}>
+              <Button className="profile-menu-item profile-menu-danger" onClick={logout}>
                 <i className="bi bi-box-arrow-right" aria-hidden="true" />
                 <span>Logout</span>
-              </button>
+              </Button>
             </div>
           ) : null}
         </div>
-        <button type="button" className="header-menu-button" title={menuOpen ? "Close menu" : "Menu"} onClick={onMenuToggle}>
-          <i className="bi bi-list" aria-hidden="true" />
-        </button>
+        <Button className="header-menu-button" icon="bi bi-list" title={menuOpen ? "Close menu" : "Menu"} onClick={onMenuToggle} />
       </div>
       {notificationsOpen ? (
         <Notifications

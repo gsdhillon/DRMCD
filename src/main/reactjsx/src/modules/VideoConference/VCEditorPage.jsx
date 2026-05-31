@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import { Button } from "../../common/Button.jsx";
 import { Input } from "../../common/form/Input.jsx";
 import { useRenderDebug } from "../../common/useRenderDebug.js";
 import { getPerson } from "../../services/personService.js";
@@ -137,12 +138,8 @@ export function VCEditorPage({
           {draft.id ? <strong className="editor-record-id ms-3">Id: {draft.id}</strong> : null}
         </h2>
         <div className="editor-page-actions d-inline-flex align-items-center gap-2">
-          <button type="button" className="btn btn-outline-secondary table-add-button table-help-button" title="Help" aria-label="Help" onClick={openHelp}>
-            <i className="bi bi-question-circle" aria-hidden="true" />
-          </button>
-          <button type="button" className="btn btn-outline-secondary table-add-button table-nav-button" title="Back to Video Conferences" aria-label="Back to Video Conferences" onClick={onBack}>
-            <i className="bi bi-arrow-left fw-bold" aria-hidden="true" />
-          </button>
+          <Button className="btn btn-outline-secondary table-add-button table-help-button" icon="bi bi-question-circle" title="Help" onClick={openHelp} />
+          <Button className="btn btn-outline-secondary table-add-button table-nav-button" icon="bi bi-arrow-left fw-bold" title="Back to Video Conferences" onClick={onBack} />
         </div>
       </div>
 
@@ -202,14 +199,8 @@ export function VCEditorPage({
       />
 
       <div className="d-flex flex-wrap align-items-center justify-content-end gap-2 mt-1">
-        <button type="button" className="btn btn-primary" onClick={save}>
-          <i className={(mode === "update" ? "bi bi-check2-circle" : "bi bi-calendar-plus") + " me-2"} aria-hidden="true" />
-          {mode === "update" ? "Update VC" : "Schedule VC"}
-        </button>
-        <button type="button" className="btn btn-secondary dialog-close-button" onClick={onBack}>
-          <i className="bi bi-x-circle me-2" aria-hidden="true" />
-          Close
-        </button>
+        <Button className="btn btn-primary" icon={mode === "update" ? "bi bi-check2-circle" : "bi bi-calendar-plus"} label={mode === "update" ? "Update VC" : "Schedule VC"} onClick={save} />
+        <Button className="btn btn-secondary dialog-close-button" icon="bi bi-x-circle" label="Close" onClick={onBack} />
       </div>
 
       {personDialog && roles.length > 0 ? (

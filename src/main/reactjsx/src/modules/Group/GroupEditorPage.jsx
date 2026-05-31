@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import { Button } from "../../common/Button.jsx";
 import { Input } from "../../common/form/Input.jsx";
 import { useRenderDebug } from "../../common/useRenderDebug.js";
 import { getPerson } from "../../services/personService.js";
@@ -119,9 +120,7 @@ export function GroupEditorPage({
           {draft.id ? <strong className="editor-record-id ms-3">Id: {draft.id}</strong> : null}
         </h2>
         <div className="editor-page-actions">
-          <button type="button" className="btn btn-outline-secondary table-add-button table-nav-button" title="Back to Groups" aria-label="Back to Groups" onClick={onBack}>
-            <i className="bi bi-arrow-left fw-bold" aria-hidden="true" />
-          </button>
+          <Button className="btn btn-outline-secondary table-add-button table-nav-button" icon="bi bi-arrow-left fw-bold" title="Back to Groups" onClick={onBack} />
         </div>
       </div>
 
@@ -171,15 +170,9 @@ export function GroupEditorPage({
 
       <div className="d-flex flex-wrap align-items-center justify-content-end gap-2 mt-1">
         {editable ? (
-          <button type="button" className="btn btn-primary" onClick={save}>
-            <i className={(mode === "update" ? "bi bi-check2-circle" : "bi bi-plus-lg") + " me-2"} aria-hidden="true" />
-            {mode === "update" ? "Update Group" : "Add Group"}
-          </button>
+          <Button className="btn btn-primary" icon={mode === "update" ? "bi bi-check2-circle" : "bi bi-plus-lg"} label={mode === "update" ? "Update Group" : "Add Group"} onClick={save} />
         ) : null}
-        <button type="button" className="btn btn-secondary dialog-close-button" onClick={onBack}>
-          <i className="bi bi-x-circle me-2" aria-hidden="true" />
-          Close
-        </button>
+        <Button className="btn btn-secondary dialog-close-button" icon="bi bi-x-circle" label="Close" onClick={onBack} />
       </div>
 
       {personDialog && roles.length > 0 ? (

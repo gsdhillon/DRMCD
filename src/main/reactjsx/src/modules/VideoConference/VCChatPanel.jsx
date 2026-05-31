@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { Button } from "../../common/Button.jsx";
 import { useRenderDebug } from "../../common/useRenderDebug.js";
 import { openVCChatSocket } from "../../services/vcChatSocket.js";
 import { useApp } from "../../state/AppContext.jsx";
@@ -268,9 +269,7 @@ export function VCChatPanel({ conferenceId }) {
           <i className="bi bi-paperclip" aria-hidden="true" />
           <span>{attachedFile.fileName}</span>
           <small className="text-secondary">{formatKb(attachedFile.fileSize)}</small>
-          <button type="button" className="btn btn-sm btn-outline-secondary" title="Remove attachment" onClick={() => setAttachedFile(null)}>
-            <i className="bi bi-x-lg" aria-hidden="true" />
-          </button>
+          <Button className="btn btn-sm btn-outline-secondary" icon="bi bi-x-lg" title="Remove attachment" onClick={() => setAttachedFile(null)} />
         </div>
       ) : null}
 
@@ -285,15 +284,9 @@ export function VCChatPanel({ conferenceId }) {
           onChange={event => setText(event.target.value)}
         />
         <div className="vc-chat-actions">
-          <button type="button" className="btn btn-outline-secondary" title="Attach document" onClick={() => fileInputRef.current?.click()}>
-            <i className="bi bi-paperclip" aria-hidden="true" />
-          </button>
-          <button type="button" className="btn btn-outline-secondary" disabled={busy} title="Capture screen" onClick={attachScreenCapture}>
-            <i className="bi bi-camera" aria-hidden="true" />
-          </button>
-          <button type="submit" className="btn btn-primary" disabled={!connected}>
-            <i className="bi bi-send" aria-hidden="true" />
-          </button>
+          <Button className="btn btn-outline-secondary" icon="bi bi-paperclip" title="Attach document" onClick={() => fileInputRef.current?.click()} />
+          <Button className="btn btn-outline-secondary" disabled={busy} icon="bi bi-camera" title="Capture screen" onClick={attachScreenCapture} />
+          <Button className="btn btn-primary" disabled={!connected} icon="bi bi-send" title="Send message" type="submit" />
         </div>
       </form>
     </aside>

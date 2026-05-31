@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { useRenderDebug } from "../../common/useRenderDebug.js";
+import { Button } from "../../common/Button.jsx";
 import { DataTable } from "../../common/DataTable.jsx";
 import { getPersons } from "../../services/personService.js";
 import {
@@ -212,26 +213,18 @@ export function VCList() {
   function renderActions(conference) {
     return (
       <div className="d-inline-flex align-items-center gap-2">
-        <button
-          type="button"
+        <Button
           className={"btn btn-sm " + (conference.startAllowed ? "btn-outline-primary" : "btn-outline-secondary")}
+          icon="bi bi-camera-video"
           title={conference.startAllowed ? "Start VC" : "Start VC is not available yet"}
           onClick={() => conference.startAllowed && setActiveConference(conference)}
-        >
-          <i className="bi bi-camera-video" aria-hidden="true" />
-        </button>
-        <button type="button" className="btn btn-sm btn-outline-secondary" title="View Participants" onClick={() => openPersons(conference)}>
-          <i className="bi bi-people" aria-hidden="true" />
-        </button>
+        />
+        <Button className="btn btn-sm btn-outline-secondary" icon="bi bi-people" title="View Participants" onClick={() => openPersons(conference)} />
         {conference.creator ? (
-          <button type="button" className="btn btn-sm btn-outline-secondary" title="Update VC" onClick={() => openUpdate(conference)}>
-            <i className="bi bi-pencil-square" aria-hidden="true" />
-          </button>
+          <Button className="btn btn-sm btn-outline-secondary" icon="bi bi-pencil-square" title="Update VC" onClick={() => openUpdate(conference)} />
         ) : null}
         {canDelete(conference) ? (
-          <button type="button" className="btn btn-sm btn-outline-danger" title="Delete VC" onClick={() => removeConference(conference)}>
-            <i className="bi bi-trash" aria-hidden="true" />
-          </button>
+          <Button className="btn btn-sm btn-outline-danger" icon="bi bi-trash" title="Delete VC" onClick={() => removeConference(conference)} />
         ) : null}
       </div>
     );
@@ -303,9 +296,7 @@ export function VCList() {
         sortField={sortField}
         title="Video Conferences"
         toolbarActions={(
-          <button type="button" className="btn btn-outline-secondary table-add-button table-help-button" title="Help" aria-label="Help" onClick={openHelp}>
-            <i className="bi bi-question-circle" aria-hidden="true" />
-          </button>
+          <Button className="btn btn-outline-secondary table-add-button table-help-button" icon="bi bi-question-circle" title="Help" onClick={openHelp} />
         )}
         totalCount={conferences.length}
         totalPages={totalPages}

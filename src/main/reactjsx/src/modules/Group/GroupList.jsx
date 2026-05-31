@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { useRenderDebug } from "../../common/useRenderDebug.js";
+import { Button } from "../../common/Button.jsx";
 import { DataTable } from "../../common/DataTable.jsx";
 import { getPersons } from "../../services/personService.js";
 import { createGroup, deleteGroup, getGroup, getGroups, updateGroup } from "../../services/groupService.js";
@@ -189,21 +190,13 @@ export function GroupList() {
   function renderActions(group) {
     return (
       <div className="d-inline-flex align-items-center gap-2">
-        <button type="button" className="btn btn-sm btn-outline-secondary me-1" title="Show Persons" onClick={() => openGroupPersons(group)}>
-          <i className="bi bi-people" aria-hidden="true" />
-        </button>
-        <button type="button" className="btn btn-sm btn-outline-secondary me-1" title="View" onClick={() => viewGroup(group)}>
-          <i className="bi bi-eye" aria-hidden="true" />
-        </button>
+        <Button className="btn btn-sm btn-outline-secondary me-1" icon="bi bi-people" title="Show Persons" onClick={() => openGroupPersons(group)} />
+        <Button className="btn btn-sm btn-outline-secondary me-1" icon="bi bi-eye" title="View" onClick={() => viewGroup(group)} />
         {isAdmin ? (
-          <button type="button" className="btn btn-sm btn-outline-secondary me-1" title="Update" onClick={() => openUpdateGroup(group)}>
-            <i className="bi bi-pencil-square" aria-hidden="true" />
-          </button>
+          <Button className="btn btn-sm btn-outline-secondary me-1" icon="bi bi-pencil-square" title="Update" onClick={() => openUpdateGroup(group)} />
         ) : null}
         {isAdmin ? (
-          <button type="button" className="btn btn-sm btn-outline-danger" title="Delete" onClick={() => removeGroup(group.id)}>
-            <i className="bi bi-trash" aria-hidden="true" />
-          </button>
+          <Button className="btn btn-sm btn-outline-danger" icon="bi bi-trash" title="Delete" onClick={() => removeGroup(group.id)} />
         ) : null}
       </div>
     );

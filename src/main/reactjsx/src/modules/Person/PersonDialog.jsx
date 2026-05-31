@@ -56,11 +56,7 @@ export function PersonDialog({
       showError("Please choose a role.");
       return false;
     }
-
-    return onSave?.({
-      ...draft,
-      password: draft.password || null
-    });
+    return onSave?.({...draft, password: draft.password || null});
   }
 
   function changeRole(roleId, role) {
@@ -69,7 +65,6 @@ export function PersonDialog({
       change("role", "");
       return;
     }
-
     change("roleId", Number(roleId));
     change("role", role.name);
   }

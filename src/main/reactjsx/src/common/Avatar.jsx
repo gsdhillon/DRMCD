@@ -1,4 +1,5 @@
 import { photoSrc } from "./Helpers.js";
+import { Button } from "./Button.jsx";
 import { useRenderDebug } from "./useRenderDebug.js";
 
 function roleBorderColor(user) {
@@ -25,8 +26,7 @@ export function Avatar({ user, onClick }) {
   useRenderDebug("Avatar");
 
   return (
-    <button
-      type="button"
+    <Button
       className="avatar header-avatar avatar-clickable"
       style={{ borderColor: roleBorderColor(user) }}
       title="Account"
@@ -35,6 +35,6 @@ export function Avatar({ user, onClick }) {
       {user?.photo
         ? <img className="avatar-image" src={photoSrc(user.photo)} alt={user.name || "User"} />
         : <span className="avatar-empty"><i className="bi bi-person" aria-hidden="true" /></span>}
-    </button>
+    </Button>
   );
 }
