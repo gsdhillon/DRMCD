@@ -7,7 +7,7 @@ function personTable(panel, onView) {
         actions={panel.actions || []}
         columnFields={["id", "name"]}
         emptyText={panel.emptyText}
-        icon="bi bi-people"
+        icon="people"
         onView={onView}
         pageSize={0}
         rows={panel.rows}

@@ -120,7 +120,7 @@ export function GroupEditorPage({
           {draft.id ? <strong className="editor-record-id ms-3">Id: {draft.id}</strong> : null}
         </h2>
         <div className="editor-page-actions">
-          <Button look="table-nav" icon="bi bi-arrow-left fw-bold" title="Back to Groups" onClick={onBack} />
+          <Button look="table-nav" icon="arrow-left" iconClassName="fw-bold" title="Back to Groups" onClick={onBack} />
         </div>
       </div>
 
@@ -142,7 +142,7 @@ export function GroupEditorPage({
         onView={viewPerson}
         selected={{
           actions: editable ? [{
-              icon: "bi bi-person-dash",
+              icon: "person-dash",
               title: "Remove from group",
               onClick: removePerson
             }] : [],
@@ -155,7 +155,7 @@ export function GroupEditorPage({
         }}
         available={editable ? {
           actions: [{
-                icon: "bi bi-person-plus",
+                icon: "person-plus",
                 title: "Add to group",
                 onClick: addPerson
               }],
@@ -170,9 +170,9 @@ export function GroupEditorPage({
 
       <div className="d-flex flex-wrap align-items-center justify-content-end gap-2 mt-1">
         {editable ? (
-          <Button look="primary" icon={mode === "update" ? "bi bi-check2-circle" : "bi bi-plus-lg"} label={mode === "update" ? "Update Group" : "Add Group"} onClick={save} />
+          <Button color="primary-fill" icon={mode === "update" ? "check2-circle" : "plus-lg"} label={mode === "update" ? "Update Group" : "Add Group"} onClick={save} />
         ) : null}
-        <Button look="dialog-close" icon="bi bi-x-circle" label="Close" onClick={onBack} />
+        <Button look="dialog-close" icon="x-circle" label="Close" onClick={onBack} />
       </div>
 
       {personDialog && roles.length > 0 ? (

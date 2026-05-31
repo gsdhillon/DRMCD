@@ -1,15 +1,4 @@
 const buttonLooks = {
-  primary: "btn btn-primary",
-  "primary-full": "btn btn-primary w-100",
-  secondary: "btn btn-secondary",
-  danger: "btn btn-danger",
-  "outline-primary": "btn btn-outline-primary",
-  "outline-secondary": "btn btn-outline-secondary",
-  "outline-danger": "btn btn-outline-danger",
-  "small-primary": "btn btn-sm btn-outline-primary",
-  "small-secondary": "btn btn-sm btn-outline-secondary",
-  "small-secondary-spaced": "btn btn-sm btn-outline-secondary me-1",
-  "small-danger": "btn btn-sm btn-outline-danger",
   "notification-delete": "btn btn-sm btn-outline-danger notification-delete",
   "dialog-close": "btn btn-secondary dialog-close-button",
   "table-add": "btn btn-primary table-add-button",
@@ -34,22 +23,62 @@ const buttonLooks = {
   "vc-splitter": "vc-splitter"
 };
 
+const buttonColors = {
+  "primary-fill": "btn-primary",
+  "primary-line": "btn-outline-primary",
+  "secondary-fill": "btn-secondary",
+  "secondary-line": "btn-outline-secondary",
+  "danger-fill": "btn-danger",
+  "danger-line": "btn-outline-danger"
+};
+
+function normalButtonClassName(color, size, me, full) {
+  return [
+    "btn",
+    size === "sm" ? "btn-sm" : "",
+    buttonColors[color] || buttonColors["secondary-fill"],
+    Number(me) > 0 ? "me-" + Number(me) : "",
+    full ? "w-100" : ""
+  ].filter(Boolean).join(" ");
+}
+
+function bootstrapIconClassName(icon, iconClassName, hasContent) {
+  if (!icon) {
+    return "";
+  }
+
+  const baseClassName = icon.startsWith("bi ")
+    ? icon
+    : "bi bi-" + icon;
+
+  return [
+    baseClassName,
+    iconClassName,
+    hasContent ? "me-2" : ""
+  ].filter(Boolean).join(" ");
+}
+
 export function Button({
   active = false,
   ariaLabel,
   children,
   className,
+  color = "secondary-fill",
+  full = false,
   icon,
+  iconClassName,
   label,
-  look = "secondary",
+  look,
+  me = 0,
+  size = "md",
   title,
   type = "button",
   ...props
 }) {
   const content = children ?? label;
   const hasContent = content !== undefined && content !== null && content !== "";
-  const iconClassName = icon && hasContent ? icon + " me-2" : icon;
-  const baseClassName = className || buttonLooks[look] || buttonLooks.secondary;
+  const finalIconClassName = bootstrapIconClassName(icon, iconClassName, hasContent);
+  const baseClassName = className || buttonLooks[look] || normalButtonClassName(color, size, me, full);
   const buttonClassName = baseClassName + (active ? " active" : "");
 
   return (
@@ -61,7 +90,7 @@ export function Button({
       aria-label={ariaLabel || title}
       {...props}
     >
-      {icon ? <i className={iconClassName} aria-hidden="true" /> : null}
+      {icon ? <i className={finalIconClassName} aria-hidden="true" /> : null}
       {content}
     </button>
   );

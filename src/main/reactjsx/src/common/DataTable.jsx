@@ -271,20 +271,20 @@ export function DataTable(props) {
         <Button
           look="table-clear-filters"
           active={filterCount > 0}
-          icon="bi bi-eraser"
+          icon="eraser"
           title="Clear all filters"
           disabled={!filterCount}
           onClick={clearAllFilters}
         />
         <Button
           look="table-tool"
-          icon="bi bi-filetype-csv"
+          icon="filetype-csv"
           title="Export CSV"
           onClick={exportCsv}
         />
         <Button
           look="table-tool"
-          icon="bi bi-filetype-pdf"
+          icon="filetype-pdf"
           title="Export PDF"
           onClick={exportPdf}
         />
@@ -302,7 +302,7 @@ export function DataTable(props) {
         <Button
           look="table-column-filter"
           active={active}
-          icon={active ? "bi bi-funnel-fill" : "bi bi-funnel"}
+          icon={active ? "funnel-fill" : "funnel"}
           title={"Filter " + column.label}
           aria-expanded={open}
           onClick={() => {
@@ -327,7 +327,7 @@ export function DataTable(props) {
             {value ? (
               <Button
                 look="table-search-clear"
-                icon="bi bi-x-lg"
+                icon="x-lg"
                 title="Clear filter"
                 onClick={() => updateColumnFilter(column.field, "")}
               />

@@ -214,18 +214,19 @@ export function VCList() {
     return (
       <div className="d-inline-flex align-items-center gap-2">
         <Button
-          look="small-secondary"
+          color="secondary-line"
+          size="sm"
           disabled={!conference.startAllowed}
-          icon="bi bi-camera-video"
+          icon="camera-video"
           title={conference.startAllowed ? "Start VC" : "Start VC is not available yet"}
           onClick={() => setActiveConference(conference)}
         />
-        <Button look="small-secondary" icon="bi bi-people" title="View Participants" onClick={() => openPersons(conference)} />
+        <Button color="secondary-line" size="sm" icon="people" title="View Participants" onClick={() => openPersons(conference)} />
         {conference.creator ? (
-          <Button look="small-secondary" icon="bi bi-pencil-square" title="Update VC" onClick={() => openUpdate(conference)} />
+          <Button color="secondary-line" size="sm" icon="pencil-square" title="Update VC" onClick={() => openUpdate(conference)} />
         ) : null}
         {canDelete(conference) ? (
-          <Button look="small-danger" icon="bi bi-trash" title="Delete VC" onClick={() => removeConference(conference)} />
+          <Button color="danger-line" size="sm" icon="trash" title="Delete VC" onClick={() => removeConference(conference)} />
         ) : null}
       </div>
     );
@@ -297,7 +298,7 @@ export function VCList() {
         sortField={sortField}
         title="Video Conferences"
         toolbarActions={(
-          <Button look="table-help" icon="bi bi-question-circle" title="Help" onClick={openHelp} />
+          <Button look="table-help" icon="question-circle" title="Help" onClick={openHelp} />
         )}
         totalCount={conferences.length}
         totalPages={totalPages}

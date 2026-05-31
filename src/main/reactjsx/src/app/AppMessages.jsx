@@ -40,7 +40,7 @@ function AppMessage({ message, timeoutMs, onHide }) {
         <strong>{messageTitle(message.type)}</strong>
         <span>{message.text}</span>
       </div>
-      <Button look="message-close" icon="bi bi-x-lg" title="Hide" ariaLabel="Hide message" onClick={onHide} />
+      <Button look="message-close" icon="x-lg" title="Hide" ariaLabel="Hide message" onClick={onHide} />
     </div>
   );
 }

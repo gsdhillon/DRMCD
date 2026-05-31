@@ -573,7 +573,7 @@ export function VCRoom({ conference, onClose }) {
           <h2 className="table-title">{conference.title || "Video Conference"}</h2>
           <span className="text-secondary text-nowrap">{view.socketReady ? "Connected" : "Connecting"}</span>
         </div>
-        <Button look="secondary" icon="bi bi-arrow-left-circle" label="Conferences" onClick={closeRoom} />
+        <Button color="secondary-fill" icon="arrow-left-circle" label="Conferences" onClick={closeRoom} />
       </div>
 
       <div
@@ -629,17 +629,17 @@ export function VCRoom({ conference, onClose }) {
 
       <div className="vc-controls">
         <Button
-          look="primary"
+          color="primary-fill"
           disabled={!view.socketReady || view.localReady || view.busy}
-          icon="bi bi-telephone-fill"
+          icon="telephone-fill"
           label="Start"
           onClick={startCall}
         />
-        <Button look="outline-secondary" disabled={!view.localReady} icon={view.audioEnabled ? "bi bi-mic" : "bi bi-mic-mute"} title={view.audioEnabled ? "Mute" : "Unmute"} onClick={toggleAudio} />
-        <Button look="outline-secondary" disabled={!view.localReady || view.sharingScreen} icon={view.videoEnabled ? "bi bi-camera-video" : "bi bi-camera-video-off"} title={view.videoEnabled ? "Turn camera off" : "Turn camera on"} onClick={toggleVideo} />
-        <Button look="outline-primary" active={view.sharingScreen} disabled={!view.localReady} icon={view.sharingScreen ? "bi bi-display-fill" : "bi bi-display"} label={view.sharingScreen ? "Stop Share" : "Share"} onClick={toggleScreenShare} />
-        <Button look="outline-secondary" active={view.chatOpen} icon="bi bi-chat-dots" title={view.chatOpen ? "Hide chat" : "Show chat"} onClick={() => patchView(current => ({ chatOpen: !current.chatOpen }))} />
-        <Button look="outline-danger" disabled={!callActive} icon="bi bi-telephone-x" label="End" onClick={hangUp} />
+        <Button color="secondary-line" disabled={!view.localReady} icon={view.audioEnabled ? "mic" : "mic-mute"} title={view.audioEnabled ? "Mute" : "Unmute"} onClick={toggleAudio} />
+        <Button color="secondary-line" disabled={!view.localReady || view.sharingScreen} icon={view.videoEnabled ? "camera-video" : "camera-video-off"} title={view.videoEnabled ? "Turn camera off" : "Turn camera on"} onClick={toggleVideo} />
+        <Button color="primary-line" active={view.sharingScreen} disabled={!view.localReady} icon={view.sharingScreen ? "display-fill" : "display"} label={view.sharingScreen ? "Stop Share" : "Share"} onClick={toggleScreenShare} />
+        <Button color="secondary-line" active={view.chatOpen} icon="chat-dots" title={view.chatOpen ? "Hide chat" : "Show chat"} onClick={() => patchView(current => ({ chatOpen: !current.chatOpen }))} />
+        <Button color="danger-line" disabled={!callActive} icon="telephone-x" label="End" onClick={hangUp} />
       </div>
     </div>
   );

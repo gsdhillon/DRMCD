@@ -40,7 +40,7 @@ export function PersonDialog({
 
   const title = mode === "view" ? "Person Details" : mode === "update" ? "Update Person" : "Add New Person";
   const submitLabel = mode === "update" ? "Update Person" : "Add Person";
-  const submitIcon = mode === "update" ? "bi bi-check2-circle" : "bi bi-plus-lg";
+  const submitIcon = mode === "update" ? "check2-circle" : "plus-lg";
 
   useEffect(() => {
     setDraft(createDraft(person));

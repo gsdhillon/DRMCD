@@ -161,7 +161,7 @@ export function Header({ menuOpen, onMenuToggle }) {
             </div>
           ) : null}
         </div>
-        <Button look="header-menu" icon="bi bi-list" title={menuOpen ? "Close menu" : "Menu"} onClick={onMenuToggle} />
+        <Button look="header-menu" icon="list" title={menuOpen ? "Close menu" : "Menu"} onClick={onMenuToggle} />
       </div>
       {notificationsOpen ? (
         <Notifications

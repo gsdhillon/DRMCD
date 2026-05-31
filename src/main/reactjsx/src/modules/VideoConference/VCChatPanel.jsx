@@ -269,7 +269,7 @@ export function VCChatPanel({ conferenceId }) {
           <i className="bi bi-paperclip" aria-hidden="true" />
           <span>{attachedFile.fileName}</span>
           <small className="text-secondary">{formatKb(attachedFile.fileSize)}</small>
-          <Button look="small-secondary" icon="bi bi-x-lg" title="Remove attachment" onClick={() => setAttachedFile(null)} />
+          <Button color="secondary-line" size="sm" icon="x-lg" title="Remove attachment" onClick={() => setAttachedFile(null)} />
         </div>
       ) : null}
 
@@ -284,9 +284,9 @@ export function VCChatPanel({ conferenceId }) {
           onChange={event => setText(event.target.value)}
         />
         <div className="vc-chat-actions">
-          <Button look="outline-secondary" icon="bi bi-paperclip" title="Attach document" onClick={() => fileInputRef.current?.click()} />
-          <Button look="outline-secondary" disabled={busy} icon="bi bi-camera" title="Capture screen" onClick={attachScreenCapture} />
-          <Button look="primary" disabled={!connected} icon="bi bi-send" title="Send message" type="submit" />
+          <Button color="secondary-line" icon="paperclip" title="Attach document" onClick={() => fileInputRef.current?.click()} />
+          <Button color="secondary-line" disabled={busy} icon="camera" title="Capture screen" onClick={attachScreenCapture} />
+          <Button color="primary-fill" disabled={!connected} icon="send" title="Send message" type="submit" />
         </div>
       </form>
     </aside>

@@ -43,7 +43,7 @@ export function RoleDialog({ onClose, onSave, role }) {
       <Form
         className="role-editor"
         onSubmit={submit}
-        submitIcon={editing ? "bi bi-check2-circle" : "bi bi-plus-lg"}
+        submitIcon={editing ? "check2-circle" : "plus-lg"}
         submitLabel={editing ? "Update Role" : "Add Role"}
         title={editing ? "Update Role" : "Add Role"}
       >

@@ -190,13 +190,13 @@ export function GroupList() {
   function renderActions(group) {
     return (
       <div className="d-inline-flex align-items-center gap-2">
-        <Button look="small-secondary-spaced" icon="bi bi-people" title="Show Persons" onClick={() => openGroupPersons(group)} />
-        <Button look="small-secondary-spaced" icon="bi bi-eye" title="View" onClick={() => viewGroup(group)} />
+        <Button color="secondary-line" size="sm" me={1} icon="people" title="Show Persons" onClick={() => openGroupPersons(group)} />
+        <Button color="secondary-line" size="sm" me={1} icon="eye" title="View" onClick={() => viewGroup(group)} />
         {isAdmin ? (
-          <Button look="small-secondary-spaced" icon="bi bi-pencil-square" title="Update" onClick={() => openUpdateGroup(group)} />
+          <Button color="secondary-line" size="sm" me={1} icon="pencil-square" title="Update" onClick={() => openUpdateGroup(group)} />
         ) : null}
         {isAdmin ? (
-          <Button look="small-danger" icon="bi bi-trash" title="Delete" onClick={() => removeGroup(group.id)} />
+          <Button color="danger-line" size="sm" icon="trash" title="Delete" onClick={() => removeGroup(group.id)} />
         ) : null}
       </div>
     );

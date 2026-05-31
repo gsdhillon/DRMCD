@@ -58,7 +58,7 @@ export function AppShell() {
           <div id="main-panel" ref={mainPanelRef}>
             <Button
               look="fullscreen"
-              icon={mainPanelFullscreen ? "bi bi-fullscreen-exit" : "bi bi-fullscreen"}
+              icon={mainPanelFullscreen ? "fullscreen-exit" : "fullscreen"}
               title={mainPanelFullscreen ? "Exit full screen" : "Full screen"}
               aria-label={mainPanelFullscreen ? "Exit full screen" : "Full screen"}
               onClick={toggleMainPanelFullscreen}
