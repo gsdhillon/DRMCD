@@ -16,7 +16,7 @@ import java.time.format.DateTimeFormatter;
 @ApplicationScoped
 public class SettingsDao {
     private static final DateTimeFormatter STARTED_ON_FORMAT =
-            DateTimeFormatter.ofPattern("dd-MM-yy HH:mm");
+            DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
 
     private static final int DEFAULT_CHAT_MSG_BUFFER_SIZE = 50;
 

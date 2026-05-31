@@ -1,11 +1,11 @@
 import { useEffect, useMemo, useState } from "react";
-import { valueOrEmpty } from "../../common/Helpers.js";
+import { Input } from "../../common/form/Input.jsx";
 import { useRenderDebug } from "../../common/useRenderDebug.js";
 import { getPerson } from "../../services/personService.js";
 import { getRoles } from "../../services/roleService.js";
 import { useApp } from "../../state/AppContext.jsx";
-import { PersonForm } from "../Person/PersonForm.jsx";
-import { PersonTable } from "../Person/PersonTable.jsx";
+import { PersonDialog } from "../Person/PersonDialog.jsx";
+import { PersonListSelector } from "../Person/PersonListSelector.jsx";
 import { VCHelpDialog, useVCHelpDialog } from "./VCHelpDialog.jsx";
 
 function toInputDateTime(value) {
@@ -134,6 +134,7 @@ export function VCEditorPage({
         <h2 className="d-flex align-items-center fs-4 fw-bold m-0">
           <i className="bi bi-camera-video me-2" aria-hidden="true" />
           {editorTitle(mode)}
+          {draft.id ? <strong className="editor-record-id ms-3">Id: {draft.id}</strong> : null}
         </h2>
         <div className="editor-page-actions d-inline-flex align-items-center gap-2">
           <button type="button" className="btn btn-outline-secondary table-add-button table-help-button" title="Help" aria-label="Help" onClick={openHelp}>
@@ -146,79 +147,59 @@ export function VCEditorPage({
       </div>
 
       <section className="vc-editor-fields">
-        <label className="form-row">
-          <span>Title</span>
-          <input
-            className="form-control"
-            placeholder="Video conference title"
-            value={valueOrEmpty(draft.title)}
-            onChange={event => patch("title", event.target.value)}
-          />
-        </label>
-        <label className="form-row">
-          <span>Scheduled</span>
-          <input
-            className="form-control"
-            type="datetime-local"
-            value={valueOrEmpty(draft.scheduledAt)}
-            onChange={event => patch("scheduledAt", event.target.value)}
-          />
-        </label>
-        <label className="form-row">
-          <span>Duration</span>
-          <div className="input-group">
-            <input
-              className="form-control"
-              step="5"
-              type="number"
-              value={valueOrEmpty(draft.durationMinutes)}
-              onChange={event => patch("durationMinutes", event.target.value)}
-            />
-            <span className="input-group-text">minutes</span>
-          </div>
-        </label>
+        <Input
+          label="Title"
+          placeholder="Video conference title"
+          value={draft.title}
+          onChange={value => patch("title", value)}
+        />
+        <Input
+          label="Duration"
+          step="5"
+          suffix="minutes"
+          type="number"
+          value={draft.durationMinutes}
+          onChange={value => patch("durationMinutes", value)}
+        />
+        <Input label="By" editable={false} value={draft.createdByName || draft.createdBy} />
+        <Input
+          label="Scheduled"
+          type="datetime-local"
+          value={draft.scheduledAt}
+          onChange={value => patch("scheduledAt", value)}
+        />
       </section>
 
-      <section className="vc-editor-persons">
-        <div className="vc-person-table">
-          <PersonTable
-            actions={[{
+      <PersonListSelector
+        className="vc-editor-persons"
+        onView={viewPerson}
+        selected={{
+          actions: [{
               icon: "bi bi-person-dash",
               title: "Remove from VC",
               onClick: removePerson
-            }]}
-            columnFields={["id", "name"]}
-            emptyText="No persons added"
-            icon="bi bi-people"
-            onView={viewPerson}
-            pageSize={0}
-            rows={participants}
-            searchFields={["id", "name"]}
-            searchInputId="vc-added-person-search"
-            searchPlaceholder="Search added"
-            title="Added Persons"
-          />
-        </div>
-        <div className="vc-person-table">
-          <PersonTable
-            actions={[{
+            }],
+          className: "vc-person-table",
+          emptyText: "No persons added",
+          rows: participants,
+          searchInputId: "vc-added-person-search",
+          searchPlaceholder: "Search added",
+          title: "Added Persons"
+        }}
+        available={{
+          actions: [{
               icon: "bi bi-person-plus",
               title: "Add to VC",
               onClick: addPerson
-            }]}
-            columnFields={["id", "name"]}
-            emptyText="No persons available"
-            icon="bi bi-people"
-            onView={viewPerson}
-            pageSize={0}
-            rows={availablePersons}
-            searchFields={["id", "name"]}
-            searchInputId="vc-available-person-search"
-            searchPlaceholder="Search available"
-            title="Available Persons"
-          />
-        </div>
-      </section>
+            }],
+          className: "vc-person-table",
+          emptyText: "No persons available",
+          rows: availablePersons,
+          searchInputId: "vc-available-person-search",
+          searchPlaceholder: "Search available",
+          title: "Available Persons"
+        }}
+      />
 
       <div className="d-flex flex-wrap align-items-center justify-content-end gap-2 mt-1">
         <button type="button" className="btn btn-primary" onClick={save}>
@@ -232,7 +213,7 @@ export function VCEditorPage({
       </div>
 
       {personDialog && roles.length > 0 ? (
-        <PersonForm
+        <PersonDialog
           editable={false}
           mode="view"
           person={personDialog}

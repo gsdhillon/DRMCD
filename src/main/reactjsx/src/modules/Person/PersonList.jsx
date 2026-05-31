@@ -3,7 +3,7 @@ import { useRenderDebug } from "../../common/useRenderDebug.js";
 import { createPerson, deletePerson, getPerson, getPersons, updatePerson } from "../../services/personService.js";
 import { getRoles } from "../../services/roleService.js";
 import { useApp } from "../../state/AppContext.jsx";
-import { PersonForm } from "./PersonForm.jsx";
+import { PersonDialog } from "./PersonDialog.jsx";
 import { PersonTable } from "./PersonTable.jsx";
 
 export function PersonList({ backTitle = "Back", groupId, onBack, persons: providedPersons, title = "Persons" }) {
@@ -171,7 +171,7 @@ export function PersonList({ backTitle = "Back", groupId, onBack, persons: provi
       />
 
       {personDialog && roles.length > 0 ? (
-        <PersonForm
+        <PersonDialog
           editable={personDialog.mode !== "view"}
           mode={personDialog.mode}
           person={personDialog.person}

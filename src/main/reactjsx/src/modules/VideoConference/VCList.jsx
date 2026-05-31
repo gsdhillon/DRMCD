@@ -279,6 +279,7 @@ export function VCList() {
         addLabel="Schedule Video Conference"
         columnFilters={columnFilters}
         columns={[
+          { field: "id", label: "Id" },
           { field: "title", label: "Title", className: "fw-semibold" },
           { field: "scheduledAt", label: "Scheduled", render: formatDateTime },
           { field: "createdByName", label: "Creator" },

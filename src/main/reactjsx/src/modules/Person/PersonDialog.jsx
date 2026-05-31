@@ -23,7 +23,7 @@ function createDraft(person) {
   return person ? { ...EMPTY_PERSON, ...person } : { ...EMPTY_PERSON };
 }
 
-export function PersonForm({
+export function PersonDialog({
   editable = true,
   mode = "add",
   onClose,
@@ -31,7 +31,7 @@ export function PersonForm({
   person,
   roles = []
 }) {
-  useRenderDebug("PersonForm");
+  useRenderDebug("PersonDialog");
 
   const { showError } = useApp();
   const roleOptions = roles;

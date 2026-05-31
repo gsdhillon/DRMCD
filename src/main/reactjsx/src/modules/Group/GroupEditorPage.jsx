@@ -1,11 +1,11 @@
 import { useEffect, useMemo, useState } from "react";
-import { valueOrEmpty } from "../../common/Helpers.js";
+import { Input } from "../../common/form/Input.jsx";
 import { useRenderDebug } from "../../common/useRenderDebug.js";
 import { getPerson } from "../../services/personService.js";
 import { getRoles } from "../../services/roleService.js";
 import { useApp } from "../../state/AppContext.jsx";
-import { PersonForm } from "../Person/PersonForm.jsx";
-import { PersonTable } from "../Person/PersonTable.jsx";
+import { PersonDialog } from "../Person/PersonDialog.jsx";
+import { PersonListSelector } from "../Person/PersonListSelector.jsx";
 
 const EMPTY_GROUP = {
   name: "",
@@ -116,6 +116,7 @@ export function GroupEditorPage({
         <h2 className="d-flex align-items-center fs-4 fw-bold m-0">
           <i className="bi bi-collection me-2" aria-hidden="true" />
           {editorTitle(mode)}
+          {draft.id ? <strong className="editor-record-id ms-3">Id: {draft.id}</strong> : null}
         </h2>
         <div className="editor-page-actions">
           <button type="button" className="btn btn-outline-secondary table-add-button table-nav-button" title="Back to Groups" aria-label="Back to Groups" onClick={onBack}>
@@ -125,72 +126,48 @@ export function GroupEditorPage({
       </div>
 
       <section className="group-editor-fields">
-        <label className="form-row">
-          <span>Name</span>
-          <input
-            className="form-control"
-            disabled={!editable}
-            placeholder="Group name"
-            value={valueOrEmpty(draft.name)}
-            onChange={event => setDraft(current => ({ ...current, name: event.target.value }))}
-          />
-        </label>
-        {mode === "view" ? (
-          <>
-            <label className="form-row">
-              <span>Created By</span>
-              <input className="form-control" disabled value={valueOrEmpty(draft.createdByName || draft.createdBy)} />
-            </label>
-            <label className="form-row">
-              <span>Created On</span>
-              <input className="form-control" disabled value={valueOrEmpty(draft.createdOn)} />
-            </label>
-          </>
-        ) : null}
+        <Input
+          label="Name"
+          editable={editable}
+          placeholder="Group name"
+          value={draft.name}
+          onChange={value => setDraft(current => ({ ...current, name: value }))}
+        />
+        <Input label="By" editable={false} value={draft.createdByName || draft.createdBy} />
+        <Input label="On" editable={false} value={draft.createdOn} />
       </section>
 
-      <section className={"group-editor-persons" + (!editable ? " group-editor-persons-single" : "")}>
-        <div className="group-person-table">
-          <PersonTable
-            actions={editable ? [{
+      <PersonListSelector
+        className="group-editor-persons"
+        singleClassName="group-editor-persons-single"
+        onView={viewPerson}
+        selected={{
+          actions: editable ? [{
               icon: "bi bi-person-dash",
               title: "Remove from group",
               onClick: removePerson
-            }] : []}
-            columnFields={["id", "name"]}
-            emptyText="No persons added"
-            icon="bi bi-people"
-            onView={viewPerson}
-            pageSize={0}
-            rows={members}
-            searchFields={["id", "name"]}
-            searchInputId="group-added-person-search"
-            searchPlaceholder="Search added"
-            title="Added Persons"
-          />
-        </div>
-        {editable ? (
-          <div className="group-person-table">
-            <PersonTable
-              actions={[{
+            }] : [],
+          className: "group-person-table",
+          emptyText: "No persons added",
+          rows: members,
+          searchInputId: "group-added-person-search",
+          searchPlaceholder: "Search added",
+          title: "Added Persons"
+        }}
+        available={editable ? {
+          actions: [{
                 icon: "bi bi-person-plus",
                 title: "Add to group",
                 onClick: addPerson
-              }]}
-              columnFields={["id", "name"]}
-              emptyText="No persons available"
-              icon="bi bi-people"
-              onView={viewPerson}
-              pageSize={0}
-              rows={availablePersons}
-              searchFields={["id", "name"]}
-              searchInputId="group-available-person-search"
-              searchPlaceholder="Search available"
-              title="Available Persons"
-            />
-          </div>
-        ) : null}
-      </section>
+              }],
+          className: "group-person-table",
+          emptyText: "No persons available",
+          rows: availablePersons,
+          searchInputId: "group-available-person-search",
+          searchPlaceholder: "Search available",
+          title: "Available Persons"
+        } : null}
+      />
 
       <div className="d-flex flex-wrap align-items-center justify-content-end gap-2 mt-1">
         {editable ? (
@@ -206,7 +183,7 @@ export function GroupEditorPage({
       </div>
 
       {personDialog && roles.length > 0 ? (
-        <PersonForm
+        <PersonDialog
           editable={false}
           mode="view"
           person={personDialog}

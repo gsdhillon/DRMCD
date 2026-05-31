@@ -116,6 +116,12 @@ select {
   min-width: 0;
 }
 
+.form-row .form-control:disabled,
+.form-row .form-select:disabled {
+  background-color: var(--bs-body-bg);
+  opacity: 1;
+}
+
 .app-shell {
   display: grid;
   grid-template-rows: auto minmax(0, 1fr) auto;
@@ -1352,6 +1358,12 @@ select {
   margin-right: 36px;
 }
 
+.editor-record-id {
+  color: var(--app-button-color, #f97316);
+  font-size: 20px;
+  font-weight: 800;
+}
+
 .group-editor-fields,
 .vc-editor-fields {
   background: var(--app-panel-bg, #fffdf2);
@@ -1363,10 +1375,39 @@ select {
   padding: 14px;
 }
 
+.group-editor-fields {
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  padding: 0;
+}
+
 .group-editor-fields .form-row,
 .vc-editor-fields .form-row {
   grid-template-columns: 110px minmax(0, 1fr);
   margin-bottom: 0;
+}
+
+.group-editor-fields .form-row {
+  grid-template-columns: 52px minmax(0, 1fr);
+}
+
+.vc-editor-fields {
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  gap: 10px 18px;
+  grid-template-columns: minmax(360px, 1fr) minmax(330px, 380px);
+  padding: 0;
+}
+
+.vc-editor-fields .form-row {
+  grid-template-columns: 72px minmax(0, 1fr);
+}
+
+.vc-editor-fields .form-row:first-child,
+.vc-editor-fields .form-row:nth-child(3) {
+  grid-template-columns: 42px minmax(0, 1fr);
 }
 
 .group-editor-persons,
