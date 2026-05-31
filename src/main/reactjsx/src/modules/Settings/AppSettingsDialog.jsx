@@ -75,31 +75,6 @@ export function AppSettingsDialog({ onClose }) {
     }));
   }
 
-  function numberField(field, label, fallback, suffix = "") {
-    return (
-      <Input
-        label={label}
-        editable={!busy}
-        suffix={suffix}
-        type="number"
-        value={numberValue(draft[field], fallback)}
-        onChange={value => change(field, value)}
-      />
-    );
-  }
-
-  function devModeField(field, label, helpText) {
-    return (
-      <CheckBox
-        label={label}
-        editable={!busy}
-        infoMsg={helpText}
-        value={draft[field] === true}
-        onChange={value => change(field, value)}
-      />
-    );
-  }
-
   async function save() {
     setBusy(true);
 
@@ -143,22 +118,97 @@ export function AppSettingsDialog({ onClose }) {
       >
         <div className="app-settings-scroll">
           <Input
-              label="App Version:"
-              editable={false}
-              value={draft.appVersion}
+            label="App Version:"
+            editable={false}
+            value={draft.appVersion}
           />
-          <Input label="Started On:" editable={false} value={draft.startedOn} />
-          {devModeField("clientInDevMode", "Client Dev Mode:", "It will set the client console logs to debug mode")}
-          {devModeField("serverInDevMode", "Server Dev Mode:", "It will set the server console logs to debug mode")}
-          {numberField("chatMsgBufferSize", "Chat Msg Buffer Size:", defaults.chatMsgBufferSize)}
-          {numberField("chatMsgMaxSize", "Chat Msg Max Size:", defaults.chatMsgMaxSize)}
-          {numberField("chatFileMaxSizeKb", "Chat File Max Size:", bytesToKb(defaults.chatFileMaxSize, defaults.chatFileMaxSize), "KB")}
-          {numberField("vcEarlyStartMins", "Vc Early Start Mins:", defaults.vcEarlyStartMins)}
-          {numberField("vcPastMins", "Vc Past Mins:", defaults.vcPastMins)}
-          {numberField("popupMsgTime", "Popup Msg Time:", defaults.popupMsgTime, "secs")}
-          {numberField("vcMaxDuration", "Vc Max Duration:", defaults.vcMaxDuration, "minutes")}
-          {numberField("vcExtededTime", "Vc Exteded Time:", defaults.vcExtededTime, "minutes")}
-          {numberField("vcEndAlertIntrval", "Vc End Alert Intrval:", defaults.vcEndAlertIntrval, "minutes")}
+          <Input
+            label="Started On:"
+            editable={false}
+            value={draft.startedOn}
+          />
+          <CheckBox
+            label="Client Dev Mode:"
+            editable={!busy}
+            infoMsg="It will set the client console logs to debug mode"
+            value={draft.clientInDevMode === true}
+            onChange={value => change("clientInDevMode", value)}
+          />
+          <CheckBox
+            label="Server Dev Mode:"
+            editable={!busy}
+            infoMsg="It will set the server console logs to debug mode"
+            value={draft.serverInDevMode === true}
+            onChange={value => change("serverInDevMode", value)}
+          />
+          <Input
+            label="Chat Msg Buffer Size:"
+            editable={!busy}
+            type="number"
+            value={numberValue(draft.chatMsgBufferSize, defaults.chatMsgBufferSize)}
+            onChange={value => change("chatMsgBufferSize", value)}
+          />
+          <Input
+            label="Chat Msg Max Size:"
+            editable={!busy}
+            type="number"
+            value={numberValue(draft.chatMsgMaxSize, defaults.chatMsgMaxSize)}
+            onChange={value => change("chatMsgMaxSize", value)}
+          />
+          <Input
+            label="Chat File Max Size:"
+            editable={!busy}
+            suffix="KB"
+            type="number"
+            value={numberValue(draft.chatFileMaxSizeKb, bytesToKb(defaults.chatFileMaxSize, defaults.chatFileMaxSize))}
+            onChange={value => change("chatFileMaxSizeKb", value)}
+          />
+          <Input
+            label="Vc Early Start Mins:"
+            editable={!busy}
+            type="number"
+            value={numberValue(draft.vcEarlyStartMins, defaults.vcEarlyStartMins)}
+            onChange={value => change("vcEarlyStartMins", value)}
+          />
+          <Input
+            label="Vc Past Mins:"
+            editable={!busy}
+            type="number"
+            value={numberValue(draft.vcPastMins, defaults.vcPastMins)}
+            onChange={value => change("vcPastMins", value)}
+          />
+          <Input
+            label="Popup Msg Time:"
+            editable={!busy}
+            suffix="secs"
+            type="number"
+            value={numberValue(draft.popupMsgTime, defaults.popupMsgTime)}
+            onChange={value => change("popupMsgTime", value)}
+          />
+          <Input
+            label="Vc Max Duration:"
+            editable={!busy}
+            suffix="minutes"
+            type="number"
+            value={numberValue(draft.vcMaxDuration, defaults.vcMaxDuration)}
+            onChange={value => change("vcMaxDuration", value)}
+          />
+          <Input
+            label="Vc Exteded Time:"
+            editable={!busy}
+            suffix="minutes"
+            type="number"
+            value={numberValue(draft.vcExtededTime, defaults.vcExtededTime)}
+            onChange={value => change("vcExtededTime", value)}
+          />
+          <Input
+            label="Vc End Alert Intrval:"
+            editable={!busy}
+            suffix="minutes"
+            type="number"
+            value={numberValue(draft.vcEndAlertIntrval, defaults.vcEndAlertIntrval)}
+            onChange={value => change("vcEndAlertIntrval", value)}
+          />
         </div>
       </Form>
     </FormDialog>
