@@ -228,7 +228,7 @@ export function DataTable(props) {
   function pageButton(page, label, disabled, active) {
     return (
       <li key={label} className={"page-item" + (disabled ? " disabled" : "") + (active ? " active" : "")}>
-        <Button className="page-link" disabled={disabled} label={label} onClick={() => !disabled && props.onPage(page)} />
+        <Button look="page-link" disabled={disabled} label={label} onClick={() => !disabled && props.onPage(page)} />
       </li>
     );
   }
@@ -269,20 +269,21 @@ export function DataTable(props) {
     return (
       <div className="table-tools" role="group" aria-label={props.title + " tools"}>
         <Button
-          className={"btn table-tool-button table-clear-filters" + (filterCount ? " active" : " btn-outline-secondary")}
+          look="table-clear-filters"
+          active={filterCount > 0}
           icon="bi bi-eraser"
           title="Clear all filters"
           disabled={!filterCount}
           onClick={clearAllFilters}
         />
         <Button
-          className="btn btn-outline-secondary table-tool-button"
+          look="table-tool"
           icon="bi bi-filetype-csv"
           title="Export CSV"
           onClick={exportCsv}
         />
         <Button
-          className="btn btn-outline-secondary table-tool-button"
+          look="table-tool"
           icon="bi bi-filetype-pdf"
           title="Export PDF"
           onClick={exportPdf}
@@ -299,7 +300,8 @@ export function DataTable(props) {
     return (
       <div className="table-column-filter-wrap">
         <Button
-          className={"btn btn-link table-column-filter-toggle" + (active ? " active" : "")}
+          look="table-column-filter"
+          active={active}
           icon={active ? "bi bi-funnel-fill" : "bi bi-funnel"}
           title={"Filter " + column.label}
           aria-expanded={open}
@@ -324,7 +326,7 @@ export function DataTable(props) {
             />
             {value ? (
               <Button
-                className="btn btn-outline-secondary table-search-clear"
+                look="table-search-clear"
                 icon="bi bi-x-lg"
                 title="Clear filter"
                 onClick={() => updateColumnFilter(column.field, "")}
@@ -394,7 +396,7 @@ export function DataTable(props) {
             <div className="table-command-group" role="group" aria-label={props.title + " commands"}>
               {props.toolbarActions}
               {props.onAdd ? (
-                <Button className="btn btn-primary table-add-button" title={props.addLabel} onClick={props.onAdd}>
+                <Button look="table-add" title={props.addLabel} onClick={props.onAdd}>
                   <i className="bi bi-plus-lg" aria-hidden="true" />
                   <i className={props.addIcon || props.icon} aria-hidden="true" />
                 </Button>
@@ -419,7 +421,7 @@ export function DataTable(props) {
                       {column.sortable === false || !props.onSort ? (
                         <span className="fw-semibold">{column.label}</span>
                       ) : (
-                        <Button className="btn btn-link p-0 fw-semibold text-decoration-none text-dark" onClick={() => props.onSort(column.field)}>
+                        <Button look="column-sort" onClick={() => props.onSort(column.field)}>
                           {column.label}
                           <i className={sortIcon(props.sortField, props.sortDirection, column.field)} aria-hidden="true" />
                         </Button>

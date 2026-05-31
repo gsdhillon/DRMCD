@@ -14,9 +14,10 @@ export function Form({
   onSubmitSuccess,
   side,
   subtitle,
-  submitClassName = "btn btn-primary",
+  submitClassName,
   submitIcon = "bi bi-check2-circle",
   submitLabel = "Save",
+  submitLook = "primary",
   title
 }) {
   const baseClassName = dialog ? "modal-panel data-form-panel" : "";
@@ -59,10 +60,10 @@ export function Form({
 
           <div className="d-flex flex-wrap align-items-center gap-2 mt-1">
             {editable ? (
-              <Button className={submitClassName} disabled={busy} icon={submitIcon} label={submitLabel} type="submit" />
+              <Button className={submitClassName} look={submitLook} disabled={busy} icon={submitIcon} label={submitLabel} type="submit" />
             ) : null}
             {onClose ? (
-              <Button className="btn btn-secondary dialog-close-button" disabled={busy} icon="bi bi-x-circle" label={closeLabel} onClick={onClose} />
+              <Button look="dialog-close" disabled={busy} icon="bi bi-x-circle" label={closeLabel} onClick={onClose} />
             ) : null}
           </div>
         </div>

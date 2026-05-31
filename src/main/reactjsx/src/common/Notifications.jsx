@@ -77,12 +77,12 @@ export function Notifications({ notifications: initialNotifications = [], onClos
         <div className="modal-header px-0 pt-0 d-flex align-items-center justify-content-between gap-3">
           <h2 className="modal-title fs-4">Notifications</h2>
           <div className="d-inline-flex align-items-center gap-2">
-            <Button className="btn btn-sm btn-outline-secondary" icon="bi bi-arrow-clockwise" title="Refresh" onClick={event => {
+            <Button look="small-secondary" icon="bi bi-arrow-clockwise" title="Refresh" onClick={event => {
               event.preventDefault();
               event.stopPropagation();
               load();
             }} />
-            <Button className="btn btn-sm btn-outline-danger" disabled={notifications.length === 0} icon="bi bi-trash3" label="Delete All" onClick={event => {
+            <Button look="small-danger" disabled={notifications.length === 0} icon="bi bi-trash3" label="Delete All" onClick={event => {
               event.preventDefault();
               event.stopPropagation();
               removeAll();
@@ -102,7 +102,7 @@ export function Notifications({ notifications: initialNotifications = [], onClos
                   <p>{notification.message}</p>
                   <span>{formatNotificationDate(notification.createdOn)}</span>
                 </div>
-                <Button className="btn btn-sm btn-outline-danger notification-delete" icon="bi bi-trash3" title="Delete notification" onClick={event => {
+                <Button look="notification-delete" icon="bi bi-trash3" title="Delete notification" onClick={event => {
                   event.preventDefault();
                   event.stopPropagation();
                   removeNotification(notification.id);
@@ -112,7 +112,7 @@ export function Notifications({ notifications: initialNotifications = [], onClos
           </div>
         )}
         <div className="d-flex flex-wrap align-items-center justify-content-end gap-2 mt-3">
-          <Button className="btn btn-secondary dialog-close-button" icon="bi bi-x-circle" label="Close" onClick={close} />
+          <Button look="dialog-close" icon="bi bi-x-circle" label="Close" onClick={close} />
         </div>
       </div>
     </div>

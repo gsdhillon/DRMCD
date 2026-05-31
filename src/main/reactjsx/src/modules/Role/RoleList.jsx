@@ -109,8 +109,8 @@ export function RoleList() {
   function renderActions(role) {
     return (
       <div className="d-inline-flex align-items-center gap-2">
-        <Button className="btn btn-sm btn-outline-secondary me-1" icon="bi bi-pencil-square" title="Edit" onClick={() => editRole(role)} />
-        <Button className="btn btn-sm btn-outline-danger" icon="bi bi-trash" title="Delete" onClick={() => removeRole(role)} />
+        <Button look="small-secondary-spaced" icon="bi bi-pencil-square" title="Edit" onClick={() => editRole(role)} />
+        <Button look="small-danger" icon="bi bi-trash" title="Delete" onClick={() => removeRole(role)} />
       </div>
     );
   }

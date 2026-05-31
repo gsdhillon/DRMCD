@@ -139,15 +139,15 @@ export function PersonList({ backTitle = "Back", groupId, onBack, persons: provi
 
   const actions = [
     {
-      className: "btn btn-sm btn-outline-secondary me-1",
       icon: "bi bi-pencil-square",
+      look: "small-secondary-spaced",
       title: "Update",
       show: person => isAdmin && canManagePerson(person) && !readOnlyList,
       onClick: openUpdatePerson
     },
     {
-      className: "btn btn-sm btn-outline-danger",
       icon: "bi bi-trash",
+      look: "small-danger",
       title: "Delete",
       show: person => isAdmin && canManagePerson(person) && !readOnlyList,
       onClick: person => removePerson(person.id)
@@ -164,7 +164,7 @@ export function PersonList({ backTitle = "Back", groupId, onBack, persons: provi
         searchInputId={groupId ? "group-person-search-" + groupId : "person-search"}
         title={title}
         toolbarActions={onBack ? (
-          <Button className="btn btn-outline-secondary table-add-button table-nav-button" icon="bi bi-arrow-left" title={backTitle} onClick={onBack} />
+          <Button look="table-nav" icon="bi bi-arrow-left" title={backTitle} onClick={onBack} />
         ) : null}
         actions={actions}
       />

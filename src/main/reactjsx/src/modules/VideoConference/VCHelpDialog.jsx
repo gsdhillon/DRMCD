@@ -69,7 +69,7 @@ export function VCHelpDialog({ help, error, loading, onClose }) {
         ) : null}
 
         <div className="d-flex justify-content-end mt-3">
-          <Button className="btn btn-secondary dialog-close-button" icon="bi bi-x-circle" label="Close" onClick={onClose} />
+          <Button look="dialog-close" icon="bi bi-x-circle" label="Close" onClick={onClose} />
         </div>
       </div>
     </div>

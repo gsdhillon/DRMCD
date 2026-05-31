@@ -137,8 +137,8 @@ export function PersonTable({
         {visibleActions.map(action => (
           <Button
             key={action.title}
-            className={action.className || "btn btn-sm btn-outline-primary"}
             icon={action.icon}
+            look={action.look || "small-primary"}
             title={action.title}
             onClick={() => action.onClick?.(person)}
           />

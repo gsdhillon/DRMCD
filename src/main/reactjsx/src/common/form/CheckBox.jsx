@@ -25,7 +25,7 @@ export function CheckBox({
         />
         <strong className={checked ? "text-success" : "text-secondary"}>{checked ? options[0] : options[1]}</strong>
         {infoMsg ? (
-          <Button className="btn btn-sm btn-link app-settings-info-button" icon="bi bi-info-circle" title="Info" onClick={() => showInfo(infoMsg)} />
+          <Button look="settings-info" icon="bi bi-info-circle" title="Info" onClick={() => showInfo(infoMsg)} />
         ) : null}
       </div>
     </label>

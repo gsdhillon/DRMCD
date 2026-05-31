@@ -138,8 +138,8 @@ export function VCEditorPage({
           {draft.id ? <strong className="editor-record-id ms-3">Id: {draft.id}</strong> : null}
         </h2>
         <div className="editor-page-actions d-inline-flex align-items-center gap-2">
-          <Button className="btn btn-outline-secondary table-add-button table-help-button" icon="bi bi-question-circle" title="Help" onClick={openHelp} />
-          <Button className="btn btn-outline-secondary table-add-button table-nav-button" icon="bi bi-arrow-left fw-bold" title="Back to Video Conferences" onClick={onBack} />
+          <Button look="table-help" icon="bi bi-question-circle" title="Help" onClick={openHelp} />
+          <Button look="table-nav" icon="bi bi-arrow-left fw-bold" title="Back to Video Conferences" onClick={onBack} />
         </div>
       </div>
 
@@ -199,8 +199,8 @@ export function VCEditorPage({
       />
 
       <div className="d-flex flex-wrap align-items-center justify-content-end gap-2 mt-1">
-        <Button className="btn btn-primary" icon={mode === "update" ? "bi bi-check2-circle" : "bi bi-calendar-plus"} label={mode === "update" ? "Update VC" : "Schedule VC"} onClick={save} />
-        <Button className="btn btn-secondary dialog-close-button" icon="bi bi-x-circle" label="Close" onClick={onBack} />
+        <Button look="primary" icon={mode === "update" ? "bi bi-check2-circle" : "bi bi-calendar-plus"} label={mode === "update" ? "Update VC" : "Schedule VC"} onClick={save} />
+        <Button look="dialog-close" icon="bi bi-x-circle" label="Close" onClick={onBack} />
       </div>
 
       {personDialog && roles.length > 0 ? (

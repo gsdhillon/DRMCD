@@ -120,7 +120,7 @@ export function GroupEditorPage({
           {draft.id ? <strong className="editor-record-id ms-3">Id: {draft.id}</strong> : null}
         </h2>
         <div className="editor-page-actions">
-          <Button className="btn btn-outline-secondary table-add-button table-nav-button" icon="bi bi-arrow-left fw-bold" title="Back to Groups" onClick={onBack} />
+          <Button look="table-nav" icon="bi bi-arrow-left fw-bold" title="Back to Groups" onClick={onBack} />
         </div>
       </div>
 
@@ -170,9 +170,9 @@ export function GroupEditorPage({
 
       <div className="d-flex flex-wrap align-items-center justify-content-end gap-2 mt-1">
         {editable ? (
-          <Button className="btn btn-primary" icon={mode === "update" ? "bi bi-check2-circle" : "bi bi-plus-lg"} label={mode === "update" ? "Update Group" : "Add Group"} onClick={save} />
+          <Button look="primary" icon={mode === "update" ? "bi bi-check2-circle" : "bi bi-plus-lg"} label={mode === "update" ? "Update Group" : "Add Group"} onClick={save} />
         ) : null}
-        <Button className="btn btn-secondary dialog-close-button" icon="bi bi-x-circle" label="Close" onClick={onBack} />
+        <Button look="dialog-close" icon="bi bi-x-circle" label="Close" onClick={onBack} />
       </div>
 
       {personDialog && roles.length > 0 ? (

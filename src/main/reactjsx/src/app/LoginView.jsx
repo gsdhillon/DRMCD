@@ -28,9 +28,9 @@ export function LoginView() {
           busy={loginBusy}
           className="login-panel"
           onSubmit={submit}
-          submitClassName="btn btn-primary w-100"
           submitIcon="bi bi-box-arrow-in-right"
           submitLabel={loginBusy ? "Signing in" : "Login"}
+          submitLook="primary-full"
         >
           <div className="login-brand">
             <img className="app-logo login-logo" src={theme.assets.logo} alt={title} />

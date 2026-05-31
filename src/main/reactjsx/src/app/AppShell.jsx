@@ -53,11 +53,11 @@ export function AppShell() {
             setMenuOpen(false);
           }}
         />
-        {menuOpen ? <Button className="app-menu-backdrop" title="Close menu" onClick={() => setMenuOpen(false)} /> : null}
+        {menuOpen ? <Button look="menu-backdrop" title="Close menu" onClick={() => setMenuOpen(false)} /> : null}
         <main className="main-panel">
           <div id="main-panel" ref={mainPanelRef}>
             <Button
-              className="main-panel-fullscreen-button"
+              look="fullscreen"
               icon={mainPanelFullscreen ? "bi bi-fullscreen-exit" : "bi bi-fullscreen"}
               title={mainPanelFullscreen ? "Exit full screen" : "Full screen"}
               aria-label={mainPanelFullscreen ? "Exit full screen" : "Full screen"}

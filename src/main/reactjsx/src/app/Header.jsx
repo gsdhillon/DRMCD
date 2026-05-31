@@ -118,7 +118,7 @@ export function Header({ menuOpen, onMenuToggle }) {
         </div>
       </div>
       <div className="notification-bar">
-        <Button className="header-icon-button" title="Notifications" onClick={toggleNotifications}>
+        <Button look="header-icon" title="Notifications" onClick={toggleNotifications}>
           <i className="bi bi-bell" aria-hidden="true" />
           {notifications.length > 0 ? (
             <span className="notification-badge">{notificationCountLabel(notifications.length)}</span>
@@ -138,30 +138,30 @@ export function Header({ menuOpen, onMenuToggle }) {
                 <strong>{user?.name || "User"}</strong>
                 <span>{user?.role || ""}</span>
               </div>
-              <Button className="profile-menu-item" onClick={openChangePassword}>
+              <Button look="profile-menu" onClick={openChangePassword}>
                 <i className="bi bi-key" aria-hidden="true" />
                 <span>Change Password</span>
               </Button>
               {user?.role === "SuperAdmin" ? (
                 <>
-                  <Button className="profile-menu-item" onClick={openSettings}>
+                  <Button look="profile-menu" onClick={openSettings}>
                     <i className="bi bi-gear" aria-hidden="true" />
                     <span>App Settings</span>
                   </Button>
-                  <Button className="profile-menu-item" onClick={openRoles}>
+                  <Button look="profile-menu" onClick={openRoles}>
                     <i className="bi bi-palette" aria-hidden="true" />
                     <span>Edit Roles</span>
                   </Button>
                 </>
               ) : null}
-              <Button className="profile-menu-item profile-menu-danger" onClick={logout}>
+              <Button look="profile-menu-danger" onClick={logout}>
                 <i className="bi bi-box-arrow-right" aria-hidden="true" />
                 <span>Logout</span>
               </Button>
             </div>
           ) : null}
         </div>
-        <Button className="header-menu-button" icon="bi bi-list" title={menuOpen ? "Close menu" : "Menu"} onClick={onMenuToggle} />
+        <Button look="header-menu" icon="bi bi-list" title={menuOpen ? "Close menu" : "Menu"} onClick={onMenuToggle} />
       </div>
       {notificationsOpen ? (
         <Notifications

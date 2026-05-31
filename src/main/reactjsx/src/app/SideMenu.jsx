@@ -8,7 +8,7 @@ export function SideMenu({ collapsed, onCollapseToggle, open }) {
   return (
     <aside className={"app-menu" + (open ? " app-menu-open" : "")}>
       <Button
-        className="app-menu-collapse-button"
+        look="menu-collapse"
         icon={collapsed ? "bi bi-chevron-right" : "bi bi-chevron-left"}
         title={collapsed ? "Expand menu" : "Collapse menu"}
         aria-label={collapsed ? "Expand menu" : "Collapse menu"}

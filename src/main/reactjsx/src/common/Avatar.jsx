@@ -27,7 +27,7 @@ export function Avatar({ user, onClick }) {
 
   return (
     <Button
-      className="avatar header-avatar avatar-clickable"
+      look="avatar"
       style={{ borderColor: roleBorderColor(user) }}
       title="Account"
       onClick={onClick}

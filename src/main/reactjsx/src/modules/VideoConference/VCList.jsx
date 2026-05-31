@@ -214,17 +214,18 @@ export function VCList() {
     return (
       <div className="d-inline-flex align-items-center gap-2">
         <Button
-          className={"btn btn-sm " + (conference.startAllowed ? "btn-outline-primary" : "btn-outline-secondary")}
+          look="small-secondary"
+          disabled={!conference.startAllowed}
           icon="bi bi-camera-video"
           title={conference.startAllowed ? "Start VC" : "Start VC is not available yet"}
-          onClick={() => conference.startAllowed && setActiveConference(conference)}
+          onClick={() => setActiveConference(conference)}
         />
-        <Button className="btn btn-sm btn-outline-secondary" icon="bi bi-people" title="View Participants" onClick={() => openPersons(conference)} />
+        <Button look="small-secondary" icon="bi bi-people" title="View Participants" onClick={() => openPersons(conference)} />
         {conference.creator ? (
-          <Button className="btn btn-sm btn-outline-secondary" icon="bi bi-pencil-square" title="Update VC" onClick={() => openUpdate(conference)} />
+          <Button look="small-secondary" icon="bi bi-pencil-square" title="Update VC" onClick={() => openUpdate(conference)} />
         ) : null}
         {canDelete(conference) ? (
-          <Button className="btn btn-sm btn-outline-danger" icon="bi bi-trash" title="Delete VC" onClick={() => removeConference(conference)} />
+          <Button look="small-danger" icon="bi bi-trash" title="Delete VC" onClick={() => removeConference(conference)} />
         ) : null}
       </div>
     );
@@ -296,7 +297,7 @@ export function VCList() {
         sortField={sortField}
         title="Video Conferences"
         toolbarActions={(
-          <Button className="btn btn-outline-secondary table-add-button table-help-button" icon="bi bi-question-circle" title="Help" onClick={openHelp} />
+          <Button look="table-help" icon="bi bi-question-circle" title="Help" onClick={openHelp} />
         )}
         totalCount={conferences.length}
         totalPages={totalPages}
