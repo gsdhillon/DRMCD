@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Form } from "./form/Form.jsx";
+import { FormDialog } from "./form/FormDialog.jsx";
 import { Input } from "./form/Input.jsx";
 import { useRenderDebug } from "./useRenderDebug.js";
 import { changePassword } from "../services/auth.js";
@@ -43,38 +44,39 @@ export function ChangePasswordDialog({ onClose }) {
   }
 
   return (
-    <Form
-      busy={busy}
-      className="password-panel"
-      closeLabel="Cancel"
-      onClose={onClose}
-      onSubmit={submitPassword}
-      subtitle="Update your login password."
-      submitLabel={busy ? "Changing..." : "Change Password"}
-      title="Change Password"
-    >
-      <Input
-        label="Current Password"
-        autoFocus
-        editable={!busy}
-        type="password"
-        value={currentPassword}
-        onChange={setCurrentPassword}
-      />
-      <Input
-        label="New Password"
-        editable={!busy}
-        type="password"
-        value={newPassword}
-        onChange={setNewPassword}
-      />
-      <Input
-        label="Confirm Password"
-        editable={!busy}
-        type="password"
-        value={confirmPassword}
-        onChange={setConfirmPassword}
-      />
-    </Form>
+    <FormDialog busy={busy} onClose={onClose}>
+      <Form
+        busy={busy}
+        className="password-panel"
+        closeLabel="Cancel"
+        onSubmit={submitPassword}
+        subtitle="Update your login password."
+        submitLabel={busy ? "Changing..." : "Change Password"}
+        title="Change Password"
+      >
+        <Input
+          label="Current Password"
+          autoFocus
+          editable={!busy}
+          type="password"
+          value={currentPassword}
+          onChange={setCurrentPassword}
+        />
+        <Input
+          label="New Password"
+          editable={!busy}
+          type="password"
+          value={newPassword}
+          onChange={setNewPassword}
+        />
+        <Input
+          label="Confirm Password"
+          editable={!busy}
+          type="password"
+          value={confirmPassword}
+          onChange={setConfirmPassword}
+        />
+      </Form>
+    </FormDialog>
   );
 }

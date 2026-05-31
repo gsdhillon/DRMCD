@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Form } from "../../common/form/Form.jsx";
+import { FormDialog } from "../../common/form/FormDialog.jsx";
 import { Input } from "../../common/form/Input.jsx";
 import { Select } from "../../common/form/Select.jsx";
 import { Photo } from "../../common/Photo.jsx";
@@ -74,57 +75,58 @@ export function PersonForm({
   }
 
   return (
-    <Form
-      className="person-form"
-      editable={editable}
-      onClose={onClose}
-      onSubmit={submit}
-      side={<Photo editable={editable} photo={draft.photo || draft.thumbnail} onChange={photo => change("photo", photo)} />}
-      submitIcon={submitIcon}
-      submitLabel={submitLabel}
-      title={title}
-    >
-      <Input
-        label="Name"
+    <FormDialog onClose={onClose}>
+      <Form
+        className="person-form"
         editable={editable}
-        value={draft.name}
-        onChange={value => change("name", value)}
-      />
-      <Input
-        label="Email"
-        editable={editable}
-        value={draft.email}
-        onChange={value => change("email", value)}
-      />
-      <Input
-        label="Mobile No"
-        editable={editable}
-        value={draft.mobileNo}
-        onChange={value => change("mobileNo", value)}
-      />
-      <Input
-        label="Designation"
-        editable={editable}
-        value={draft.designation}
-        onChange={value => change("designation", value)}
-      />
-      <Select
-        editable={editable}
-        label="Role"
-        options={roleOptions}
-        value={draft.roleId}
-        onChange={changeRole}
-      />
-      {editable ? (
+        onSubmit={submit}
+        side={<Photo editable={editable} photo={draft.photo || draft.thumbnail} onChange={photo => change("photo", photo)} />}
+        submitIcon={submitIcon}
+        submitLabel={submitLabel}
+        title={title}
+      >
         <Input
-          label="Password"
+          label="Name"
           editable={editable}
-          placeholder={mode === "update" ? "Leave blank to keep existing" : "Password"}
-          type="password"
-          value={draft.password}
-          onChange={value => change("password", value)}
+          value={draft.name}
+          onChange={value => change("name", value)}
         />
-      ) : null}
-    </Form>
+        <Input
+          label="Email"
+          editable={editable}
+          value={draft.email}
+          onChange={value => change("email", value)}
+        />
+        <Input
+          label="Mobile No"
+          editable={editable}
+          value={draft.mobileNo}
+          onChange={value => change("mobileNo", value)}
+        />
+        <Input
+          label="Designation"
+          editable={editable}
+          value={draft.designation}
+          onChange={value => change("designation", value)}
+        />
+        <Select
+          editable={editable}
+          label="Role"
+          options={roleOptions}
+          value={draft.roleId}
+          onChange={changeRole}
+        />
+        {editable ? (
+          <Input
+            label="Password"
+            editable={editable}
+            placeholder={mode === "update" ? "Leave blank to keep existing" : "Password"}
+            type="password"
+            value={draft.password}
+            onChange={value => change("password", value)}
+          />
+        ) : null}
+      </Form>
+    </FormDialog>
   );
 }

@@ -3,6 +3,8 @@ import { copyrightText, title } from "./AppText.js";
 import { useApp } from "../state/AppContext.jsx";
 import { AppMessages } from "./AppMessages.jsx";
 import { Footer } from "./Footer.jsx";
+import { Form } from "../common/form/Form.jsx";
+import { Input } from "../common/form/Input.jsx";
 import { useRenderDebug } from "../common/useRenderDebug.js";
 
 export function LoginView() {
@@ -12,9 +14,7 @@ export function LoginView() {
   const [personId, setPersonId] = useState("");
   const [password, setPassword] = useState("");
 
-  async function submit(event) {
-    event.preventDefault();
-
+  async function submit() {
     if (!loginBusy) {
       await login(personId, password);
     }
@@ -24,42 +24,37 @@ export function LoginView() {
     <div className="login-shell" style={theme.cssVars}>
       <AppMessages />
       <main className="login-content">
-        <form className="login-panel" onSubmit={submit}>
+        <Form
+          busy={loginBusy}
+          className="login-panel"
+          onSubmit={submit}
+          submitClassName="btn btn-primary w-100"
+          submitIcon="bi bi-box-arrow-in-right"
+          submitLabel={loginBusy ? "Signing in" : "Login"}
+        >
           <div className="login-brand">
             <img className="app-logo login-logo" src={theme.assets.logo} alt={title} />
             <div>
               <h1>{title}</h1>
             </div>
           </div>
-          <label className="form-row">
-            <span>Person Id</span>
-            <input
-              id="login-person-id"
-              type="number"
-              className="form-control"
-              autoComplete="username"
-              name="username"
-              value={personId}
-              onChange={event => setPersonId(event.target.value)}
-            />
-          </label>
-          <label className="form-row">
-            <span>Password</span>
-            <input
-              id="login-password"
-              type="password"
-              className="form-control"
-              autoComplete="current-password"
-              name="password"
-              value={password}
-              onChange={event => setPassword(event.target.value)}
-            />
-          </label>
-          <button type="submit" className="btn btn-primary w-100" disabled={loginBusy}>
-            <i className="bi bi-box-arrow-in-right" aria-hidden="true" />
-            {loginBusy ? "Signing in" : "Login"}
-          </button>
-        </form>
+          <Input
+            label="Person Id"
+            editable={!loginBusy}
+            id="login-person-id"
+            type="number"
+            value={personId}
+            onChange={setPersonId}
+          />
+          <Input
+            label="Password"
+            editable={!loginBusy}
+            id="login-password"
+            type="password"
+            value={password}
+            onChange={setPassword}
+          />
+        </Form>
       </main>
       <Footer footerText={copyrightText} />
     </div>
