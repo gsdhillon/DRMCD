@@ -138,8 +138,8 @@ export function VCEditorPage({
           {draft.id ? <strong className="editor-record-id ms-3">Id: {draft.id}</strong> : null}
         </h2>
         <div className="editor-page-actions d-inline-flex align-items-center gap-2">
-          <Button look="table-help" icon="question-circle" title="Help" onClick={openHelp} />
-          <Button look="table-nav" icon="arrow-left" iconClassName="fw-bold" title="Back to Video Conferences" onClick={onBack} />
+          <Button color="secondary-line" icon="question-circle" title="Help" onClick={openHelp} />
+          <Button color="secondary-line" icon="arrow-left" iconClassName="fw-bold" title="Back to Video Conferences" onClick={onBack} />
         </div>
       </div>
 

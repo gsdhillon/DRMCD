@@ -1,11 +1,5 @@
 const buttonLooks = {
-  "notification-delete": "btn btn-sm btn-outline-danger notification-delete",
   "dialog-close": "btn btn-secondary dialog-close-button",
-  "table-add": "btn btn-primary table-add-button",
-  "table-nav": "btn btn-outline-secondary table-add-button table-nav-button",
-  "table-help": "btn btn-outline-secondary table-add-button table-help-button",
-  "table-tool": "btn btn-outline-secondary table-tool-button",
-  "table-clear-filters": "btn btn-outline-secondary table-tool-button table-clear-filters",
   "table-column-filter": "btn btn-link table-column-filter-toggle",
   "table-search-clear": "btn btn-outline-secondary table-search-clear",
   "column-sort": "btn btn-link p-0 fw-semibold text-decoration-none text-dark",

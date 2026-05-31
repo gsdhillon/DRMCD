@@ -562,39 +562,9 @@ select {
   gap: 4px;
 }
 
-.table-tool-button {
-  align-items: center;
-  display: inline-flex;
-  height: 38px;
-  justify-content: center;
-  padding: 0;
-  width: 38px;
-}
-
-.table-clear-filters.active {
-  background: var(--app-button-color, #f97316);
-  border-color: var(--app-button-color, #f97316);
-  color: var(--app-button-text, #ffffff);
-}
-
-.table-clear-filters.active:hover,
-.table-clear-filters.active:focus {
-  filter: brightness(0.96);
-}
-
 .table-search input::-webkit-search-cancel-button,
 .table-column-filter input::-webkit-search-cancel-button {
   display: none;
-}
-
-.table-add-button {
-  align-items: center;
-  display: inline-flex;
-  flex: 0 0 auto;
-  height: 38px;
-  justify-content: center;
-  min-width: 38px;
-  padding: 0 10px;
 }
 
 .table-command-group {
@@ -602,22 +572,6 @@ select {
   display: inline-flex;
   flex: 0 0 auto;
   gap: 4px;
-}
-
-.table-help-button,
-.table-nav-button {
-  border-color: var(--app-button-color, #f97316);
-  color: var(--app-button-color, #f97316);
-  font-weight: 800;
-}
-
-.table-help-button:hover,
-.table-help-button:focus,
-.table-nav-button:hover,
-.table-nav-button:focus {
-  background: var(--app-button-color, #f97316);
-  border-color: var(--app-button-color, #f97316);
-  color: var(--app-button-text, #ffffff);
 }
 
 .app-messages {
@@ -1065,14 +1019,6 @@ select {
   color: var(--app-muted-text, #756344);
   display: block;
   font-size: 12px;
-}
-
-.notification-delete {
-  align-items: center;
-  display: inline-flex;
-  height: 34px;
-  justify-content: center;
-  width: 34px;
 }
 
 .notification-empty {

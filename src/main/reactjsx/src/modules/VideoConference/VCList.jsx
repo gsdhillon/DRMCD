@@ -298,7 +298,7 @@ export function VCList() {
         sortField={sortField}
         title="Video Conferences"
         toolbarActions={(
-          <Button look="table-help" icon="question-circle" title="Help" onClick={openHelp} />
+          <Button color="secondary-line" icon="question-circle" title="Help" onClick={openHelp} />
         )}
         totalCount={conferences.length}
         totalPages={totalPages}

@@ -167,7 +167,7 @@ export function PersonList({ backTitle = "Back", groupId, onBack, persons: provi
         searchInputId={groupId ? "group-person-search-" + groupId : "person-search"}
         title={title}
         toolbarActions={onBack ? (
-          <Button look="table-nav" icon="arrow-left" title={backTitle} onClick={onBack} />
+          <Button color="secondary-line" icon="arrow-left" title={backTitle} onClick={onBack} />
         ) : null}
         actions={actions}
       />

@@ -102,7 +102,7 @@ export function Notifications({ notifications: initialNotifications = [], onClos
                   <p>{notification.message}</p>
                   <span>{formatNotificationDate(notification.createdOn)}</span>
                 </div>
-                <Button look="notification-delete" icon="trash3" title="Delete notification" onClick={event => {
+                <Button color="danger-line" size="sm" icon="trash3" title="Delete notification" onClick={event => {
                   event.preventDefault();
                   event.stopPropagation();
                   removeNotification(notification.id);

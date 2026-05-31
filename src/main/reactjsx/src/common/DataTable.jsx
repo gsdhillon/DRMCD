@@ -269,7 +269,7 @@ export function DataTable(props) {
     return (
       <div className="table-tools" role="group" aria-label={props.title + " tools"}>
         <Button
-          look="table-clear-filters"
+          color="secondary-line"
           active={filterCount > 0}
           icon="eraser"
           title="Clear all filters"
@@ -277,13 +277,13 @@ export function DataTable(props) {
           onClick={clearAllFilters}
         />
         <Button
-          look="table-tool"
+          color="secondary-line"
           icon="filetype-csv"
           title="Export CSV"
           onClick={exportCsv}
         />
         <Button
-          look="table-tool"
+          color="secondary-line"
           icon="filetype-pdf"
           title="Export PDF"
           onClick={exportPdf}
@@ -396,7 +396,7 @@ export function DataTable(props) {
             <div className="table-command-group" role="group" aria-label={props.title + " commands"}>
               {props.toolbarActions}
               {props.onAdd ? (
-                <Button look="table-add" title={props.addLabel} onClick={props.onAdd}>
+                <Button color="primary-fill" title={props.addLabel} onClick={props.onAdd}>
                   <i className="bi bi-plus-lg" aria-hidden="true" />
                   <i className={props.addIcon || props.icon} aria-hidden="true" />
                 </Button>

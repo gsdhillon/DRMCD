@@ -120,7 +120,7 @@ export function GroupEditorPage({
           {draft.id ? <strong className="editor-record-id ms-3">Id: {draft.id}</strong> : null}
         </h2>
         <div className="editor-page-actions">
-          <Button look="table-nav" icon="arrow-left" iconClassName="fw-bold" title="Back to Groups" onClick={onBack} />
+          <Button color="secondary-line" icon="arrow-left" iconClassName="fw-bold" title="Back to Groups" onClick={onBack} />
         </div>
       </div>
 
