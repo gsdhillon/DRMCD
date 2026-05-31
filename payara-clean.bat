@@ -26,10 +26,10 @@ if not exist "%PAYARA%" (
     set PAYARA=asadmin
 )
 
-echo Building %APP_NAME%.war, including the React JSX frontend from src\main\reactjsx ...
+echo Building %APP_NAME%.war, including the React frontend from frontend ...
 call mvn clean package "-Dskip.payara.deploy=true"
 set BUILD_ERROR=%ERRORLEVEL%
-powershell -NoProfile -ExecutionPolicy Bypass -Command "$p = 'src\main\reactjsx\package-lock.json'; if (Test-Path -LiteralPath $p) { $text = [System.IO.File]::ReadAllText($p).Replace(([string][char]13 + [string][char]10), [string][char]10); [System.IO.File]::WriteAllText($p, $text, [System.Text.UTF8Encoding]::new($false)) }"
+powershell -NoProfile -ExecutionPolicy Bypass -Command "$p = 'frontend\package-lock.json'; if (Test-Path -LiteralPath $p) { $text = [System.IO.File]::ReadAllText($p).Replace(([string][char]13 + [string][char]10), [string][char]10); [System.IO.File]::WriteAllText($p, $text, [System.Text.UTF8Encoding]::new($false)) }"
 
 IF NOT "%BUILD_ERROR%"=="0" (
     echo Build failed

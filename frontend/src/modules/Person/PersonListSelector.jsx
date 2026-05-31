@@ -14,6 +14,7 @@ function personTable(panel, onView) {
         searchFields={["id", "name"]}
         searchInputId={panel.searchInputId}
         searchPlaceholder={panel.searchPlaceholder}
+        showExport={false}
         title={panel.title}
       />
     </div>

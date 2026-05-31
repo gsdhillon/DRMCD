@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { Button } from "../../common/Button.jsx";
+import { useCenterPanelActions } from "../../common/CenterPanel.jsx";
 import { Input } from "../../common/form/Input.jsx";
 import { useRenderDebug } from "../../common/useRenderDebug.js";
 import { getPerson } from "../../services/personService.js";
@@ -129,20 +130,24 @@ export function VCEditorPage({
     }
   }
 
+  const centerPanelActions = useMemo(() => (
+    <div className="center-panel-editor-actions">
+      {draft.id ? <span className="center-panel-record-id">Id: {draft.id}</span> : null}
+      <Button color="secondary-line" icon="question-circle" label="Help" size="sm" onClick={openHelp} />
+      <Button
+        color="primary-fill"
+        icon={mode === "update" ? "check2-circle" : "calendar-plus"}
+        label={mode === "update" ? "Update VC" : "Schedule VC"}
+        size="sm"
+        onClick={save}
+      />
+    </div>
+  ), [draft.id, mode, openHelp, save]);
+
+  useCenterPanelActions(centerPanelActions);
+
   return (
     <div className="view-fill vc-editor-page">
-      <div className="editor-page-toolbar d-flex align-items-center justify-content-between gap-3">
-        <h2 className="d-flex align-items-center fs-4 fw-bold m-0">
-          <i className="bi bi-camera-video me-2" aria-hidden="true" />
-          {editorTitle(mode)}
-          {draft.id ? <strong className="editor-record-id ms-3">Id: {draft.id}</strong> : null}
-        </h2>
-        <div className="editor-page-actions d-inline-flex align-items-center gap-2">
-          <Button color="secondary-line" icon="question-circle" title="Help" onClick={openHelp} />
-          <Button color="secondary-line" icon="arrow-left" iconClassName="fw-bold" title="Back to Video Conferences" onClick={onBack} />
-        </div>
-      </div>
-
       <section className="vc-editor-fields">
         <Input
           label="Title"
@@ -197,11 +202,6 @@ export function VCEditorPage({
           title: "Available Persons"
         }}
       />
-
-      <div className="d-flex flex-wrap align-items-center justify-content-end gap-2 mt-1">
-        <Button color="primary-fill" icon={mode === "update" ? "check2-circle" : "calendar-plus"} label={mode === "update" ? "Update VC" : "Schedule VC"} onClick={save} />
-        <Button color="secondary-line" icon="x-circle" label="Close" onClick={onBack} />
-      </div>
 
       {personDialog && roles.length > 0 ? (
         <PersonDialog

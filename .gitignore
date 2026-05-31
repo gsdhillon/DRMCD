@@ -1,8 +1,8 @@
 target/
-src/main/reactjsx/node_modules/
-src/main/reactjsx/dist/
-src/main/reactjsx/vite*.log
-src/main/reactjsx/src/vite*.log
+frontend/node_modules/
+frontend/dist/
+frontend/vite*.log
+frontend/src/vite*.log
 .idea/
 *.iml
 *.log

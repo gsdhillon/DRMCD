@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useRenderDebug } from "../../common/useRenderDebug.js";
 import { Button } from "../../common/Button.jsx";
+import { useCenterPanel } from "../../common/CenterPanel.jsx";
 import { DataTable } from "../../common/DataTable.jsx";
 import { getPersons } from "../../services/personService.js";
 import { createGroup, deleteGroup, getGroup, getGroups, updateGroup } from "../../services/groupService.js";
@@ -41,10 +42,9 @@ export function GroupList() {
   useRenderDebug("GroupList");
 
   const { auth, showError } = useApp();
+  const centerPanel = useCenterPanel();
   const [groups, setGroups] = useState([]);
   const [persons, setPersons] = useState([]);
-  const [editor, setEditor] = useState(null);
-  const [personGroup, setPersonGroup] = useState(null);
   const [columnFilters, setColumnFilters] = useState({});
   const [sortField, setSortField] = useState("id");
   const [sortDirection, setSortDirection] = useState("asc");
@@ -91,43 +91,68 @@ export function GroupList() {
   }, [currentPage, totalPages]);
 
   function openNewGroup() {
-    setEditor({
-      mode: "add",
-      group: createEmptyGroup()
+    centerPanel?.pushPage({
+      title: "Add",
+      content: (
+        <GroupEditorPage
+          group={createEmptyGroup()}
+          mode="add"
+          persons={persons}
+          onBack={centerPanel.goBack}
+          onSave={group => saveGroup(group, "add")}
+        />
+      )
     });
   }
 
   async function openUpdateGroup(group) {
+    let editorGroup = group;
+
     try {
-      setEditor({
-        mode: "update",
-        group: await getGroup(group.id)
-      });
+      editorGroup = await getGroup(group.id);
     } catch (error) {
-      setEditor({
-        mode: "update",
-        group
-      });
+      editorGroup = group;
     }
+
+    centerPanel?.pushPage({
+      title: "Update",
+      content: (
+        <GroupEditorPage
+          group={editorGroup}
+          mode="update"
+          persons={persons}
+          onBack={centerPanel.goBack}
+          onSave={groupToSave => saveGroup(groupToSave, "update")}
+        />
+      )
+    });
   }
 
   async function viewGroup(group) {
+    let editorGroup = group;
+
     try {
-      setEditor({
-        mode: "view",
-        group: await getGroup(group.id)
-      });
+      editorGroup = await getGroup(group.id);
     } catch (error) {
-      setEditor({
-        mode: "view",
-        group
-      });
+      editorGroup = group;
     }
+
+    centerPanel?.pushPage({
+      title: "Group Details",
+      content: (
+        <GroupEditorPage
+          group={editorGroup}
+          mode="view"
+          persons={persons}
+          onBack={centerPanel.goBack}
+        />
+      )
+    });
   }
 
-  async function saveGroup(group) {
+  async function saveGroup(group, mode) {
     try {
-      if (editor?.mode === "update") {
+      if (mode === "update") {
         await updateGroup(group);
       } else {
         await createGroup(group);
@@ -141,8 +166,16 @@ export function GroupList() {
     }
   }
 
-  function closeEditor() {
-    setEditor(null);
+  function openGroupPersons(group) {
+    centerPanel?.pushPage({
+      title: "Persons for " + group.name,
+      content: (
+        <PersonList
+          groupId={group.id}
+          title={"Persons for " + group.name}
+        />
+      )
+    });
   }
 
   async function removeGroup(id) {
@@ -183,10 +216,6 @@ export function GroupList() {
     setCurrentPage(1);
   }
 
-  function openGroupPersons(group) {
-    setPersonGroup(group);
-  }
-
   function renderActions(group) {
     return (
       <div className="d-inline-flex align-items-center gap-2">
@@ -210,33 +239,12 @@ export function GroupList() {
     { field: "createdOn", label: "Created On", render: formatDateTime }
   ];
 
-  if (editor) {
-    return (
-      <GroupEditorPage
-        group={editor.group}
-        mode={editor.mode}
-        persons={persons}
-        onBack={closeEditor}
-        onSave={saveGroup}
-      />
-    );
-  }
-
-  if (personGroup) {
-    return (
-      <PersonList
-        groupId={personGroup.id}
-        title={"Persons for " + personGroup.name}
-        onBack={() => setPersonGroup(null)}
-      />
-    );
-  }
-
   return (
     <div className="view-fill">
       <DataTable
         addIcon="bi bi-collection"
         addLabel="Add New Group"
+        centerPanelToolbar
         columnFilters={columnFilters}
         columns={columns}
         currentPage={safePage}
@@ -256,6 +264,7 @@ export function GroupList() {
         sortDirection={sortDirection}
         sortField={sortField}
         title="Groups"
+        showTitle={false}
         totalCount={groups.length}
         totalPages={totalPages}
       />

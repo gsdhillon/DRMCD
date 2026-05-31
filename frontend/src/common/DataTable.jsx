@@ -1,5 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Button } from "./Button.jsx";
+import { useCenterPanelActions } from "./CenterPanel.jsx";
 import { useRenderDebug } from "./useRenderDebug.js";
 
 function sortIcon(sortField, sortDirection, field) {
@@ -272,25 +273,119 @@ export function DataTable(props) {
           color="secondary-line"
           active={filterCount > 0}
           icon="eraser"
+          size="sm"
           title="Clear all filters"
           disabled={!filterCount}
           onClick={clearAllFilters}
         />
-        <Button
-          color="secondary-line"
-          icon="filetype-csv"
-          title="Export CSV"
-          onClick={exportCsv}
-        />
-        <Button
-          color="secondary-line"
-          icon="filetype-pdf"
-          title="Export PDF"
-          onClick={exportPdf}
-        />
+        {props.showExport === false ? null : (
+          <>
+            <Button
+              color="secondary-line"
+              icon="filetype-csv"
+              size="sm"
+              title="Export CSV"
+              onClick={exportCsv}
+            />
+            <Button
+              color="secondary-line"
+              icon="filetype-pdf"
+              size="sm"
+              title="Export PDF"
+              onClick={exportPdf}
+            />
+          </>
+        )}
       </div>
     );
   }
+
+  function renderToolbarCommands() {
+    if (!props.toolbarActions && !props.onAdd) {
+      return null;
+    }
+
+    return (
+      <div className="table-command-group" role="group" aria-label={props.title + " commands"}>
+        {props.toolbarActions}
+        {props.onAdd ? (
+          <Button
+            color="primary-fill"
+            icon="plus-lg"
+            iconClassName={props.addIcon || props.icon}
+            size="sm"
+            title={props.addLabel}
+            onClick={props.onAdd}
+          />
+        ) : null}
+      </div>
+    );
+  }
+
+  function renderToolbarTitle() {
+    return (
+      <div className="d-flex align-items-center gap-2">
+        {props.showTitle === false ? null : (
+          <h2 className="table-title">
+            {props.icon ? <i className={props.icon + " me-2"} aria-hidden="true" /> : null}
+            {props.title}
+          </h2>
+        )}
+        <span className="table-count text-secondary text-nowrap">{String(props.filteredCount)} of {String(props.totalCount)}</span>
+      </div>
+    );
+  }
+
+  function renderPagination() {
+    if (!props.onPage) {
+      return null;
+    }
+
+    return (
+      <nav className="pagination-wrap" aria-label={props.title + " pages"}>
+        <ul className="pagination pagination-sm mb-0">
+          {pageButton(props.currentPage - 1, "Prev", props.currentPage === 1, false)}
+          {pageNumbers(props.totalPages).map(page => pageButton(page, String(page), false, page === props.currentPage))}
+          {pageButton(props.currentPage + 1, "Next", props.currentPage === props.totalPages, false)}
+        </ul>
+      </nav>
+    );
+  }
+
+  const centerPanelToolbar = useMemo(() => (
+    props.centerPanelToolbar ? (
+      <div className="center-panel-table-actions">
+        {renderToolbarTitle()}
+        {renderPagination()}
+        {renderTableTools()}
+        {renderToolbarCommands()}
+      </div>
+    ) : null
+  ), [
+    activeColumnFilter,
+    columnFilterCursor,
+    columnFilters,
+    exportRows,
+    filterCount,
+    props.addIcon,
+    props.addLabel,
+    props.centerPanelToolbar,
+    props.columns,
+    props.currentPage,
+    props.filteredCount,
+    props.icon,
+    props.onAdd,
+    props.onColumnFilter,
+    props.onPage,
+    props.showTitle,
+    props.showExport,
+    props.title,
+    props.toolbarActions,
+    props.totalCount,
+    props.totalPages
+  ]);
+
+  useCenterPanelActions(props.centerPanelToolbar ? centerPanelToolbar : undefined);
 
   function renderColumnFilter(column) {
     const value = columnFilters[column.field] || "";
@@ -373,38 +468,16 @@ export function DataTable(props) {
 
   return (
     <div className="card data-table-card shadow-sm border-0">
-      <div className="card-header border-0">
+      {props.centerPanelToolbar ? null : (
+        <div className="card-header border-0">
         <div className="table-toolbar">
-          <div className="d-flex align-items-center gap-2">
-            <h2 className="table-title">
-              {props.icon ? <i className={props.icon + " me-2"} aria-hidden="true" /> : null}
-              {props.title}
-            </h2>
-            <span className="text-secondary text-nowrap">{String(props.filteredCount)} of {String(props.totalCount)}</span>
-          </div>
-          {props.onPage ? (
-            <nav className="pagination-wrap" aria-label={props.title + " pages"}>
-              <ul className="pagination pagination-sm mb-0">
-                {pageButton(props.currentPage - 1, "Prev", props.currentPage === 1, false)}
-                {pageNumbers(props.totalPages).map(page => pageButton(page, String(page), false, page === props.currentPage))}
-                {pageButton(props.currentPage + 1, "Next", props.currentPage === props.totalPages, false)}
-              </ul>
-            </nav>
-          ) : null}
+          {renderToolbarTitle()}
+          {renderPagination()}
           {renderTableTools()}
-          {props.toolbarActions || props.onAdd ? (
-            <div className="table-command-group" role="group" aria-label={props.title + " commands"}>
-              {props.toolbarActions}
-              {props.onAdd ? (
-                <Button color="primary-fill" title={props.addLabel} onClick={props.onAdd}>
-                  <i className="bi bi-plus-lg" aria-hidden="true" />
-                  <i className={props.addIcon || props.icon} aria-hidden="true" />
-                </Button>
-              ) : null}
-            </div>
-          ) : null}
+          {renderToolbarCommands()}
         </div>
-      </div>
+        </div>
+      )}
       <div className="card-body pt-0">
         <div className="table-responsive">
           <table className="table table-hover align-middle mb-0">

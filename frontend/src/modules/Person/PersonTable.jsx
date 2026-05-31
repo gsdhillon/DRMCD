@@ -49,6 +49,7 @@ export function PersonTable({
   actions = [],
   addIcon = "bi bi-person-fill",
   addLabel = "Add New Person",
+  centerPanelToolbar = false,
   columnFields,
   emptyText = "No persons found",
   icon = "bi bi-people-fill",
@@ -58,6 +59,8 @@ export function PersonTable({
   rows = [],
   searchFields = ["name"],
   searchInputId = "person-search",
+  showExport = true,
+  showTitle = true,
   title = "Persons",
   toolbarActions
 }) {
@@ -154,6 +157,7 @@ export function PersonTable({
       actionLabel={actionLabel}
       addIcon={addIcon}
       addLabel={addLabel}
+      centerPanelToolbar={centerPanelToolbar}
       columnFilters={columnFilters}
       columns={columns}
       currentPage={safePage}
@@ -172,6 +176,8 @@ export function PersonTable({
       searchInputId={searchInputId}
       sortDirection={sortDirection}
       sortField={sortField}
+      showTitle={showTitle}
+      showExport={showExport}
       title={title}
       toolbarActions={toolbarActions}
       totalCount={rows.length}

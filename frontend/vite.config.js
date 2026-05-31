@@ -5,7 +5,7 @@ export default defineConfig({
   base: "./",
   plugins: [react()],
   build: {
-    outDir: "../../../target/generated-webapp",
+    outDir: "../target/generated-webapp",
     emptyOutDir: true
   },
   server: {

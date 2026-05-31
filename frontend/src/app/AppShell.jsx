@@ -1,7 +1,8 @@
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import { Route, Routes } from "react-router-dom";
 import { Dashboard } from "../modules/Dashboard/Dashboard.jsx";
 import { Button } from "../common/Button.jsx";
+import { CenterPanel } from "../common/CenterPanel.jsx";
 import { GroupList } from "../modules/Group/GroupList.jsx";
 import { PersonList } from "../modules/Person/PersonList.jsx";
 import { RoleList } from "../modules/Role/RoleList.jsx";
@@ -19,26 +20,6 @@ export function AppShell() {
   const { theme } = useApp();
   const [menuOpen, setMenuOpen] = useState(false);
   const [menuCollapsed, setMenuCollapsed] = useState(false);
-  const [mainPanelFullscreen, setMainPanelFullscreen] = useState(false);
-  const mainPanelRef = useRef(null);
-
-  useEffect(() => {
-    function updateFullscreenState() {
-      setMainPanelFullscreen(document.fullscreenElement === mainPanelRef.current);
-    }
-
-    document.addEventListener("fullscreenchange", updateFullscreenState);
-    return () => document.removeEventListener("fullscreenchange", updateFullscreenState);
-  }, []);
-
-  async function toggleMainPanelFullscreen() {
-    if (document.fullscreenElement) {
-      await document.exitFullscreen();
-      return;
-    }
-
-    await mainPanelRef.current?.requestFullscreen();
-  }
 
   return (
     <div className="app-shell" style={theme.cssVars}>
@@ -55,22 +36,13 @@ export function AppShell() {
         />
         {menuOpen ? <Button look="menu-backdrop" title="Close menu" onClick={() => setMenuOpen(false)} /> : null}
         <main className="main-panel">
-          <div id="main-panel" ref={mainPanelRef}>
-            <Button
-              className="btn btn-sm btn-outline-secondary main-panel-fullscreen-button"
-              icon={mainPanelFullscreen ? "fullscreen-exit" : "fullscreen"}
-              title={mainPanelFullscreen ? "Exit full screen" : "Full screen"}
-              aria-label={mainPanelFullscreen ? "Exit full screen" : "Full screen"}
-              onClick={toggleMainPanelFullscreen}
-            />
-            <Routes>
-              <Route path="/" element={<Dashboard />} />
-              <Route path="/persons" element={<PersonList />} />
-              <Route path="/groups" element={<GroupList />} />
-              <Route path="/roles" element={<RoleList />} />
-              <Route path="/video-conferences" element={<VCList />} />
-            </Routes>
-          </div>
+          <Routes>
+            <Route path="/" element={<CenterPanel title="Dashboard"><Dashboard /></CenterPanel>} />
+            <Route path="/persons" element={<CenterPanel title="Persons"><PersonList /></CenterPanel>} />
+            <Route path="/groups" element={<CenterPanel title="Groups"><GroupList /></CenterPanel>} />
+            <Route path="/roles" element={<CenterPanel title="Roles"><RoleList /></CenterPanel>} />
+            <Route path="/video-conferences" element={<CenterPanel title="Video Conferences"><VCList /></CenterPanel>} />
+          </Routes>
         </main>
         <aside className="app-right-side" aria-hidden="true" />
       </div>

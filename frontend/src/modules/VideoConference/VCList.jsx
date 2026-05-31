@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useRenderDebug } from "../../common/useRenderDebug.js";
 import { Button } from "../../common/Button.jsx";
+import { useCenterPanel } from "../../common/CenterPanel.jsx";
 import { DataTable } from "../../common/DataTable.jsx";
 import { getPersons } from "../../services/personService.js";
 import {
@@ -68,11 +69,9 @@ export function VCList() {
   useRenderDebug("VCList");
 
   const { showError, user } = useApp();
+  const centerPanel = useCenterPanel();
   const [conferences, setConferences] = useState([]);
   const [persons, setPersons] = useState([]);
-  const [activeConference, setActiveConference] = useState(null);
-  const [editor, setEditor] = useState(null);
-  const [personConference, setPersonConference] = useState(null);
   const [columnFilters, setColumnFilters] = useState({});
   const [sortField, setSortField] = useState("scheduledAt");
   const [sortDirection, setSortDirection] = useState("desc");
@@ -159,36 +158,72 @@ export function VCList() {
   }
 
   function openAdd() {
-    setEditor({
-      mode: "add",
-      conference: newVideoConference()
+    centerPanel?.pushPage({
+      title: "Schedule",
+      content: (
+        <VCEditorPage
+          conference={newVideoConference()}
+          mode="add"
+          onBack={centerPanel.goBack}
+          onSave={conference => saveConference(conference, "add")}
+          persons={persons.filter(person => Number(person.id) !== Number(user?.personId))}
+        />
+      )
     });
   }
 
   function openUpdate(conference) {
-    setEditor({
-      mode: "update",
-      conference: hydrateConference(conference)
+    centerPanel?.pushPage({
+      title: "Update",
+      content: (
+        <VCEditorPage
+          conference={hydrateConference(conference)}
+          mode="update"
+          onBack={centerPanel.goBack}
+          onSave={conferenceToSave => saveConference(conferenceToSave, "update")}
+          persons={persons.filter(person => Number(person.id) !== Number(user?.personId))}
+        />
+      )
     });
   }
 
   function openPersons(conference) {
-    setPersonConference(hydrateConference(conference));
+    const hydratedConference = hydrateConference(conference);
+
+    centerPanel?.pushPage({
+      title: "Participants",
+      content: (
+        <PersonList
+          persons={hydratedConference.participants || []}
+          title={"Persons for " + (hydratedConference.title || "Video Conference")}
+        />
+      )
+    });
   }
 
-  function closeEditor() {
-    setEditor(null);
+  function openRoom(conference) {
+    centerPanel?.pushPage({
+      title: "Video Conference Room",
+      content: (
+        <VCRoom
+          conference={conference}
+          onClose={() => {
+            centerPanel.goBack();
+            loadConferences();
+          }}
+        />
+      )
+    });
   }
 
-  async function saveConference(conference) {
+  async function saveConference(conference, mode) {
     try {
-      if (editor?.mode === "update") {
+      if (mode === "update") {
         await updateVideoConference(conference);
       } else {
         await createVideoConference(conference);
       }
 
-      setEditor(null);
       await loadConferences();
       return true;
     } catch (error) {
@@ -219,7 +254,7 @@ export function VCList() {
           disabled={!conference.startAllowed}
           icon="camera-video"
           title={conference.startAllowed ? "Start VC" : "Start VC is not available yet"}
-          onClick={() => setActiveConference(conference)}
+          onClick={() => openRoom(conference)}
         />
         <Button color="secondary-line" size="sm" icon="people" title="View Participants" onClick={() => openPersons(conference)} />
         {conference.creator ? (
@@ -232,46 +267,12 @@ export function VCList() {
     );
   }
 
-  if (activeConference) {
-    return (
-      <VCRoom
-        conference={activeConference}
-        onClose={() => {
-          setActiveConference(null);
-          loadConferences();
-        }}
-      />
-    );
-  }
-
-  if (personConference) {
-    return (
-      <PersonList
-        backTitle="Back to Video Conferences"
-        onBack={() => setPersonConference(null)}
-        persons={personConference.participants || []}
-        title={"Persons for " + (personConference.title || "Video Conference")}
-      />
-    );
-  }
-
-  if (editor) {
-    return (
-      <VCEditorPage
-        conference={editor.conference}
-        mode={editor.mode}
-        onBack={closeEditor}
-        onSave={saveConference}
-        persons={persons.filter(person => Number(person.id) !== Number(user?.personId))}
-      />
-    );
-  }
-
   return (
     <div className="view-fill">
       <DataTable
         addIcon="bi bi-camera-video"
         addLabel="Schedule Video Conference"
+        centerPanelToolbar
         columnFilters={columnFilters}
         columns={[
           { field: "id", label: "Id" },
@@ -297,8 +298,9 @@ export function VCList() {
         sortDirection={sortDirection}
         sortField={sortField}
         title="Video Conferences"
+        showTitle={false}
         toolbarActions={(
-          <Button color="secondary-line" icon="question-circle" title="Help" onClick={openHelp} />
+          <Button color="secondary-line" size="sm" icon="question-circle" title="Help" onClick={openHelp} />
         )}
         totalCount={conferences.length}
         totalPages={totalPages}

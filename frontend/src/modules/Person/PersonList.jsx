@@ -3,7 +3,6 @@ import { useRenderDebug } from "../../common/useRenderDebug.js";
 import { createPerson, deletePerson, getPerson, getPersons, updatePerson } from "../../services/personService.js";
 import { getRoles } from "../../services/roleService.js";
 import { useApp } from "../../state/AppContext.jsx";
-import { Button } from "../../common/Button.jsx";
 import { PersonDialog } from "./PersonDialog.jsx";
 import { PersonTable } from "./PersonTable.jsx";
 
@@ -160,15 +159,14 @@ export function PersonList({ backTitle = "Back", groupId, onBack, persons: provi
   return (
     <div className="view-fill">
       <PersonTable
+        centerPanelToolbar
         onAdd={isAdmin && !readOnlyList ? openNewPerson : null}
         onView={viewPerson}
         rows={persons}
         searchFields={["name"]}
         searchInputId={groupId ? "group-person-search-" + groupId : "person-search"}
+        showTitle={false}
         title={title}
-        toolbarActions={onBack ? (
-          <Button color="secondary-line" icon="arrow-left" title={backTitle} onClick={onBack} />
-        ) : null}
         actions={actions}
       />
 

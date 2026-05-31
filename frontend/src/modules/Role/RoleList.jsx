@@ -124,6 +124,7 @@ export function RoleList() {
       <DataTable
         addIcon="bi bi-palette"
         addLabel="Add Role"
+        centerPanelToolbar
         columnFilters={columnFilters}
         columns={columns}
         currentPage={1}
@@ -138,6 +139,7 @@ export function RoleList() {
         rows={visibleRoles}
         searchFields={["name"]}
         searchInputId="role-search"
+        showTitle={false}
         title="Edit Roles"
         totalCount={roles.length}
         totalPages={1}
