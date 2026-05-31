@@ -19,7 +19,7 @@ export function Footer({ footerText = copyrightText }) {
   const darkMode = themeMode === "dark";
   const appVersion = formatAppVersion(settings?.appVersion);
   const clientDevMode = settings?.clientInDevMode === true;
-  const clientDevModeLabel = "Client Dev Mode " + (clientDevMode ? "ON" : "OFF");
+  const clientDevModeLabel = clientDevMode ? "Dev mode ON. See console." : undefined;
 
   return (
     <footer className="app-footer">
