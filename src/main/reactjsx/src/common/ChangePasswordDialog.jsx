@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { Form } from "./form/Form.jsx";
+import { Input } from "./form/Input.jsx";
 import { useRenderDebug } from "./useRenderDebug.js";
 import { changePassword } from "../services/auth.js";
 import { useApp } from "../state/AppContext.jsx";
@@ -12,17 +14,15 @@ export function ChangePasswordDialog({ onClose }) {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [busy, setBusy] = useState(false);
 
-  async function submitPassword(formEvent) {
-    formEvent.preventDefault();
-
+  async function submitPassword() {
     if (!currentPassword || !newPassword) {
       showError("Current password and new password are required.");
-      return;
+      return false;
     }
 
     if (newPassword !== confirmPassword) {
       showError("New password and confirm password must match.");
-      return;
+      return false;
     }
 
     setBusy(true);
@@ -33,69 +33,48 @@ export function ChangePasswordDialog({ onClose }) {
       setNewPassword("");
       setConfirmPassword("");
       showInfo(response.message || "Password changed");
+      return true;
     } catch (changeError) {
       showError(changeError.message || "Unable to change password.");
+      return false;
     } finally {
       setBusy(false);
     }
   }
 
   return (
-    <div className="modal-backdrop-custom" onClick={busy ? undefined : onClose}>
-      <form className="modal-panel password-panel" onSubmit={submitPassword} onClick={event => event.stopPropagation()}>
-        <div className="modal-header px-0 pt-0 d-flex align-items-center justify-content-between gap-3">
-          <div>
-            <h2>Change Password</h2>
-            <p>Update your login password.</p>
-          </div>
-          <button type="button" className="btn btn-secondary" title="Close" onClick={onClose} disabled={busy}>
-            <i className="bi bi-x-lg" aria-hidden="true" />
-          </button>
-        </div>
-
-        <div className="mt-3">
-          <label className="form-row">
-            <span>Current Password</span>
-            <input
-              className="form-control"
-              type="password"
-              value={currentPassword}
-              onChange={event => setCurrentPassword(event.target.value)}
-              autoFocus
-              disabled={busy}
-            />
-          </label>
-          <label className="form-row">
-            <span>New Password</span>
-            <input
-              className="form-control"
-              type="password"
-              value={newPassword}
-              onChange={event => setNewPassword(event.target.value)}
-              disabled={busy}
-            />
-          </label>
-          <label className="form-row">
-            <span>Confirm Password</span>
-            <input
-              className="form-control"
-              type="password"
-              value={confirmPassword}
-              onChange={event => setConfirmPassword(event.target.value)}
-              disabled={busy}
-            />
-          </label>
-        </div>
-
-        <div className="d-flex flex-wrap align-items-center gap-2 mt-1">
-          <button type="button" className="btn btn-secondary" onClick={onClose} disabled={busy}>
-            Cancel
-          </button>
-          <button type="submit" className="btn btn-primary" disabled={busy}>
-            {busy ? "Changing..." : "Change Password"}
-          </button>
-        </div>
-      </form>
-    </div>
+    <Form
+      busy={busy}
+      className="password-panel"
+      closeLabel="Cancel"
+      onClose={onClose}
+      onSubmit={submitPassword}
+      subtitle="Update your login password."
+      submitLabel={busy ? "Changing..." : "Change Password"}
+      title="Change Password"
+    >
+      <Input
+        label="Current Password"
+        autoFocus
+        editable={!busy}
+        type="password"
+        value={currentPassword}
+        onChange={setCurrentPassword}
+      />
+      <Input
+        label="New Password"
+        editable={!busy}
+        type="password"
+        value={newPassword}
+        onChange={setNewPassword}
+      />
+      <Input
+        label="Confirm Password"
+        editable={!busy}
+        type="password"
+        value={confirmPassword}
+        onChange={setConfirmPassword}
+      />
+    </Form>
   );
 }
