@@ -3,7 +3,7 @@ import { useRenderDebug } from "../../common/useRenderDebug.js";
 import { createPerson, deletePerson, getPerson, getPersons, updatePerson } from "../../services/personService.js";
 import { getRoles } from "../../services/roleService.js";
 import { useApp } from "../../state/AppContext.jsx";
-import { createEmptyPerson, PersonForm } from "./PersonForm.jsx";
+import { PersonForm } from "./PersonForm.jsx";
 import { PersonTable } from "./PersonTable.jsx";
 
 export function PersonList({ backTitle = "Back", groupId, onBack, persons: providedPersons, title = "Persons" }) {
@@ -46,56 +46,69 @@ export function PersonList({ backTitle = "Back", groupId, onBack, persons: provi
     loadRoles();
   }, [groupId, providedPersons]);
 
+  useEffect(() => {
+    if (personDialog && roles.length === 0) {
+      showError("At least one role is required to open person form.");
+      setPersonDialog(null);
+    }
+  }, [personDialog, roles]);
+
   function openNewPerson() {
+    if (roles.length === 0) {
+      showError("At least one role is required to add a person.");
+      return;
+    }
+
     setPersonDialog({
       mode: "add",
-      person: createEmptyPerson(),
-      title: "Add New Person"
+      person: null
     });
   }
 
   async function openUpdatePerson(person) {
+    if (roles.length === 0) {
+      showError("At least one role is required to update a person.");
+      return;
+    }
+
     try {
       setPersonDialog({
         mode: "update",
-        person: { ...(await getPerson(person.id)), password: "" },
-        title: "Update Person"
+        person: { ...(await getPerson(person.id)), password: "" }
       });
     } catch (error) {
       setPersonDialog({
         mode: "update",
-        person: { ...person, password: "" },
-        title: "Update Person"
+        person: { ...person, password: "" }
       });
     }
   }
 
   async function viewPerson(person) {
+    if (roles.length === 0) {
+      showError("At least one role is required to view person details.");
+      return;
+    }
+
     try {
       setPersonDialog({
         mode: "view",
-        person: await getPerson(person.id),
-        title: "Person Details"
+        person: await getPerson(person.id)
       });
     } catch (error) {
       setPersonDialog({
         mode: "view",
-        person,
-        title: "Person Details"
+        person
       });
     }
   }
 
   async function savePerson(person) {
-    const userRole =
-      roles.find(role => role.role === "User");
-    const payload = isSuperAdmin ? person : { ...person, role: "User", roleId: userRole?.id };
-
     try {
       if (personDialog?.mode === "update") {
-        await updatePerson(payload);
+        await updatePerson(person);
       } else {
-        await createPerson(payload);
+        await createPerson(person);
       }
 
       await loadPersons();
@@ -157,9 +170,8 @@ export function PersonList({ backTitle = "Back", groupId, onBack, persons: provi
         actions={actions}
       />
 
-      {personDialog ? (
+      {personDialog && roles.length > 0 ? (
         <PersonForm
-          isPrivileged={isSuperAdmin}
           editable={personDialog.mode !== "view"}
           mode={personDialog.mode}
           person={personDialog.person}

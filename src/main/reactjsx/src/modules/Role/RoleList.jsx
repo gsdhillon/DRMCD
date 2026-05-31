@@ -5,7 +5,7 @@ import { createRole, deleteRole, getRoles, updateRole } from "../../services/rol
 import { useApp } from "../../state/AppContext.jsx";
 
 const emptyRole = {
-  role: "",
+  name: "",
   color: "F4F4F4"
 };
 
@@ -36,7 +36,7 @@ export function RoleList() {
   const isSuperAdmin = auth?.role === "SuperAdmin";
   const columns = [
     { field: "id", label: "Id" },
-    { field: "role", label: "Role" },
+    { field: "name", label: "Role" },
     { field: "color", label: "HEX Color" }
   ];
 
@@ -85,7 +85,7 @@ export function RoleList() {
   function editRole(role) {
     setEditingId(role.id);
     setDraft({
-      role: role.role || "",
+      name: role.name || "",
       color: normalizeColor(role.color)
     });
   }
@@ -100,7 +100,7 @@ export function RoleList() {
 
     const payload = {
       id: editingId,
-      role: draft.role.trim(),
+      name: draft.name.trim(),
       color: normalizeColor(draft.color)
     };
 
@@ -148,7 +148,7 @@ export function RoleList() {
       <form className="role-editor" onSubmit={saveRole}>
         <label className="form-row">
           <span>Role</span>
-          <input className="form-control" value={draft.role} onChange={event => setDraft(current => ({ ...current, role: event.target.value }))} />
+          <input className="form-control" value={draft.name} onChange={event => setDraft(current => ({ ...current, name: event.target.value }))} />
         </label>
         <label className="form-row">
           <span>HEX Color</span>
@@ -174,7 +174,7 @@ export function RoleList() {
         onColumnFilter={updateColumnFilter}
         renderActions={renderActions}
         rows={visibleRoles}
-        searchFields={["role"]}
+        searchFields={["name"]}
         searchInputId="role-search"
         title="Edit Roles"
         totalCount={roles.length}

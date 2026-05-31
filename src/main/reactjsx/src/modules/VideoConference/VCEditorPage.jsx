@@ -1,7 +1,9 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { valueOrEmpty } from "../../common/Helpers.js";
 import { useRenderDebug } from "../../common/useRenderDebug.js";
 import { getPerson } from "../../services/personService.js";
+import { getRoles } from "../../services/roleService.js";
+import { useApp } from "../../state/AppContext.jsx";
 import { PersonForm } from "../Person/PersonForm.jsx";
 import { PersonTable } from "../Person/PersonTable.jsx";
 import { VCHelpDialog, useVCHelpDialog } from "./VCHelpDialog.jsx";
@@ -58,15 +60,30 @@ export function VCEditorPage({
 }) {
   useRenderDebug("VCEditorPage");
 
+  const { showError } = useApp();
   const [draft, setDraft] = useState(() => normalizeConference(conference));
   const [participants, setParticipants] = useState(() => normalizeConference(conference).participants);
   const [personDialog, setPersonDialog] = useState(null);
+  const [roles, setRoles] = useState([]);
   const { closeHelp, helpDialog, helpError, helpLoading, openHelp } = useVCHelpDialog();
   const participantIds = useMemo(
     () => new Set(participants.map(person => Number(person.id))),
     [participants]
   );
   const availablePersons = persons.filter(person => !participantIds.has(Number(person.id)));
+
+  useEffect(() => {
+    async function loadRoles() {
+      try {
+        setRoles(await getRoles());
+      } catch (error) {
+        showError(error.message || "Unable to load roles");
+        setRoles([]);
+      }
+    }
+
+    loadRoles();
+  }, []);
 
   function patch(field, value) {
     setDraft(current => ({
@@ -84,6 +101,11 @@ export function VCEditorPage({
   }
 
   async function viewPerson(person) {
+    if (roles.length === 0) {
+      showError("At least one role is required to view person details.");
+      return;
+    }
+
     try {
       setPersonDialog(await getPerson(person.id));
     } catch (error) {
@@ -209,11 +231,12 @@ export function VCEditorPage({
         </button>
       </div>
 
-      {personDialog ? (
+      {personDialog && roles.length > 0 ? (
         <PersonForm
           editable={false}
           mode="view"
           person={personDialog}
+          roles={roles}
           onClose={() => setPersonDialog(null)}
         />
       ) : null}

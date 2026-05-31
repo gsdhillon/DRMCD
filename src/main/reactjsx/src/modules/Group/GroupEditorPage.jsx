@@ -1,7 +1,9 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { valueOrEmpty } from "../../common/Helpers.js";
 import { useRenderDebug } from "../../common/useRenderDebug.js";
 import { getPerson } from "../../services/personService.js";
+import { getRoles } from "../../services/roleService.js";
+import { useApp } from "../../state/AppContext.jsx";
 import { PersonForm } from "../Person/PersonForm.jsx";
 import { PersonTable } from "../Person/PersonTable.jsx";
 
@@ -45,12 +47,27 @@ export function GroupEditorPage({
 }) {
   useRenderDebug("GroupEditorPage");
 
+  const { showError } = useApp();
   const editable = mode !== "view";
   const [draft, setDraft] = useState(() => ({ ...EMPTY_GROUP, ...(group || {}) }));
   const [members, setMembers] = useState(() => normalizedMembers(group, persons));
   const [personDialog, setPersonDialog] = useState(null);
+  const [roles, setRoles] = useState([]);
   const memberIds = useMemo(() => new Set(members.map(member => Number(member.id || member.pId))), [members]);
   const availablePersons = persons.filter(person => !memberIds.has(Number(person.id)));
+
+  useEffect(() => {
+    async function loadRoles() {
+      try {
+        setRoles(await getRoles());
+      } catch (error) {
+        showError(error.message || "Unable to load roles");
+        setRoles([]);
+      }
+    }
+
+    loadRoles();
+  }, []);
 
   function addPerson(person) {
     setMembers(current => current.concat({
@@ -65,6 +82,11 @@ export function GroupEditorPage({
   }
 
   async function viewPerson(person) {
+    if (roles.length === 0) {
+      showError("At least one role is required to view person details.");
+      return;
+    }
+
     try {
       setPersonDialog(await getPerson(person.id || person.pId));
     } catch (error) {
@@ -183,11 +205,12 @@ export function GroupEditorPage({
         </button>
       </div>
 
-      {personDialog ? (
+      {personDialog && roles.length > 0 ? (
         <PersonForm
           editable={false}
           mode="view"
           person={personDialog}
+          roles={roles}
           onClose={() => setPersonDialog(null)}
         />
       ) : null}

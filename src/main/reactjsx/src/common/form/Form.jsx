@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { BrowserBlocker, noBrowserSaveFormProps } from "./BrowserBlocker.jsx";
+import { BrowserBlocker, noBrowserSaveFormProps } from "../BrowserBlocker.jsx";
 
 export function Form({
   children,

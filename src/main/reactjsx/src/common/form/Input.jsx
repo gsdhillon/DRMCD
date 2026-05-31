@@ -1,7 +1,7 @@
-import { noAutofillInputProps } from "./BrowserBlocker.jsx";
-import { valueOrEmpty } from "./Helpers.js";
+import { noAutofillInputProps } from "../BrowserBlocker.jsx";
+import { valueOrEmpty } from "../Helpers.js";
 
-export function FormInput({
+export function Input({
   label,
   className = "form-control",
   editable = true,
