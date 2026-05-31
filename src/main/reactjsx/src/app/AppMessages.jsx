@@ -27,14 +27,10 @@ function messageTitle(type) {
 
 function AppMessage({ message, timeoutMs, onHide }) {
   useEffect(() => {
-    if (message.type === "error") {
-      return undefined;
-    }
-
     const timer = window.setTimeout(onHide, timeoutMs);
 
     return () => window.clearTimeout(timer);
-  }, [message.id, message.type, onHide, timeoutMs]);
+  }, [message.id, onHide, timeoutMs]);
 
   return (
     <div className={"app-message app-message-" + message.type} role={message.type === "error" ? "alert" : "status"}>

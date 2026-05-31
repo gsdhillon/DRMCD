@@ -53,7 +53,7 @@ export function ChangePasswordDialog({ onClose }) {
           </button>
         </div>
 
-        <div className="password-form-grid">
+        <div className="mt-3">
           <label className="form-row">
             <span>Current Password</span>
             <input

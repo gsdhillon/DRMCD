@@ -172,6 +172,7 @@ export function AppProvider({ children }) {
   useEffect(() => {
     document.body.classList.toggle("theme-dark", themeMode === "dark");
     document.body.classList.toggle("theme-light", themeMode !== "dark");
+    document.body.dataset.bsTheme = themeMode === "dark" ? "dark" : "light";
   }, [themeMode]);
 
   const user = useMemo(() => ({

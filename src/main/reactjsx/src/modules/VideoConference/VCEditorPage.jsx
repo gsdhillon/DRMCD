@@ -1,7 +1,6 @@
 import { useMemo, useState } from "react";
 import { valueOrEmpty } from "../../app/Helpers.js";
 import { useRenderDebug } from "../../app/useRenderDebug.js";
-import { ErrorAlert } from "../../common/ErrorAlert.jsx";
 import { getPerson } from "../../services/personService.js";
 import { PersonForm } from "../Person/PersonForm.jsx";
 import { PersonTable } from "../Person/PersonTable.jsx";
@@ -52,10 +51,8 @@ export function newVideoConference() {
 
 export function VCEditorPage({
   conference,
-  error,
   mode = "add",
   onBack,
-  onClearError,
   onSave,
   persons = []
 }) {
@@ -126,15 +123,12 @@ export function VCEditorPage({
         </div>
       </div>
 
-      <ErrorAlert error={error} onClear={onClearError} />
-
       <section className="vc-editor-fields">
         <label className="form-row">
           <span>Title</span>
           <input
             className="form-control"
             placeholder="Video conference title"
-            required
             value={valueOrEmpty(draft.title)}
             onChange={event => patch("title", event.target.value)}
           />
@@ -143,7 +137,6 @@ export function VCEditorPage({
           <span>Scheduled</span>
           <input
             className="form-control"
-            required
             type="datetime-local"
             value={valueOrEmpty(draft.scheduledAt)}
             onChange={event => patch("scheduledAt", event.target.value)}
@@ -154,7 +147,6 @@ export function VCEditorPage({
           <div className="input-group">
             <input
               className="form-control"
-              min="1"
               step="5"
               type="number"
               value={valueOrEmpty(draft.durationMinutes)}
@@ -220,7 +212,6 @@ export function VCEditorPage({
       {personDialog ? (
         <PersonForm
           editable={false}
-          error=""
           mode="view"
           person={personDialog}
           onClose={() => setPersonDialog(null)}

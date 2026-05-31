@@ -44,7 +44,6 @@ export function GroupList() {
   const [persons, setPersons] = useState([]);
   const [editor, setEditor] = useState(null);
   const [personGroup, setPersonGroup] = useState(null);
-  const [formError, setFormError] = useState("");
   const [columnFilters, setColumnFilters] = useState({});
   const [sortField, setSortField] = useState("id");
   const [sortDirection, setSortDirection] = useState("asc");
@@ -91,7 +90,6 @@ export function GroupList() {
   }, [currentPage, totalPages]);
 
   function openNewGroup() {
-    setFormError("");
     setEditor({
       mode: "add",
       group: createEmptyGroup()
@@ -99,8 +97,6 @@ export function GroupList() {
   }
 
   async function openUpdateGroup(group) {
-    setFormError("");
-
     try {
       setEditor({
         mode: "update",
@@ -130,7 +126,6 @@ export function GroupList() {
 
   async function saveGroup(group) {
     try {
-      setFormError("");
       if (editor?.mode === "update") {
         await updateGroup(group);
       } else {
@@ -140,14 +135,13 @@ export function GroupList() {
       await loadGroups();
       return true;
     } catch (error) {
-      setFormError(error.message || "Unable to save group");
+      showError(error.message || "Unable to save group");
       return false;
     }
   }
 
   function closeEditor() {
     setEditor(null);
-    setFormError("");
   }
 
   async function removeGroup(id) {
@@ -226,12 +220,10 @@ export function GroupList() {
   if (editor) {
     return (
       <GroupEditorPage
-        error={editor.mode === "view" ? "" : formError}
         group={editor.group}
         mode={editor.mode}
         persons={persons}
         onBack={closeEditor}
-        onClearError={() => setFormError("")}
         onSave={saveGroup}
       />
     );

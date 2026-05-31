@@ -12,20 +12,14 @@ const EMPTY_PERSON = {
   password: ""
 };
 
-function emptyPerson() {
-  return { ...EMPTY_PERSON };
-}
-
 export function createEmptyPerson() {
-  return emptyPerson();
+  return { ...EMPTY_PERSON };
 }
 
 export function PersonForm({
   allowPrivilegedRoles = false,
   editable = true,
-  error,
   mode = "add",
-  onClearError,
   onClose,
   onSave,
   person,
@@ -33,21 +27,14 @@ export function PersonForm({
 }) {
   useRenderDebug("PersonForm");
 
-  const roleOptions = roles.length
-    ? roles
-    : [
-        { id: null, role: "User" },
-        { id: null, role: "Admin" },
-        { id: null, role: "SuperAdmin" }
-      ];
+  const roleOptions = roles;
 
   return (
     <DataForm
       editable={editable}
       emptyValue={EMPTY_PERSON}
-      error={error}
       fields={[
-        { label: "Name", minLength: 2, name: "name", inputName: "personEditorName", required: true },
+        { label: "Name", name: "name", inputName: "personEditorName" },
         { label: "Email", name: "email", inputName: "personEditorEmail" },
         { label: "Mobile No", name: "mobileNo", inputName: "personEditorMobileNo" },
         {
@@ -91,7 +78,6 @@ export function PersonForm({
       mode={mode}
       submitLabel={mode === "update" ? "Update Person" : "Add Person"}
       title={mode === "view" ? "Person Details" : mode === "update" ? "Update Person" : "Add New Person"}
-      onClearError={onClearError}
       onClose={onClose}
       onSave={draft => onSave?.({
         ...draft,

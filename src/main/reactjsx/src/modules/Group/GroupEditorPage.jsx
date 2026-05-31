@@ -1,7 +1,6 @@
 import { useMemo, useState } from "react";
 import { valueOrEmpty } from "../../app/Helpers.js";
 import { useRenderDebug } from "../../app/useRenderDebug.js";
-import { ErrorAlert } from "../../common/ErrorAlert.jsx";
 import { getPerson } from "../../services/personService.js";
 import { PersonForm } from "../Person/PersonForm.jsx";
 import { PersonTable } from "../Person/PersonTable.jsx";
@@ -38,11 +37,9 @@ function editorTitle(mode) {
 }
 
 export function GroupEditorPage({
-  error,
   group,
   mode = "add",
   onBack,
-  onClearError,
   onSave,
   persons = []
 }) {
@@ -105,8 +102,6 @@ export function GroupEditorPage({
         </div>
       </div>
 
-      <ErrorAlert error={error} onClear={onClearError} />
-
       <section className="group-editor-fields">
         <label className="form-row">
           <span>Name</span>
@@ -114,7 +109,6 @@ export function GroupEditorPage({
             className="form-control"
             disabled={!editable}
             placeholder="Group name"
-            required
             value={valueOrEmpty(draft.name)}
             onChange={event => setDraft(current => ({ ...current, name: event.target.value }))}
           />
@@ -192,7 +186,6 @@ export function GroupEditorPage({
       {personDialog ? (
         <PersonForm
           editable={false}
-          error=""
           mode="view"
           person={personDialog}
           onClose={() => setPersonDialog(null)}

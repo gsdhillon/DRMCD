@@ -98,14 +98,13 @@ export function AppSettingsDialog({ onClose }) {
     }));
   }
 
-  function numberField(field, label, fallback, min = 1, suffix = "") {
+  function numberField(field, label, fallback, suffix = "") {
     return (
       <label className="form-row">
         <span>{label}</span>
         <div className={suffix ? "input-group" : undefined}>
           <input
             className="form-control"
-            min={String(min)}
             type="number"
             value={valueOrEmpty(numberValue(draft[field], fallback))}
             onChange={event => change(field, event.target.value)}
@@ -193,13 +192,13 @@ export function AppSettingsDialog({ onClose }) {
           {devModeField("serverInDevMode", "Server Dev Mode:", "It will set the server console logs to debug mode")}
           {numberField("chatMsgBufferSize", "Chat Msg Buffer Size:", defaults.chatMsgBufferSize)}
           {numberField("chatMsgMaxSize", "Chat Msg Max Size:", defaults.chatMsgMaxSize)}
-          {numberField("chatFileMaxSizeKb", "Chat File Max Size:", bytesToKb(defaults.chatFileMaxSize, defaults.chatFileMaxSize), 1, "KB")}
-          {numberField("vcEarlyStartMins", "Vc Early Start Mins:", defaults.vcEarlyStartMins, 0)}
-          {numberField("vcPastMins", "Vc Past Mins:", defaults.vcPastMins, 0)}
-          {numberField("popupMsgTime", "Popup Msg Time:", defaults.popupMsgTime, 1, "secs")}
-          {numberField("vcMaxDuration", "Vc Max Duration:", defaults.vcMaxDuration, 1, "minutes")}
-          {numberField("vcExtededTime", "Vc Exteded Time:", defaults.vcExtededTime, 0, "minutes")}
-          {numberField("vcEndAlertIntrval", "Vc End Alert Intrval:", defaults.vcEndAlertIntrval, 1, "minutes")}
+          {numberField("chatFileMaxSizeKb", "Chat File Max Size:", bytesToKb(defaults.chatFileMaxSize, defaults.chatFileMaxSize), "KB")}
+          {numberField("vcEarlyStartMins", "Vc Early Start Mins:", defaults.vcEarlyStartMins)}
+          {numberField("vcPastMins", "Vc Past Mins:", defaults.vcPastMins)}
+          {numberField("popupMsgTime", "Popup Msg Time:", defaults.popupMsgTime, "secs")}
+          {numberField("vcMaxDuration", "Vc Max Duration:", defaults.vcMaxDuration, "minutes")}
+          {numberField("vcExtededTime", "Vc Exteded Time:", defaults.vcExtededTime, "minutes")}
+          {numberField("vcEndAlertIntrval", "Vc End Alert Intrval:", defaults.vcEndAlertIntrval, "minutes")}
         </div>
 
         <div className="d-flex flex-wrap align-items-center gap-2 mt-3">

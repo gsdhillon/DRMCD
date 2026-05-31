@@ -148,11 +148,11 @@ export function RoleList() {
       <form className="role-editor" onSubmit={saveRole}>
         <label className="form-row">
           <span>Role</span>
-          <input className="form-control" required value={draft.role} onChange={event => setDraft(current => ({ ...current, role: event.target.value }))} />
+          <input className="form-control" value={draft.role} onChange={event => setDraft(current => ({ ...current, role: event.target.value }))} />
         </label>
         <label className="form-row">
           <span>HEX Color</span>
-          <input className="form-control" maxLength={6} pattern="[0-9A-Fa-f]{6}" required value={draft.color} onChange={event => setDraft(current => ({ ...current, color: normalizeColor(event.target.value) }))} />
+          <input className="form-control" value={draft.color} onChange={event => setDraft(current => ({ ...current, color: normalizeColor(event.target.value) }))} />
         </label>
         <div className="d-flex flex-wrap align-items-center gap-2 mt-0">
           <button type="submit" className="btn btn-primary">

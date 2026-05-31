@@ -6,8 +6,8 @@
 
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.control_desk</groupId>
-    <artifactId>DRMCD</artifactId>
+    <groupId>com.rssd</groupId>
+    <artifactId>drmvd</artifactId>
     <version>1.0</version>
     <packaging>war</packaging>
 
@@ -161,7 +161,7 @@
                             <target>
                                 <exec executable="cmd" dir="${project.basedir}" failonerror="true">
                                     <arg value="/c"/>
-                                    <arg value="payara-deploy.bat"/>
+                                    <arg value="deploy.bat"/>
                                 </exec>
                             </target>
                         </configuration>

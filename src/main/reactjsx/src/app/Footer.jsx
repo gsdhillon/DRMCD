@@ -1,6 +1,5 @@
 import { copyrightText } from "./AppText.js";
 import { useApp } from "../state/AppContext.jsx";
-import { appUrl } from "../services/endpoint.js";
 import { useRenderDebug } from "./useRenderDebug.js";
 
 function formatAppVersion(appVersion) {
@@ -48,7 +47,7 @@ export function Footer({ footerText = copyrightText }) {
           title={clientDevModeLabel}
         >
           <img className="app-framework-logo" src={theme.assets.footerImage} alt="React JSX" />
-          <span className="app-framework-status-badge">{clientDevMode ? "ON" : "OFF"}</span>
+          {clientDevMode ? <span className="app-framework-status-badge">ON</span> : null}
         </span>
       </div>
     </footer>

@@ -72,7 +72,6 @@ export function VCList() {
   const [activeConference, setActiveConference] = useState(null);
   const [editor, setEditor] = useState(null);
   const [personConference, setPersonConference] = useState(null);
-  const [formError, setFormError] = useState("");
   const [columnFilters, setColumnFilters] = useState({});
   const [sortField, setSortField] = useState("scheduledAt");
   const [sortDirection, setSortDirection] = useState("desc");
@@ -159,7 +158,6 @@ export function VCList() {
   }
 
   function openAdd() {
-    setFormError("");
     setEditor({
       mode: "add",
       conference: newVideoConference()
@@ -167,7 +165,6 @@ export function VCList() {
   }
 
   function openUpdate(conference) {
-    setFormError("");
     setEditor({
       mode: "update",
       conference: hydrateConference(conference)
@@ -180,13 +177,10 @@ export function VCList() {
 
   function closeEditor() {
     setEditor(null);
-    setFormError("");
   }
 
   async function saveConference(conference) {
     try {
-      setFormError("");
-
       if (editor?.mode === "update") {
         await updateVideoConference(conference);
       } else {
@@ -197,7 +191,7 @@ export function VCList() {
       await loadConferences();
       return true;
     } catch (error) {
-      setFormError(error.message || "Unable to save video conference");
+      showError(error.message || "Unable to save video conference");
       return false;
     }
   }
@@ -270,10 +264,8 @@ export function VCList() {
     return (
       <VCEditorPage
         conference={editor.conference}
-        error={formError}
         mode={editor.mode}
         onBack={closeEditor}
-        onClearError={() => setFormError("")}
         onSave={saveConference}
         persons={persons.filter(person => Number(person.id) !== Number(user?.personId))}
       />

@@ -30,7 +30,6 @@ function renderFieldControl(field, draft, editable, change) {
     disabled,
     name: field.inputName || field.name,
     placeholder: field.placeholder || field.label,
-    required: field.required,
     value: fieldValue(draft, field)
   };
 
@@ -72,9 +71,6 @@ function renderFieldControl(field, draft, editable, change) {
     <input
       {...commonProps}
       {...guardedProps}
-      maxLength={field.maxLength}
-      minLength={field.minLength}
-      pattern={field.pattern}
       spellCheck={field.spellCheck}
       style={field.style}
       type={field.type === "password" ? "text" : field.type || "text"}
@@ -90,20 +86,17 @@ export function DataForm({
   closeOnBackdrop = true,
   editable = true,
   emptyValue = DEFAULT_EMPTY_VALUE,
-  error,
   fields = [],
   formClassName = "",
   initialValue = DEFAULT_INITIAL_VALUE,
   mode = "add",
-  onClearError,
   onClose,
   onSave,
   renderAfterFields,
   sideContent,
   submitIcon,
   submitLabel,
-  title,
-  twoColumns = false
+  title
 }) {
   useRenderDebug("DataForm");
 
@@ -170,20 +163,9 @@ export function DataForm({
 
         <div className={"data-form-layout" + (side ? " data-form-layout-with-side" : "")}>
           <div className="data-form-details">
-            {error ? (
-              <div className="alert alert-danger alert-dismissible d-flex align-items-center justify-content-between gap-2">
-                <span>{error}</span>
-                {onClearError ? (
-                  <button type="button" className="btn btn-sm btn-outline-secondary alert-icon-button" title="Hide" onClick={onClearError}>
-                    <i className="bi bi-x-lg" aria-hidden="true" />
-                  </button>
-                ) : null}
-              </div>
-            ) : null}
-
-            <div className={"data-form-fields" + (twoColumns ? " data-form-fields-two" : "")}>
+            <div className="data-form-fields">
               {visibleFields.map(field => (
-                <label key={field.name} className={"form-row" + (field.fullWidth ? " data-form-field-full" : "")}>
+                <label key={field.name} className="form-row">
                   <span>{field.label}</span>
                   {renderFieldControl(field, draft, editable, change)}
                 </label>

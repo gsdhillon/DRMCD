@@ -14,7 +14,6 @@ export function PersonList({ backTitle = "Back", groupId, onBack, persons: provi
   const [persons, setPersons] = useState([]);
   const [roles, setRoles] = useState([]);
   const [personDialog, setPersonDialog] = useState(null);
-  const [formError, setFormError] = useState("");
 
   const isAdmin = auth?.role === "Admin" || auth?.role === "SuperAdmin";
   const isSuperAdmin = auth?.role === "SuperAdmin";
@@ -48,7 +47,6 @@ export function PersonList({ backTitle = "Back", groupId, onBack, persons: provi
   }, [groupId, providedPersons]);
 
   function openNewPerson() {
-    setFormError("");
     setPersonDialog({
       mode: "add",
       person: createEmptyPerson(),
@@ -57,8 +55,6 @@ export function PersonList({ backTitle = "Back", groupId, onBack, persons: provi
   }
 
   async function openUpdatePerson(person) {
-    setFormError("");
-
     try {
       setPersonDialog({
         mode: "update",
@@ -102,18 +98,16 @@ export function PersonList({ backTitle = "Back", groupId, onBack, persons: provi
         await createPerson(payload);
       }
 
-      setFormError("");
       await loadPersons();
       return true;
     } catch (error) {
-      setFormError(error.message || "Unable to save person");
+      showError(error.message || "Unable to save person");
       return false;
     }
   }
 
   function closePersonDialog() {
     setPersonDialog(null);
-    setFormError("");
   }
 
   async function removePerson(id) {
@@ -167,11 +161,9 @@ export function PersonList({ backTitle = "Back", groupId, onBack, persons: provi
         <PersonForm
           allowPrivilegedRoles={isSuperAdmin}
           editable={personDialog.mode !== "view"}
-          error={personDialog.mode === "view" ? "" : formError}
           mode={personDialog.mode}
           person={personDialog.person}
           roles={roles}
-          onClearError={() => setFormError("")}
           onClose={closePersonDialog}
           onSave={savePerson}
         />
