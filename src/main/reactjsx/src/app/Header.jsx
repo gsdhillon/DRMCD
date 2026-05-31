@@ -118,7 +118,7 @@ export function Header({ menuOpen, onMenuToggle }) {
         </div>
       </div>
       <div className="notification-bar">
-        <Button look="header-icon" title="Notifications" onClick={toggleNotifications}>
+        <Button color="secondary-line" title="Notifications" onClick={toggleNotifications}>
           <i className="bi bi-bell" aria-hidden="true" />
           {notifications.length > 0 ? (
             <span className="notification-badge">{notificationCountLabel(notifications.length)}</span>

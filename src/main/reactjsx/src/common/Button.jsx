@@ -1,17 +1,11 @@
 const buttonLooks = {
-  "dialog-close": "btn btn-secondary dialog-close-button",
   "table-column-filter": "btn btn-link table-column-filter-toggle",
-  "table-search-clear": "btn btn-outline-secondary table-search-clear",
   "column-sort": "btn btn-link p-0 fw-semibold text-decoration-none text-dark",
-  "settings-info": "btn btn-sm btn-link app-settings-info-button",
-  "header-icon": "header-icon-button",
   "header-menu": "header-menu-button",
   "profile-menu": "profile-menu-item",
   "profile-menu-danger": "profile-menu-item profile-menu-danger",
-  "message-close": "app-message-close",
   "menu-backdrop": "app-menu-backdrop",
   "menu-collapse": "app-menu-collapse-button",
-  "fullscreen": "main-panel-fullscreen-button",
   "page-link": "page-link",
   avatar: "avatar header-avatar avatar-clickable",
   "vc-splitter": "vc-splitter"

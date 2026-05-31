@@ -172,7 +172,7 @@ export function GroupEditorPage({
         {editable ? (
           <Button color="primary-fill" icon={mode === "update" ? "check2-circle" : "plus-lg"} label={mode === "update" ? "Update Group" : "Add Group"} onClick={save} />
         ) : null}
-        <Button look="dialog-close" icon="x-circle" label="Close" onClick={onBack} />
+        <Button color="secondary-line" icon="x-circle" label="Close" onClick={onBack} />
       </div>
 
       {personDialog && roles.length > 0 ? (

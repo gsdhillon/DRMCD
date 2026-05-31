@@ -200,7 +200,7 @@ export function VCEditorPage({
 
       <div className="d-flex flex-wrap align-items-center justify-content-end gap-2 mt-1">
         <Button color="primary-fill" icon={mode === "update" ? "check2-circle" : "calendar-plus"} label={mode === "update" ? "Update VC" : "Schedule VC"} onClick={save} />
-        <Button look="dialog-close" icon="x-circle" label="Close" onClick={onBack} />
+        <Button color="secondary-line" icon="x-circle" label="Close" onClick={onBack} />
       </div>
 
       {personDialog && roles.length > 0 ? (

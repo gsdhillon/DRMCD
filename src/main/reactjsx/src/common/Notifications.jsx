@@ -112,7 +112,7 @@ export function Notifications({ notifications: initialNotifications = [], onClos
           </div>
         )}
         <div className="d-flex flex-wrap align-items-center justify-content-end gap-2 mt-3">
-          <Button look="dialog-close" icon="x-circle" label="Close" onClick={close} />
+          <Button color="secondary-line" icon="x-circle" label="Close" onClick={close} />
         </div>
       </div>
     </div>

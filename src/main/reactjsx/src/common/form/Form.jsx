@@ -63,7 +63,7 @@ export function Form({
               <Button color={submitColor} full={submitFull} disabled={busy} icon={submitIcon} label={submitLabel} type="submit" />
             ) : null}
             {onClose ? (
-              <Button look="dialog-close" disabled={busy} icon="x-circle" label={closeLabel} onClick={onClose} />
+              <Button color="secondary-line" disabled={busy} icon="x-circle" label={closeLabel} onClick={onClose} />
             ) : null}
           </div>
         </div>

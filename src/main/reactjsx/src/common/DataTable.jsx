@@ -326,7 +326,7 @@ export function DataTable(props) {
             />
             {value ? (
               <Button
-                look="table-search-clear"
+                color="secondary-line"
                 icon="x-lg"
                 title="Clear filter"
                 onClick={() => updateColumnFilter(column.field, "")}
