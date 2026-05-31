@@ -7,6 +7,7 @@ export function Input({
   editable = true,
   onChange,
   placeholder = label,
+  suffix,
   value,
   ...props
 }) {
@@ -20,15 +21,21 @@ export function Input({
   };
 
   const input = <input {...noAutofillInputProps(inputProps, editable)} />;
+  const control = suffix ? (
+    <div className="input-group">
+      {input}
+      <span className="input-group-text">{suffix}</span>
+    </div>
+  ) : input;
 
   if (!label) {
-    return input;
+    return control;
   }
 
   return (
     <label className="form-row">
       <span>{label}</span>
-      {input}
+      {control}
     </label>
   );
 }

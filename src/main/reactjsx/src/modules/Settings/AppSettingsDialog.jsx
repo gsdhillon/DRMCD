@@ -1,5 +1,8 @@
 import { useEffect, useState } from "react";
-import { valueOrEmpty } from "../../common/Helpers.js";
+import { CheckBox } from "../../common/form/CheckBox.jsx";
+import { Form } from "../../common/form/Form.jsx";
+import { FormDialog } from "../../common/form/FormDialog.jsx";
+import { Input } from "../../common/form/Input.jsx";
 import { useRenderDebug } from "../../common/useRenderDebug.js";
 import { updateSettings } from "../../services/settingsService.js";
 import { useApp } from "../../state/AppContext.jsx";
@@ -59,37 +62,11 @@ export function AppSettingsDialog({ onClose }) {
 
   const { refreshSettings, settings, showError, showInfo } = useApp();
   const [busy, setBusy] = useState(false);
-  const [closing, setClosing] = useState("");
   const [draft, setDraft] = useState(() => dialogDraft(settings));
 
   useEffect(() => {
-    if (!closing) {
-      setDraft(dialogDraft(settings));
-    }
+    setDraft(dialogDraft(settings));
   }, [settings]);
-
-  function animateClose(animation) {
-    if (closing) {
-      return;
-    }
-
-    setClosing(animation);
-    window.setTimeout(
-      onClose,
-      animation === "submit" ? 440 : 360
-    );
-  }
-
-  function close(event) {
-    event?.preventDefault();
-    event?.stopPropagation();
-
-    if (busy) {
-      return;
-    }
-
-    animateClose("throw");
-  }
 
   function change(field, value) {
     setDraft(current => ({
@@ -100,45 +77,30 @@ export function AppSettingsDialog({ onClose }) {
 
   function numberField(field, label, fallback, suffix = "") {
     return (
-      <label className="form-row">
-        <span>{label}</span>
-        <div className={suffix ? "input-group" : undefined}>
-          <input
-            className="form-control"
-            type="number"
-            value={valueOrEmpty(numberValue(draft[field], fallback))}
-            onChange={event => change(field, event.target.value)}
-          />
-          {suffix ? <span className="input-group-text">{suffix}</span> : null}
-        </div>
-      </label>
+      <Input
+        label={label}
+        editable={!busy}
+        suffix={suffix}
+        type="number"
+        value={numberValue(draft[field], fallback)}
+        onChange={value => change(field, value)}
+      />
     );
   }
 
   function devModeField(field, label, helpText) {
-    const enabled = draft[field] === true;
-
     return (
-      <label className="form-row">
-        <span>{label}</span>
-        <div className="app-settings-inline-control">
-          <input
-            className="form-check-input"
-            checked={enabled}
-            type="checkbox"
-            onChange={event => change(field, event.target.checked)}
-          />
-          <strong className={enabled ? "text-success" : "text-secondary"}>{enabled ? "ON" : "OFF"}</strong>
-          <button type="button" className="btn btn-sm btn-link app-settings-info-button" title="Info" onClick={() => showInfo(helpText)}>
-            <i className="bi bi-info-circle" aria-hidden="true" />
-          </button>
-        </div>
-      </label>
+      <CheckBox
+        label={label}
+        editable={!busy}
+        infoMsg={helpText}
+        value={draft[field] === true}
+        onChange={value => change(field, value)}
+      />
     );
   }
 
-  async function save(event) {
-    event.preventDefault();
+  async function save() {
     setBusy(true);
 
     try {
@@ -161,33 +123,27 @@ export function AppSettingsDialog({ onClose }) {
       setDraft(dialogDraft(saved || {}));
       await refreshSettings();
       showInfo("Settings saved");
-      animateClose("submit");
+      return true;
     } catch (saveError) {
       showError(saveError.message || "Unable to save app settings");
+      return false;
     } finally {
       setBusy(false);
     }
   }
 
   return (
-    <div className={"modal-backdrop-custom" + (closing ? " modal-closing-" + closing : "")} onClick={close}>
-      <form className={"modal-panel app-settings-panel" + (closing ? " modal-closing-" + closing : "")} onClick={event => event.stopPropagation()} onSubmit={save}>
-        <div className="modal-header px-0 pt-0">
-          <h2 className="modal-title fs-4">
-            <i className="bi bi-gear-fill me-2" aria-hidden="true" />
-            App Settings
-          </h2>
-        </div>
-
+    <FormDialog busy={busy} onClose={onClose}>
+      <Form
+        busy={busy}
+        className="app-settings-panel"
+        onSubmit={save}
+        submitLabel={busy ? "Saving" : "Save Settings"}
+        title={<><i className="bi bi-gear-fill me-2" aria-hidden="true" />App Settings</>}
+      >
         <div className="app-settings-scroll">
-          <label className="form-row">
-            <span>App Version:</span>
-            <input className="form-control" disabled value={valueOrEmpty(draft.appVersion)} />
-          </label>
-          <label className="form-row">
-            <span>Started On:</span>
-            <input className="form-control" disabled value={valueOrEmpty(draft.startedOn)} />
-          </label>
+          <Input label="App Version:" editable={false} value={draft.appVersion} />
+          <Input label="Started On:" editable={false} value={draft.startedOn} />
           {devModeField("clientInDevMode", "Client Dev Mode:", "It will set the client console logs to debug mode")}
           {devModeField("serverInDevMode", "Server Dev Mode:", "It will set the server console logs to debug mode")}
           {numberField("chatMsgBufferSize", "Chat Msg Buffer Size:", defaults.chatMsgBufferSize)}
@@ -200,18 +156,7 @@ export function AppSettingsDialog({ onClose }) {
           {numberField("vcExtededTime", "Vc Exteded Time:", defaults.vcExtededTime, "minutes")}
           {numberField("vcEndAlertIntrval", "Vc End Alert Intrval:", defaults.vcEndAlertIntrval, "minutes")}
         </div>
-
-        <div className="d-flex flex-wrap align-items-center gap-2 mt-3">
-          <button type="submit" className="btn btn-primary" disabled={busy}>
-            <i className="bi bi-check2-circle me-2" aria-hidden="true" />
-            {busy ? "Saving" : "Save Settings"}
-          </button>
-          <button type="button" className="btn btn-secondary dialog-close-button" disabled={busy} onClick={close}>
-            <i className="bi bi-x-circle me-2" aria-hidden="true" />
-            Close
-          </button>
-        </div>
-      </form>
-    </div>
+      </Form>
+    </FormDialog>
   );
 }
