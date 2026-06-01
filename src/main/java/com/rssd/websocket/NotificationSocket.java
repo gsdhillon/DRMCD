@@ -6,6 +6,11 @@ package com.rssd.websocket;
 
 import com.rssd.security.AuthUser;
 import com.rssd.security.JwtService;
+import com.rssd.modules.videoconference.VideoConference;
+import com.rssd.modules.videoconference.VideoConferenceDao;
+import jakarta.json.Json;
+import jakarta.json.JsonArrayBuilder;
+import jakarta.json.JsonObjectBuilder;
 import jakarta.inject.Inject;
 import jakarta.websocket.CloseReason;
 import jakarta.websocket.OnClose;
@@ -15,6 +20,7 @@ import jakarta.websocket.server.ServerEndpoint;
 
 import java.net.URI;
 import java.util.Collections;
+import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -25,6 +31,11 @@ public class NotificationSocket {
 
     @Inject
     JwtService jwtService;
+
+    @Inject
+    VideoConferenceDao conferenceDao;
+
+    private static volatile VideoConferenceDao sharedConferenceDao;
 
     @OnOpen
     public void open(Session session) {
@@ -37,6 +48,7 @@ public class NotificationSocket {
         }
 
         session.getUserProperties().put("personId", user.personId);
+        sharedConferenceDao = conferenceDao;
 
         SESSIONS
                 .computeIfAbsent(
@@ -44,6 +56,8 @@ public class NotificationSocket {
                         key -> ConcurrentHashMap.newKeySet()
                 )
                 .add(session);
+
+        sendUpcomingConferences(session, user.personId);
     }
 
     @OnClose
@@ -66,7 +80,47 @@ public class NotificationSocket {
 
             session.getAsyncRemote()
                     .sendText("{\"type\":\"notification-created\"}");
+            sendUpcomingConferences(session, personId);
         }
+    }
+
+    private static void sendUpcomingConferences(Session session, int personId) {
+        VideoConferenceDao dao =
+                sharedConferenceDao;
+
+        if (dao == null || !session.isOpen()) {
+            return;
+        }
+
+        try {
+            session.getAsyncRemote()
+                    .sendText(upcomingConferencesMessage(dao.getUpcomingForPerson(personId, 5)));
+        } catch (Exception ignored) {
+        }
+    }
+
+    private static String upcomingConferencesMessage(List<VideoConference> conferences) {
+        JsonArrayBuilder items =
+                Json.createArrayBuilder();
+
+        for (VideoConference conference : conferences) {
+            JsonObjectBuilder item =
+                    Json.createObjectBuilder()
+                            .add("id", conference.id == null ? 0 : conference.id)
+                            .add("title", conference.title == null ? "" : conference.title)
+                            .add("scheduledAt", conference.scheduledAt == null ? "" : conference.scheduledAt.toString())
+                            .add("durationMinutes", conference.durationMinutes == null ? 0 : conference.durationMinutes)
+                            .add("startAllowed", conference.startAllowed);
+
+            items.add(item);
+        }
+
+        // Ishjyot [2026-06-01] : Push upcoming VC status on the same lightweight status socket.
+        return Json.createObjectBuilder()
+                .add("type", "upcoming-conferences-status")
+                .add("conferences", items)
+                .build()
+                .toString();
     }
 
     private static void remove(Session session) {

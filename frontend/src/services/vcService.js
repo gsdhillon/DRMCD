@@ -4,6 +4,10 @@ export function getVideoConferences() {
   return api("/video-conferences");
 }
 
+export function getUpcomingVideoConferences() {
+  return api("/video-conferences/upcoming");
+}
+
 export function getVideoConferenceHelp() {
   return api("/video-conferences/help");
 }

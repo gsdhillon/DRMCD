@@ -51,6 +51,13 @@ public class VideoConferenceREST {
     }
 
     @GET
+    @Path("/upcoming")
+    public List<VideoConference> getUpcoming() {
+        int personId = requirePersonId();
+        return service.getUpcomingForPerson(personId, 5);
+    }
+
+    @GET
     @Path("/help")
     public VcHelp getHelp() {
         Settings settings =
@@ -263,6 +270,7 @@ public class VideoConferenceREST {
         }
 
         service.delete(id);
+        notifyConferenceStatus(vc);
     }
 
     private int requirePersonId() {
@@ -290,6 +298,10 @@ public class VideoConferenceREST {
             throw new BadRequestException("Scheduled time is required");
         }
 
+        if (vc.title == null || vc.title.trim().length() < 5) {
+            throw new BadRequestException("Title must be at least 5 characters");
+        }
+
         if (vc.scheduledAt.isBefore(LocalDateTime.now().minusMinutes(vcPastMins()))) {
             throw new BadRequestException("Scheduled time cannot be in the past");
         }
@@ -298,8 +310,11 @@ public class VideoConferenceREST {
             throw new BadRequestException("Duration is required");
         }
 
-        if (vc.durationMinutes != null && vc.durationMinutes > vcMaxDuration()) {
-            throw new BadRequestException("Duration cannot be more than VC max duration");
+        int maxDuration =
+                vcMaxDuration();
+
+        if (vc.durationMinutes != null && vc.durationMinutes > maxDuration) {
+            throw new BadRequestException("Duration cannot be more than " + maxDuration + " minute(s)");
         }
     }
 
@@ -386,6 +401,18 @@ public class VideoConferenceREST {
                     changedByName
             );
             NotificationSocket.notifyPerson(participant.id);
+        }
+    }
+
+    private void notifyConferenceStatus(VideoConference conference) {
+        if (conference == null || conference.participants == null) {
+            return;
+        }
+
+        for (Person participant : conference.participants) {
+            if (participant != null && participant.id != null) {
+                NotificationSocket.notifyPerson(participant.id);
+            }
         }
     }
 

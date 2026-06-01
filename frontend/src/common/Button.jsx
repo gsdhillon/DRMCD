@@ -58,11 +58,16 @@ export function Button({
   label,
   look,
   me = 0,
+  render = true,
   size = "md",
   title,
   type = "button",
   ...props
 }) {
+  if (!render) {
+    return null;
+  }
+
   const content = children ?? label;
   const hasContent = content !== undefined && content !== null && content !== "";
   const finalIconClassName = bootstrapIconClassName(icon, iconClassName, hasContent);

@@ -3,21 +3,17 @@ import { useNavigate } from "react-router-dom";
 import { Avatar } from "../common/Avatar.jsx";
 import { Button } from "../common/Button.jsx";
 import { ChangePasswordDialog } from "../common/ChangePasswordDialog.jsx";
-import { Notifications } from "../common/Notifications.jsx";
 import { subTitle, title } from "./AppText.js";
-import { getNotifications } from "../services/notificationService.js";
 import { AppSettingsDialog } from "../modules/Settings/AppSettingsDialog.jsx";
-import { openNotificationSocket } from "../services/notificationSocket.js";
+import { StatusPanel } from "./StatusPanel.jsx";
 import { useApp } from "../state/AppContext.jsx";
 import { useRenderDebug } from "../common/useRenderDebug.js";
 
 export function Header({ menuOpen, onMenuToggle }) {
   useRenderDebug("Header");
 
-  const { auth, logout, theme, user } = useApp();
+  const { logout, theme, user } = useApp();
   const navigate = useNavigate();
-  const [notifications, setNotifications] = useState([]);
-  const [notificationsOpen, setNotificationsOpen] = useState(false);
   const [passwordDialogOpen, setPasswordDialogOpen] = useState(false);
   const [profileMenuOpen, setProfileMenuOpen] = useState(false);
   const [settingsDialogOpen, setSettingsDialogOpen] = useState(false);
@@ -42,69 +38,18 @@ export function Header({ menuOpen, onMenuToggle }) {
     return () => document.removeEventListener(eventName, closeProfileMenu, true);
   }, [profileMenuOpen]);
 
-  useEffect(() => {
-    let cancelled = false;
-
-    async function loadInitialNotifications() {
-      if (!auth) {
-        setNotifications([]);
-        return;
-      }
-
-      try {
-        const loaded = await getNotifications();
-
-        if (!cancelled) {
-          setNotifications(loaded);
-        }
-      } catch (error) {
-        console.error("Unable to load notifications", error);
-      }
-    }
-
-    loadInitialNotifications();
-
-    const socket = openNotificationSocket(auth, message => {
-      if (message.type === "notification-created") {
-        loadInitialNotifications();
-      }
-    });
-
-    return () => {
-      cancelled = true;
-
-      if (socket) {
-        socket.close();
-      }
-    };
-  }, [auth]);
-
-  function notificationCountLabel(count) {
-    return count > 99 ? "99+" : String(count);
-  }
-
-  function toggleNotifications(clickEvent) {
-    clickEvent?.preventDefault();
-    clickEvent?.stopPropagation();
-    setProfileMenuOpen(false);
-    setNotificationsOpen(open => !open);
-  }
-
   function openChangePassword() {
     setProfileMenuOpen(false);
-    setNotificationsOpen(false);
     setPasswordDialogOpen(true);
   }
 
   function openRoles() {
     setProfileMenuOpen(false);
-    setNotificationsOpen(false);
     navigate("/roles");
   }
 
   function openSettings() {
     setProfileMenuOpen(false);
-    setNotificationsOpen(false);
     setSettingsDialogOpen(true);
   }
 
@@ -117,15 +62,8 @@ export function Header({ menuOpen, onMenuToggle }) {
           <p>{subTitle}</p>
         </div>
       </div>
-      <div className="notification-bar">
-        <Button color="secondary-line" title="Notifications" onClick={toggleNotifications}>
-          <i className="bi bi-bell" aria-hidden="true" />
-          {notifications.length > 0 ? (
-            <span className="notification-badge">{notificationCountLabel(notifications.length)}</span>
-          ) : null}
-        </Button>
-      </div>
       <div className="header-user">
+        <StatusPanel />
         <div className="header-user-text">
           <strong>{user?.name || "User"}</strong>
           <span>{user?.role || ""}</span>
@@ -163,13 +101,6 @@ export function Header({ menuOpen, onMenuToggle }) {
         </div>
         <Button look="header-menu" icon="list" title={menuOpen ? "Close menu" : "Menu"} onClick={onMenuToggle} />
       </div>
-      {notificationsOpen ? (
-        <Notifications
-          notifications={notifications}
-          onClose={() => setNotificationsOpen(false)}
-          onLoaded={setNotifications}
-        />
-      ) : null}
       {passwordDialogOpen ? <ChangePasswordDialog onClose={() => setPasswordDialogOpen(false)} /> : null}
       {settingsDialogOpen ? <AppSettingsDialog onClose={() => setSettingsDialogOpen(false)} /> : null}
     </header>

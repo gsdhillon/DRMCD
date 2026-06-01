@@ -68,8 +68,8 @@ export function CenterPanel({ children, title }) {
       <div ref={panelRef} className="center-panel">
         <div className="center-panel-topbar">
           <div className="center-panel-path" aria-label="Current location">
-            {stack.map((page, index) => {
-              const isLast = index === stack.length - 1;
+            {(activePage?.currentTitleOnly ? [activePage] : stack).map((page, index, pages) => {
+              const isLast = index === pages.length - 1;
 
               return (
                 <span key={index} className="center-panel-path-part">

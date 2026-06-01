@@ -28,7 +28,21 @@ function formatDateTime(value) {
   }
 
   const date = new Date(value);
-  return Number.isNaN(date.getTime()) ? String(value).replace("T", " ") : date.toLocaleString();
+
+  if (Number.isNaN(date.getTime())) {
+    return String(value).replace("T", " ");
+  }
+
+  const pad = number => String(number).padStart(2, "0");
+
+  return [
+    pad(date.getDate()),
+    pad(date.getMonth() + 1),
+    date.getFullYear()
+  ].join("/") + " " + [
+    pad(date.getHours()),
+    pad(date.getMinutes())
+  ].join(":");
 }
 
 function compareConferences(sortField, sortDirection) {
@@ -96,8 +110,8 @@ export function VCList() {
   }
 
   useEffect(() => {
-    loadPersons();
-    loadConferences();
+    void loadPersons();
+    void loadConferences();
   }, []);
 
   const visibleConferences = useMemo(() => {
@@ -195,7 +209,7 @@ export function VCList() {
       content: (
         <PersonList
           persons={hydratedConference.participants || []}
-          title={"Persons for " + (hydratedConference.title || "Video Conference")}
+          title={"Participants of " + (hydratedConference.title || "Video Conference")}
         />
       )
     });
@@ -203,7 +217,9 @@ export function VCList() {
 
   function openRoom(conference) {
     centerPanel?.pushPage({
-      title: "Video Conference Room",
+      // Ishjyot [01/06/2026]
+      currentTitleOnly: true,
+      title: (conference.title || "Video Conference") + " (id: " + conference.id + " )",
       content: (
         <VCRoom
           conference={conference}
@@ -249,20 +265,35 @@ export function VCList() {
     return (
       <div className="d-inline-flex align-items-center gap-2">
         <Button
-          color="secondary-line"
-          size="sm"
-          disabled={!conference.startAllowed}
-          icon="camera-video"
-          title={conference.startAllowed ? "Start VC" : "Start VC is not available yet"}
-          onClick={() => openRoom(conference)}
+            color="secondary-line"
+            size="sm"
+            disabled={!conference.startAllowed}
+            icon="camera-video"
+            title={conference.startAllowed ? "Start VC" : "Start VC is not available yet"}
+            onClick={() => openRoom(conference)}
         />
-        <Button color="secondary-line" size="sm" icon="people" title="View Participants" onClick={() => openPersons(conference)} />
-        {conference.creator ? (
-          <Button color="secondary-line" size="sm" icon="pencil-square" title="Update VC" onClick={() => openUpdate(conference)} />
-        ) : null}
-        {canDelete(conference) ? (
-          <Button color="danger-line" size="sm" icon="trash" title="Delete VC" onClick={() => removeConference(conference)} />
-        ) : null}
+        <Button
+            color="secondary-line"
+            size="sm" icon="people"
+            title="View Participants"
+            onClick={() => openPersons(conference)}
+        />
+        <Button
+            render={conference.creator}
+            color="secondary-line"
+            size="sm"
+            icon="pencil-square"
+            title="Update VC"
+            onClick= { () => openUpdate(conference)}
+        />
+        <Button
+            render={canDelete(conference)}
+            color="danger-line"
+            size="sm"
+            icon="trash"
+            title="Delete VC"
+            onClick={() => removeConference(conference)}
+        />
       </div>
     );
   }
@@ -300,12 +331,22 @@ export function VCList() {
         title="Video Conferences"
         showTitle={false}
         toolbarActions={(
-          <Button color="secondary-line" size="sm" icon="question-circle" title="Help" onClick={openHelp} />
+          <Button
+              color="secondary-line"
+              size="sm"
+              icon="question-circle"
+              title="Help" onClick={openHelp}
+          />
         )}
         totalCount={conferences.length}
         totalPages={totalPages}
       />
-      <VCHelpDialog help={helpDialog} error={helpError} loading={helpLoading} onClose={closeHelp} />
+      <VCHelpDialog
+          help={helpDialog}
+          error={helpError}
+          loading={helpLoading}
+          onClose={closeHelp}
+      />
     </div>
   );
 }

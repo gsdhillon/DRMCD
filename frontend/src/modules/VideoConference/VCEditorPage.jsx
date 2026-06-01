@@ -62,7 +62,7 @@ export function VCEditorPage({
 }) {
   useRenderDebug("VCEditorPage");
 
-  const { showError } = useApp();
+  const { showError, user } = useApp();
   const [draft, setDraft] = useState(() => normalizeConference(conference));
   const [participants, setParticipants] = useState(() => normalizeConference(conference).participants);
   const [personDialog, setPersonDialog] = useState(null);
@@ -151,6 +151,7 @@ export function VCEditorPage({
       <section className="vc-editor-fields">
         <Input
           label="Title"
+          minLength={5}
           placeholder="Video conference title"
           value={draft.title}
           onChange={value => patch("title", value)}
@@ -163,7 +164,7 @@ export function VCEditorPage({
           value={draft.durationMinutes}
           onChange={value => patch("durationMinutes", value)}
         />
-        <Input label="By" editable={false} value={draft.createdByName || draft.createdBy} />
+        <Input label="By" editable={false} value={draft.createdByName || draft.createdBy || user?.name || ""} />
         <Input
           label="Scheduled"
           type="datetime-local"

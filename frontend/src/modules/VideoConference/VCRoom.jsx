@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Button } from "../../common/Button.jsx";
+import { useCenterPanelActions } from "../../common/CenterPanel.jsx";
 import { useRenderDebug } from "../../common/useRenderDebug.js";
 import { PersonThumbnail } from "../../common/PersonThumbnail.jsx";
 import { openVCSocket } from "../../services/vcSocket.js";
@@ -19,6 +20,7 @@ function initialView() {
     peers: {},
     sharingScreen: false,
     chatOpen: false,
+    chatUnread: false,
     socketReady: false,
     videoEnabled: true
   };
@@ -30,9 +32,7 @@ export function VCRoom({ conference, onClose }) {
   const { showError, user } = useApp();
   const selfPersonId = Number(user?.personId || user?.id || 0);
   const [view, setView] = useState(initialView);
-  const [sidePanelWidth, setSidePanelWidth] = useState(28);
   const viewRef = useRef(view);
-  const stageRef = useRef(null);
   const callRef = useRef({
     localStream: null,
     peerConnections: {},
@@ -42,7 +42,9 @@ export function VCRoom({ conference, onClose }) {
     screenStream: null,
     socket: null
   });
-  const localVideoRef = useRef(null);
+  const localPreviewVideoRef = useRef(null);
+  const mainVideoPanelRef = useRef(null);
+  const mainVideoRef = useRef(null);
   const remoteVideoRefs = useRef({});
 
   useEffect(() => {
@@ -54,31 +56,6 @@ export function VCRoom({ conference, onClose }) {
       ...current,
       ...(typeof patch === "function" ? patch(current) : patch)
     }));
-  }
-
-  function startResize(pointerEvent) {
-    const stage = stageRef.current;
-
-    if (!stage) {
-      return;
-    }
-
-    pointerEvent.preventDefault();
-
-    const bounds = stage.getBoundingClientRect();
-
-    function resize(moveEvent) {
-      const nextWidth = ((bounds.right - moveEvent.clientX) / bounds.width) * 100;
-      setSidePanelWidth(Math.min(45, Math.max(20, nextWidth)));
-    }
-
-    function stopResize() {
-      window.removeEventListener("pointermove", resize);
-      window.removeEventListener("pointerup", stopResize);
-    }
-
-    window.addEventListener("pointermove", resize);
-    window.addEventListener("pointerup", stopResize);
   }
 
   function sendSignal(payload) {
@@ -132,9 +109,15 @@ export function VCRoom({ conference, onClose }) {
     }));
   }
 
-  function attachLocalVideo(stream) {
-    if (localVideoRef.current && localVideoRef.current.srcObject !== stream) {
-      localVideoRef.current.srcObject = stream;
+  function attachMainVideo(stream) {
+    if (mainVideoRef.current && mainVideoRef.current.srcObject !== stream) {
+      mainVideoRef.current.srcObject = stream;
+    }
+  }
+
+  function attachLocalPreviewVideo(stream) {
+    if (localPreviewVideoRef.current && localPreviewVideoRef.current.srcObject !== stream) {
+      localPreviewVideoRef.current.srcObject = stream;
     }
   }
 
@@ -382,7 +365,8 @@ export function VCRoom({ conference, onClose }) {
       });
 
       callRef.current.localStream = stream;
-      attachLocalVideo(stream);
+      attachMainVideo(stream);
+      attachLocalPreviewVideo(stream);
       patchView({
         audioEnabled: true,
         localReady: true,
@@ -456,7 +440,7 @@ export function VCRoom({ conference, onClose }) {
     await replaceVideoTrack(cameraTrack, call.localStream);
     call.screenStream?.getTracks().forEach(track => track.stop());
     call.screenStream = null;
-    attachLocalVideo(call.localStream);
+    attachMainVideo(call.localStream);
     patchView({ sharingScreen: false });
     setTimeout(sendMediaState, 0);
   }
@@ -485,7 +469,7 @@ export function VCRoom({ conference, onClose }) {
         }
       };
       await replaceVideoTrack(screenTrack, screenStream);
-      attachLocalVideo(screenStream);
+      attachMainVideo(screenStream);
       patchView({ sharingScreen: true, videoEnabled: true });
       setTimeout(sendMediaState, 0);
     } catch (error) {
@@ -516,19 +500,14 @@ export function VCRoom({ conference, onClose }) {
     callRef.current.screenStream?.getTracks().forEach(track => track.stop());
     callRef.current.localStream = null;
     callRef.current.screenStream = null;
-    attachLocalVideo(null);
+    attachMainVideo(null);
+    attachLocalPreviewVideo(null);
     patchView({
       audioEnabled: true,
       localReady: false,
       sharingScreen: false,
       videoEnabled: true
     });
-  }
-
-  function closeRoom() {
-    hangUp();
-    callRef.current.socket?.close();
-    onClose?.();
   }
 
   useEffect(() => {
@@ -558,73 +537,97 @@ export function VCRoom({ conference, onClose }) {
   }, [conference.id]);
 
   useEffect(() => {
-    attachLocalVideo(view.sharingScreen ? callRef.current.screenStream : callRef.current.localStream);
+    attachMainVideo(view.sharingScreen ? callRef.current.screenStream : callRef.current.localStream);
+    attachLocalPreviewVideo(callRef.current.localStream);
     Object.entries(callRef.current.remoteStreams).forEach(([personId, stream]) => attachRemoteVideo(personId, stream));
   });
 
+  useEffect(() => () => onClose?.(), []);
+
+  async function toggleMainVideoFullscreen() {
+    if (document.fullscreenElement === mainVideoPanelRef.current) {
+      await document.exitFullscreen();
+      return;
+    }
+
+    await mainVideoPanelRef.current?.requestFullscreen();
+  }
+
+  function handleIncomingChatMessage() {
+    if (!viewRef.current.chatOpen) {
+      patchView({ chatUnread: true });
+    }
+  }
+
+  function toggleChat() {
+    patchView(current => ({
+      chatOpen: !current.chatOpen,
+      chatUnread: current.chatOpen ? current.chatUnread : false
+    }));
+  }
+
   const peers = useMemo(() => Object.values(view.peers), [view.peers]);
   const callActive = view.localReady || Object.keys(callRef.current.peerConnections).length > 0;
+  const centerPanelActions = useMemo(() => (
+    <div className="vc-room-toolbar-actions">
+      <span className={"vc-room-status " + (view.socketReady ? "vc-room-status-connected" : "vc-room-status-connecting")}>
+        {view.socketReady ? "Connected" : "Connecting"}
+      </span>
+      <Button color="secondary-line" icon="arrows-fullscreen" size="sm" title="Full screen main video" onClick={toggleMainVideoFullscreen} />
+    </div>
+  ), [view.socketReady]);
+
+  useCenterPanelActions(centerPanelActions);
 
   return (
     <div className="vc-room view-fill">
-      <div className="table-toolbar">
-        <div className="d-flex align-items-center gap-2 min-w-0">
-          <i className="bi bi-camera-video-fill text-primary" aria-hidden="true" />
-          <h2 className="table-title">{conference.title || "Video Conference"}</h2>
-          <span className="text-secondary text-nowrap">{view.socketReady ? "Connected" : "Connecting"}</span>
-        </div>
-        <Button color="secondary-fill" icon="arrow-left-circle" label="Conferences" onClick={closeRoom} />
-      </div>
-
-      <div
-        className="vc-stage"
-        ref={stageRef}
-        style={{ gridTemplateColumns: "minmax(0, 1fr) 7px minmax(220px, " + sidePanelWidth + "%, 520px)" }}
-      >
-        <div className="vc-local">
-          <video ref={localVideoRef} autoPlay muted playsInline />
+      <div className="vc-stage">
+        <div className="vc-local vc-main-video-panel" ref={mainVideoPanelRef}>
+          <video ref={mainVideoRef} autoPlay muted playsInline />
           {!view.localReady ? <div className="vc-placeholder"><i className="bi bi-person-video3" /></div> : null}
-          <span>{view.sharingScreen ? "Screen" : "You"}</span>
         </div>
-        <Button
-          look="vc-splitter"
-          title="Resize panels"
-          aria-label="Resize video and side panel"
-          onPointerDown={startResize}
-        />
-        {view.chatOpen ? (
-          <VCChatPanel conferenceId={conference.id} />
-        ) : (
-          <div className="vc-remote-grid">
-            {peers.length === 0 ? (
-              <div className="vc-waiting">Waiting for participants</div>
-            ) : peers.map(peer => (
-              <div className="vc-remote" key={peer.personId}>
-                <video
-                  ref={node => {
-                    if (node) {
-                      remoteVideoRefs.current[peer.personId] = node;
-                      attachRemoteVideo(peer.personId, callRef.current.remoteStreams[peer.personId]);
-                    }
-                  }}
-                  autoPlay
-                  playsInline
-                />
-                {!peer.hasStream ? (
-                  <div className="vc-placeholder">
-                    <PersonThumbnail name={peer.personName} title={peer.personName} />
-                    <strong>{peer.personName}</strong>
-                  </div>
-                ) : null}
-                <div className="vc-peer-badges">
-                  {peer.audioEnabled === false ? <i className="bi bi-mic-mute" title="Muted" /> : null}
-                  {peer.videoEnabled === false ? <i className="bi bi-camera-video-off" title="Camera off" /> : null}
-                  {peer.screenSharing ? <i className="bi bi-display" title="Screen sharing" /> : null}
-                </div>
-              </div>
-            ))}
+        <aside className={"vc-side-panel" + (view.chatOpen ? " vc-side-panel-chat-open" : "")}>
+          <div className={view.chatOpen ? "vc-chat-slot" : "vc-chat-slot vc-chat-slot-hidden"}>
+            <VCChatPanel conferenceId={conference.id} onIncomingMessage={handleIncomingChatMessage} />
           </div>
-        )}
+          {!view.chatOpen ? (
+            <>
+              <div className="vc-remote-grid">
+                {peers.length === 0 ? (
+                  <div className="vc-waiting">Waiting for participants</div>
+                ) : peers.map(peer => (
+                  <div className="vc-remote" key={peer.personId}>
+                    <video
+                      ref={node => {
+                        if (node) {
+                          remoteVideoRefs.current[peer.personId] = node;
+                          attachRemoteVideo(peer.personId, callRef.current.remoteStreams[peer.personId]);
+                        }
+                      }}
+                      autoPlay
+                      playsInline
+                    />
+                    {!peer.hasStream ? (
+                      <div className="vc-placeholder">
+                        <PersonThumbnail name={peer.personName} title={peer.personName} />
+                        <strong>{peer.personName}</strong>
+                      </div>
+                    ) : null}
+                    <div className="vc-peer-badges">
+                      {peer.audioEnabled === false ? <i className="bi bi-mic-mute" title="Muted" /> : null}
+                      {peer.videoEnabled === false ? <i className="bi bi-camera-video-off" title="Camera off" /> : null}
+                      {peer.screenSharing ? <i className="bi bi-display" title="Screen sharing" /> : null}
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <div className="vc-local vc-local-preview">
+                <video ref={localPreviewVideoRef} autoPlay muted playsInline />
+                {!view.localReady ? <div className="vc-placeholder"><i className="bi bi-person-video3" /></div> : null}
+              </div>
+            </>
+          ) : null}
+        </aside>
       </div>
 
       <div className="vc-controls">
@@ -638,7 +641,7 @@ export function VCRoom({ conference, onClose }) {
         <Button color="secondary-line" disabled={!view.localReady} icon={view.audioEnabled ? "mic" : "mic-mute"} title={view.audioEnabled ? "Mute" : "Unmute"} onClick={toggleAudio} />
         <Button color="secondary-line" disabled={!view.localReady || view.sharingScreen} icon={view.videoEnabled ? "camera-video" : "camera-video-off"} title={view.videoEnabled ? "Turn camera off" : "Turn camera on"} onClick={toggleVideo} />
         <Button color="primary-line" active={view.sharingScreen} disabled={!view.localReady} icon={view.sharingScreen ? "display-fill" : "display"} label={view.sharingScreen ? "Stop Share" : "Share"} onClick={toggleScreenShare} />
-        <Button color="secondary-line" active={view.chatOpen} icon="chat-dots" title={view.chatOpen ? "Hide chat" : "Show chat"} onClick={() => patchView(current => ({ chatOpen: !current.chatOpen }))} />
+        <Button color="secondary-line" active={view.chatOpen || view.chatUnread} icon={view.chatUnread && !view.chatOpen ? "chat-dots-fill" : "chat-dots"} title={view.chatOpen ? "Hide chat" : "Show chat"} onClick={toggleChat} />
         <Button color="danger-line" disabled={!callActive} icon="telephone-x" label="End" onClick={hangUp} />
       </div>
     </div>

@@ -49,6 +49,39 @@ public class VideoConferenceDao {
         return list;
     }
 
+    public List<VideoConference> getUpcomingForPerson(int personId, int limit) {
+        ensureTables();
+        List<VideoConference> list = new ArrayList<>();
+        int safeLimit =
+                limit < 1
+                        ? 5
+                        : Math.min(limit, 20);
+
+        try (Connection con = getConnection(); PreparedStatement ps = con.prepareStatement("""
+                SELECT vc.id, vc.title, vc.scheduled_at, vc.duration_minutes, vc.created_by, c.name AS created_by_name, vc.created_at
+                FROM video_conference vc
+                JOIN vc_participants vcp ON vcp.vc_id = vc.id
+                LEFT JOIN persons c ON c.id = vc.created_by
+                WHERE vcp.person_id = ?
+                  AND DATE_ADD(vc.scheduled_at, INTERVAL vc.duration_minutes MINUTE) >= CURRENT_TIMESTAMP
+                ORDER BY vc.scheduled_at ASC, vc.id ASC
+                LIMIT ?
+                """)) {
+            ps.setInt(1, personId);
+            ps.setInt(2, safeLimit);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    VideoConference vc = readConference(rs, personId);
+                    vc.participants = getParticipants(vc.id);
+                    list.add(vc);
+                }
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        return list;
+    }
+
     public List<VideoConference> getAll(int currentPersonId) {
         ensureTables();
         List<VideoConference> list = new ArrayList<>();

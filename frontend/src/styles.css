@@ -187,7 +187,7 @@ select {
   position: relative;
 }
 
-.notification-bar {
+.status-panel {
   align-items: center;
   display: inline-flex;
   gap: 10px;
@@ -195,6 +195,21 @@ select {
   position: absolute;
   top: 10px;
   transform: translateX(-50%);
+}
+
+/* Ishjyot [2026-06-01] : Header status icons collapse into one mobile status popup. */
+.status-panel-desktop {
+  align-items: center;
+  display: inline-flex;
+  gap: 10px;
+}
+
+.status-panel-mobile {
+  display: none;
+}
+
+.status-panel .btn {
+  position: relative;
 }
 
 .notification-badge {
@@ -213,6 +228,57 @@ select {
   position: absolute;
   right: -7px;
   top: -7px;
+}
+
+.status-badge-info {
+  background: #0d6efd;
+}
+
+.status-popup {
+  background: var(--app-panel-bg, #fffdf2);
+  border: 1px solid var(--app-border, #ead9a7);
+  border-radius: 8px;
+  box-shadow: var(--app-shadow-popup, 0 18px 48px rgba(15, 23, 42, 0.22));
+  color: var(--app-text, #3f2b12);
+  min-width: 260px;
+  padding: 6px;
+  position: absolute;
+  right: 0;
+  top: calc(100% + 10px);
+  z-index: 1210;
+}
+
+.status-popup-header {
+  align-items: center;
+  border-bottom: 1px solid var(--app-border, #ead9a7);
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 4px;
+  padding: 4px 4px 8px;
+}
+
+.status-empty {
+  color: var(--app-muted-text, #756344);
+  padding: 12px 8px;
+  text-align: center;
+}
+
+.upcoming-vc-list {
+  display: grid;
+  gap: 2px;
+  max-height: 280px;
+  overflow: auto;
+}
+
+.upcoming-vc-list .profile-menu-item span {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+
+.upcoming-vc-list .profile-menu-item small {
+  color: var(--app-muted-text, #756344);
+  font-size: 11px;
 }
 
 .avatar {
@@ -1041,10 +1107,35 @@ select {
 .vc-stage {
   display: grid;
   flex: 1 1 0;
-  gap: 0;
-  grid-template-columns: minmax(0, 1fr) 7px minmax(220px, 28%, 520px);
+  gap: 12px;
+  grid-template-columns: minmax(0, 7fr) minmax(260px, 3fr);
   min-height: 0;
   padding: 12px;
+}
+
+.vc-room-toolbar-actions {
+  align-items: center;
+  display: inline-flex;
+  gap: 6px;
+}
+
+.vc-room-status {
+  border: 1px solid var(--app-border, #ead9a7);
+  border-radius: 999px;
+  color: var(--app-muted-text, #756344);
+  font-size: 12px;
+  font-weight: 800;
+  line-height: 1;
+  padding: 5px 9px;
+  white-space: nowrap;
+}
+
+.vc-room-status-connected {
+  color: #198754;
+}
+
+.vc-room-status-connecting {
+  color: #c28200;
 }
 
 .vc-local,
@@ -1070,22 +1161,40 @@ select {
   min-height: 0;
 }
 
-.vc-local span {
-  background: rgba(0, 0, 0, 0.54);
-  border-radius: 6px;
-  bottom: 8px;
-  color: #ffffff;
-  font-size: 12px;
-  font-weight: 700;
-  left: 8px;
-  padding: 4px 8px;
-  position: absolute;
+.vc-main-video-panel:fullscreen {
+  background: #111827;
+  border-radius: 0;
+}
+
+.vc-side-panel {
+  display: grid;
+  gap: 12px;
+  grid-template-rows: minmax(0, 1fr) minmax(132px, 29%);
+  min-height: 0;
+}
+
+.vc-side-panel-chat-open {
+  grid-template-rows: minmax(0, 1fr);
+}
+
+.vc-local-preview {
+  min-height: 132px;
+}
+
+.vc-chat-slot {
+  display: grid;
+  height: 100%;
+  min-height: 0;
+}
+
+.vc-chat-slot-hidden {
+  display: none;
 }
 
 .vc-remote-grid {
   display: grid;
   gap: 12px;
-  grid-auto-rows: minmax(170px, 220px);
+  grid-auto-rows: minmax(120px, 1fr);
   grid-template-columns: minmax(0, 1fr);
   min-height: 0;
   overflow: auto;
@@ -1165,6 +1274,7 @@ select {
   border-radius: 8px;
   display: grid;
   grid-template-rows: auto minmax(0, 1fr) auto auto;
+  height: 100%;
   min-height: 0;
   overflow: hidden;
 }
@@ -1833,8 +1943,37 @@ body.theme-dark .search-highlight {
     display: inline-flex;
   }
 
-  .notification-bar {
+  .status-panel {
+    left: auto;
+    position: relative;
+    top: auto;
+    transform: none;
+  }
+
+  .status-panel-desktop {
     display: none;
+  }
+
+  .status-panel-mobile {
+    display: inline-flex;
+  }
+
+  .status-popup {
+    right: -58px;
+  }
+
+  .status-popup-mobile {
+    min-width: 220px;
+  }
+
+  .status-popup-mobile .profile-menu-item {
+    align-items: center;
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+  }
+
+  .status-popup-mobile .profile-menu-item span {
+    min-width: 0;
   }
 }
 

@@ -94,7 +94,7 @@ async function captureScreen() {
   }
 }
 
-export function VCChatPanel({ conferenceId }) {
+export function VCChatPanel({ conferenceId, onIncomingMessage }) {
   useRenderDebug("VCChatPanel");
 
   const { settings, showError, user } = useApp();
@@ -127,6 +127,7 @@ export function VCChatPanel({ conferenceId }) {
 
         if (data.type === "message" && data.message) {
           setMessages(current => current.concat(data.message));
+          onIncomingMessage?.(data.message);
           return;
         }
 
