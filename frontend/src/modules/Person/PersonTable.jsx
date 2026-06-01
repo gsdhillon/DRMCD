@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { useRenderDebug } from "../../common/useRenderDebug.js";
-import { Button } from "../../common/Button.jsx";
+import { Button } from "../../components/Button.jsx";
 import { DataTable } from "../../common/DataTable.jsx";
 import { PersonThumbnail } from "../../common/PersonThumbnail.jsx";
 

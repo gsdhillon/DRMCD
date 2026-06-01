@@ -1,6 +1,6 @@
 import { Photo } from "../../common/Photo.jsx";
 import { useRenderDebug } from "../../common/useRenderDebug.js";
-import { useApp } from "../../state/AppContext.jsx";
+import { useApp } from "../../app/AppContext.jsx";
 
 export function Dashboard() {
   useRenderDebug("Dashboard");

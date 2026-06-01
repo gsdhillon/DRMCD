@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
-import { Form } from "../../common/form/Form.jsx";
-import { FormDialog } from "../../common/form/FormDialog.jsx";
-import { Input } from "../../common/form/Input.jsx";
-import { Select } from "../../common/form/Select.jsx";
+import { Form } from "../../components/Form.jsx";
+import { FormDialog } from "../../components/FormDialog.jsx";
+import { Input } from "../../components/Input.jsx";
+import { Select } from "../../components/Select.jsx";
 import { Photo } from "../../common/Photo.jsx";
 import { useRenderDebug } from "../../common/useRenderDebug.js";
-import { useApp } from "../../state/AppContext.jsx";
+import { useApp } from "../../app/AppContext.jsx";
 
 const EMPTY_PERSON = {
   name: "",

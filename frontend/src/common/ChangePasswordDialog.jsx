@@ -1,10 +1,10 @@
 import { useState } from "react";
-import { Form } from "./form/Form.jsx";
-import { FormDialog } from "./form/FormDialog.jsx";
-import { Input } from "./form/Input.jsx";
+import { Form } from "../components/Form.jsx";
+import { FormDialog } from "../components/FormDialog.jsx";
+import { Input } from "../components/Input.jsx";
 import { useRenderDebug } from "./useRenderDebug.js";
 import { changePassword } from "../services/auth.js";
-import { useApp } from "../state/AppContext.jsx";
+import { useApp } from "../app/AppContext.jsx";
 
 export function ChangePasswordDialog({ onClose }) {
   useRenderDebug("ChangePasswordDialog");

@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { Button } from "../../common/Button.jsx";
+import { Button } from "../../components/Button.jsx";
 import { useRenderDebug } from "../../common/useRenderDebug.js";
 import { getVideoConferenceHelp } from "../../services/vcService.js";
-import { useApp } from "../../state/AppContext.jsx";
+import { useApp } from "../../app/AppContext.jsx";
 
 export function useVCHelpDialog() {
   const { showError } = useApp();

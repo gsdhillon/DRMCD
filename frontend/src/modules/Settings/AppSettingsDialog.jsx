@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
-import { CheckBox } from "../../common/form/CheckBox.jsx";
-import { Form } from "../../common/form/Form.jsx";
-import { FormDialog } from "../../common/form/FormDialog.jsx";
-import { Input } from "../../common/form/Input.jsx";
+import { CheckBox } from "../../components/CheckBox.jsx";
+import { Form } from "../../components/Form.jsx";
+import { FormDialog } from "../../components/FormDialog.jsx";
+import { Input } from "../../components/Input.jsx";
 import { useRenderDebug } from "../../common/useRenderDebug.js";
 import { updateSettings } from "../../services/settingsService.js";
-import { useApp } from "../../state/AppContext.jsx";
+import { useApp } from "../../app/AppContext.jsx";
 
 const defaults = {
   chatFileMaxSize: 1048576,

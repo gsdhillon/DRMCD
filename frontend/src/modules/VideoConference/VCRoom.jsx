@@ -1,10 +1,10 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Button } from "../../common/Button.jsx";
-import { useCenterPanelActions } from "../../common/CenterPanel.jsx";
+import { Button } from "../../components/Button.jsx";
+import { useCenterPanelActions } from "../../components/CenterPanel.jsx";
 import { useRenderDebug } from "../../common/useRenderDebug.js";
 import { PersonThumbnail } from "../../common/PersonThumbnail.jsx";
 import { openVCSocket } from "../../services/vcSocket.js";
-import { useApp } from "../../state/AppContext.jsx";
+import { useApp } from "../../app/AppContext.jsx";
 import { VCChatPanel } from "./VCChatPanel.jsx";
 
 const peerConfig = {

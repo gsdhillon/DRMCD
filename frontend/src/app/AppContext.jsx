@@ -3,7 +3,7 @@ import { getAuth, login as loginRequest, logout as logoutRequest } from "../serv
 import { getPerson } from "../services/personService.js";
 import { getSettings } from "../services/settingsService.js";
 import { socketUrl } from "../services/endpoint.js";
-import { resolveReactTheme } from "../theme/reactTheme.js";
+import { appAssets } from "./AppConfig.js";
 
 const AppContext = createContext(null);
 
@@ -28,8 +28,6 @@ export function AppProvider({ children }) {
   const [messages, setMessages] = useState([]);
   const [settings, setSettings] = useState({});
   const [themeMode, setThemeModeState] = useState(initialThemeMode);
-
-  const theme = useMemo(() => resolveReactTheme(themeMode), [themeMode]);
 
   const setThemeMode = useCallback(mode => {
     const nextMode = mode === "dark" ? "dark" : "light";
@@ -170,9 +168,12 @@ export function AppProvider({ children }) {
   }, [auth?.personId]);
 
   useEffect(() => {
+    const chromeBg = themeMode === "dark" ? appAssets.darkBg : appAssets.lightBg;
+
     document.body.classList.toggle("theme-dark", themeMode === "dark");
     document.body.classList.toggle("theme-light", themeMode !== "dark");
     document.body.dataset.bsTheme = themeMode === "dark" ? "dark" : "light";
+    document.body.style.setProperty("--app-chrome-bg-layer", `url("${chromeBg}")`);
   }, [themeMode]);
 
   const user = useMemo(() => ({
@@ -199,10 +200,9 @@ export function AppProvider({ children }) {
     showError,
     showInfo,
     settings,
-    theme,
     themeMode,
     user
-  }), [auth, currentPerson, hideMessage, login, loginBusy, loginError, logout, messages, refreshSettings, setThemeMode, showAlert, showError, showInfo, settings, theme, themeMode, user]);
+  }), [auth, currentPerson, hideMessage, login, loginBusy, loginError, logout, messages, refreshSettings, setThemeMode, showAlert, showError, showInfo, settings, themeMode, user]);
 
   return (
     <AppContext.Provider value={value}>

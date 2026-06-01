@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { Route, Routes } from "react-router-dom";
 import { Dashboard } from "../modules/Dashboard/Dashboard.jsx";
-import { Button } from "../common/Button.jsx";
-import { CenterPanel } from "../common/CenterPanel.jsx";
+import { Button } from "../components/Button.jsx";
+import { CenterPanel } from "../components/CenterPanel.jsx";
 import { GroupList } from "../modules/Group/GroupList.jsx";
 import { PersonList } from "../modules/Person/PersonList.jsx";
 import { RoleList } from "../modules/Role/RoleList.jsx";
@@ -12,17 +12,15 @@ import { Footer } from "./Footer.jsx";
 import { Header } from "./Header.jsx";
 import { SideMenu } from "./SideMenu.jsx";
 import { useRenderDebug } from "../common/useRenderDebug.js";
-import { useApp } from "../state/AppContext.jsx";
 
 export function AppShell() {
   useRenderDebug("AppShell");
 
-  const { theme } = useApp();
   const [menuOpen, setMenuOpen] = useState(false);
   const [menuCollapsed, setMenuCollapsed] = useState(false);
 
   return (
-    <div className="app-shell" style={theme.cssVars}>
+    <div className="app-shell">
       <AppMessages />
       <Header menuOpen={menuOpen} onMenuToggle={() => setMenuOpen(open => !open)} />
       <div className={"app-body" + (menuCollapsed ? " app-menu-collapsed" : "")}>

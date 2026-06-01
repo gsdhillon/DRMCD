@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useRenderDebug } from "../../common/useRenderDebug.js";
 import { createPerson, deletePerson, getPerson, getPersons, updatePerson } from "../../services/personService.js";
 import { getRoles } from "../../services/roleService.js";
-import { useApp } from "../../state/AppContext.jsx";
+import { useApp } from "../../app/AppContext.jsx";
 import { PersonDialog } from "./PersonDialog.jsx";
 import { PersonTable } from "./PersonTable.jsx";
 

@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
-import { Button } from "./Button.jsx";
-import { useCenterPanelActions } from "./CenterPanel.jsx";
+import { Button } from "../components/Button.jsx";
+import { useCenterPanelActions } from "../components/CenterPanel.jsx";
 import { useRenderDebug } from "./useRenderDebug.js";
 
 function sortIcon(sortField, sortDirection, field) {

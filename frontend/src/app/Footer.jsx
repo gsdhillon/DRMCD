@@ -1,6 +1,6 @@
-import { copyrightText } from "./AppText.js";
-import { Button } from "../common/Button.jsx";
-import { useApp } from "../state/AppContext.jsx";
+import { appAssets, copyrightText } from "./AppConfig.js";
+import { Button } from "../components/Button.jsx";
+import { useApp } from "./AppContext.jsx";
 import { useRenderDebug } from "../common/useRenderDebug.js";
 
 function formatAppVersion(appVersion) {
@@ -16,7 +16,7 @@ function formatAppVersion(appVersion) {
 export function Footer({ footerText = copyrightText }) {
   useRenderDebug("Footer");
 
-  const { setThemeMode, settings, theme, themeMode } = useApp();
+  const { setThemeMode, settings, themeMode } = useApp();
   const darkMode = themeMode === "dark";
   const appVersion = formatAppVersion(settings?.appVersion);
   const clientDevMode = settings?.clientInDevMode === true;
@@ -46,7 +46,7 @@ export function Footer({ footerText = copyrightText }) {
           aria-label={clientDevModeLabel}
           title={clientDevModeLabel}
         >
-          <img className="app-framework-logo" src={theme.assets.footerImage} alt="React JSX" />
+          <img className="app-framework-logo" src={appAssets.footerImage} alt="React JSX" />
           {clientDevMode ? <span className="app-framework-status-badge">ON</span> : null}
         </span>
       </div>

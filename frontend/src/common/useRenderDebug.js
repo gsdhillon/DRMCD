@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useApp } from "../state/AppContext.jsx";
+import { useApp } from "../app/AppContext.jsx";
 
 export function useRenderDebug(componentName) {
   const { settings } = useApp();

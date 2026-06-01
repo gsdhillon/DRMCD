@@ -1,16 +1,16 @@
 import { useState } from "react";
-import { copyrightText, title } from "./AppText.js";
-import { useApp } from "../state/AppContext.jsx";
+import { appAssets, copyrightText, title } from "./AppConfig.js";
+import { useApp } from "./AppContext.jsx";
 import { AppMessages } from "./AppMessages.jsx";
 import { Footer } from "./Footer.jsx";
-import { Form } from "../common/form/Form.jsx";
-import { Input } from "../common/form/Input.jsx";
+import { Form } from "../components/Form.jsx";
+import { Input } from "../components/Input.jsx";
 import { useRenderDebug } from "../common/useRenderDebug.js";
 
 export function LoginView() {
   useRenderDebug("LoginView");
 
-  const { login, loginBusy, theme } = useApp();
+  const { login, loginBusy } = useApp();
   const [personId, setPersonId] = useState("");
   const [password, setPassword] = useState("");
 
@@ -21,7 +21,7 @@ export function LoginView() {
   }
 
   return (
-    <div className="login-shell" style={theme.cssVars}>
+    <div className="login-shell">
       <AppMessages />
       <main className="login-content">
         <Form
@@ -33,7 +33,7 @@ export function LoginView() {
           submitFull
         >
           <div className="login-brand">
-            <img className="app-logo login-logo" src={theme.assets.logo} alt={title} />
+            <img className="app-logo login-logo" src={appAssets.appLogo} alt={title} />
             <div>
               <h1>{title}</h1>
             </div>
@@ -42,6 +42,7 @@ export function LoginView() {
             label="Person Id"
             editable={!loginBusy}
             id="login-person-id"
+            placeholder=""
             type="number"
             value={personId}
             onChange={setPersonId}
@@ -50,6 +51,7 @@ export function LoginView() {
             label="Password"
             editable={!loginBusy}
             id="login-password"
+            placeholder=""
             type="password"
             value={password}
             onChange={setPassword}

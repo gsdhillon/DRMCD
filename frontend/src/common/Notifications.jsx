@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Button } from "./Button.jsx";
+import { Button } from "../components/Button.jsx";
 import { useRenderDebug } from "./useRenderDebug.js";
 import { deleteAllNotifications, deleteNotification, getNotifications } from "../services/notificationService.js";
 

@@ -1,5 +1,5 @@
-import { BrowserBlocker, noBrowserSaveFormProps } from "../BrowserBlocker.jsx";
-import { Button } from "../Button.jsx";
+import { BrowserBlocker, noBrowserSaveFormProps } from "../common/BrowserBlocker.jsx";
+import { Button } from "./Button.jsx";
 
 export function Form({
   animationClass = "",
@@ -59,12 +59,23 @@ export function Form({
           </div>
 
           <div className="d-flex flex-wrap align-items-center gap-2 mt-1">
-            {editable ? (
-              <Button color={submitColor} full={submitFull} disabled={busy} icon={submitIcon} label={submitLabel} type="submit" />
-            ) : null}
-            {onClose ? (
-              <Button color="secondary-line" disabled={busy} icon="x-circle" label={closeLabel} onClick={onClose} />
-            ) : null}
+              <Button
+                  render={editable}
+                  color={submitColor}
+                  full={submitFull}
+                  disabled={busy}
+                  icon={submitIcon}
+                  label={submitLabel}
+                  type="submit"
+              />
+              <Button
+                  render={Boolean(onClose)}
+                  color="secondary-line"
+                  disabled={busy}
+                  icon="x-circle"
+                  label={closeLabel}
+                  onClick={onClose}
+              />
           </div>
         </div>
 

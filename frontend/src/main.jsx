@@ -1,17 +1,23 @@
 import React from "react";
 import { createRoot } from "react-dom/client";
 import { HashRouter } from "react-router-dom";
-import { App } from "./app/App.jsx";
-import { AppProvider } from "./state/AppContext.jsx";
-import "./css/bootstrap/bootstrap.min.css";
-import "./css/bootstrap-icons/bootstrap-icons.min.css";
-import "./styles.css";
+import { AppShell } from "./app/AppShell.jsx";
+import { LoginView } from "./app/LoginView.jsx";
+import { AppProvider, useApp } from "./app/AppContext.jsx";
+import "./styles/bootstrap.min.css";
+import "./styles/bootstrap-icons.min.css";
+import "./styles/styles.css";
+
+function RootView() {
+  const { auth } = useApp();
+  return auth ? <AppShell /> : <LoginView />;
+}
 
 createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <HashRouter>
       <AppProvider>
-        <App />
+        <RootView />
       </AppProvider>
     </HashRouter>
   </React.StrictMode>

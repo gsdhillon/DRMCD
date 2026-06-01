@@ -1,5 +1,5 @@
 import { NavLink } from "react-router-dom";
-import { Button } from "../common/Button.jsx";
+import { Button } from "../components/Button.jsx";
 import { useRenderDebug } from "../common/useRenderDebug.js";
 
 export function SideMenu({ collapsed, onCollapseToggle, open }) {

@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useRenderDebug } from "../../common/useRenderDebug.js";
-import { Button } from "../../common/Button.jsx";
-import { useCenterPanel } from "../../common/CenterPanel.jsx";
+import { Button } from "../../components/Button.jsx";
+import { useCenterPanel } from "../../components/CenterPanel.jsx";
 import { DataTable } from "../../common/DataTable.jsx";
 import { getPersons } from "../../services/personService.js";
 import {
@@ -10,7 +10,7 @@ import {
   getVideoConferences,
   updateVideoConference
 } from "../../services/vcService.js";
-import { useApp } from "../../state/AppContext.jsx";
+import { useApp } from "../../app/AppContext.jsx";
 import { PersonList } from "../Person/PersonList.jsx";
 import { newVideoConference, VCEditorPage } from "./VCEditorPage.jsx";
 import { VCHelpDialog, useVCHelpDialog } from "./VCHelpDialog.jsx";

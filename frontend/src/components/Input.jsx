@@ -1,5 +1,5 @@
-import { noAutofillInputProps } from "../BrowserBlocker.jsx";
-import { valueOrEmpty } from "../Helpers.js";
+import { noAutofillInputProps } from "../common/BrowserBlocker.jsx";
+import { valueOrEmpty } from "../common/Helpers.js";
 
 export function Input({
   label,

@@ -1,11 +1,11 @@
 import { useEffect, useMemo, useState } from "react";
-import { Button } from "../../common/Button.jsx";
-import { useCenterPanelActions } from "../../common/CenterPanel.jsx";
-import { Input } from "../../common/form/Input.jsx";
+import { Button } from "../../components/Button.jsx";
+import { useCenterPanelActions } from "../../components/CenterPanel.jsx";
+import { Input } from "../../components/Input.jsx";
 import { useRenderDebug } from "../../common/useRenderDebug.js";
 import { getPerson } from "../../services/personService.js";
 import { getRoles } from "../../services/roleService.js";
-import { useApp } from "../../state/AppContext.jsx";
+import { useApp } from "../../app/AppContext.jsx";
 import { PersonDialog } from "../Person/PersonDialog.jsx";
 import { PersonListSelector } from "../Person/PersonListSelector.jsx";
 import { VCHelpDialog, useVCHelpDialog } from "./VCHelpDialog.jsx";

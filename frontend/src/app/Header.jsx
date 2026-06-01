@@ -1,18 +1,18 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Avatar } from "../common/Avatar.jsx";
-import { Button } from "../common/Button.jsx";
+import { Button } from "../components/Button.jsx";
 import { ChangePasswordDialog } from "../common/ChangePasswordDialog.jsx";
-import { subTitle, title } from "./AppText.js";
+import { appAssets, subTitle, title } from "./AppConfig.js";
 import { AppSettingsDialog } from "../modules/Settings/AppSettingsDialog.jsx";
 import { StatusPanel } from "./StatusPanel.jsx";
-import { useApp } from "../state/AppContext.jsx";
+import { useApp } from "./AppContext.jsx";
 import { useRenderDebug } from "../common/useRenderDebug.js";
 
 export function Header({ menuOpen, onMenuToggle }) {
   useRenderDebug("Header");
 
-  const { logout, theme, user } = useApp();
+  const { logout, user } = useApp();
   const navigate = useNavigate();
   const [passwordDialogOpen, setPasswordDialogOpen] = useState(false);
   const [profileMenuOpen, setProfileMenuOpen] = useState(false);
@@ -56,7 +56,7 @@ export function Header({ menuOpen, onMenuToggle }) {
   return (
     <header className="app-header">
       <div className="app-brand">
-        <img className="app-logo" src={theme.assets.appLogo} alt={title} />
+        <img className="app-logo" src={appAssets.appLogo} alt={title} />
         <div>
           <h1>{title}</h1>
           <p>{subTitle}</p>

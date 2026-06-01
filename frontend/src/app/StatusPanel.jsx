@@ -1,11 +1,11 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Button } from "../common/Button.jsx";
+import { Button } from "../components/Button.jsx";
 import { Notifications } from "../common/Notifications.jsx";
 import { getNotifications } from "../services/notificationService.js";
 import { openNotificationSocket } from "../services/notificationSocket.js";
 import { getUpcomingVideoConferences } from "../services/vcService.js";
-import { useApp } from "../state/AppContext.jsx";
+import { useApp } from "./AppContext.jsx";
 
 function countLabel(count) {
   return count > 99 ? "99+" : String(count);

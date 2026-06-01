@@ -1,5 +1,5 @@
-import { Button } from "../Button.jsx";
-import { useApp } from "../../state/AppContext.jsx";
+import { Button } from "./Button.jsx";
+import { useApp } from "../app/AppContext.jsx";
 
 export function CheckBox({
   editable = true,

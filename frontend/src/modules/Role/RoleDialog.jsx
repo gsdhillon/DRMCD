@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { Form } from "../../common/form/Form.jsx";
-import { FormDialog } from "../../common/form/FormDialog.jsx";
-import { Input } from "../../common/form/Input.jsx";
+import { Form } from "../../components/Form.jsx";
+import { FormDialog } from "../../components/FormDialog.jsx";
+import { Input } from "../../components/Input.jsx";
 import { useRenderDebug } from "../../common/useRenderDebug.js";
 
 const emptyRole = {

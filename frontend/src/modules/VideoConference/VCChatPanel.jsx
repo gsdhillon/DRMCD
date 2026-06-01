@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from "react";
-import { Button } from "../../common/Button.jsx";
+import { Button } from "../../components/Button.jsx";
 import { useRenderDebug } from "../../common/useRenderDebug.js";
 import { openVCChatSocket } from "../../services/vcChatSocket.js";
-import { useApp } from "../../state/AppContext.jsx";
+import { useApp } from "../../app/AppContext.jsx";
 
 function dataUrl(message) {
   if (!message.fileData) {

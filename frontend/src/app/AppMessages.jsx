@@ -1,6 +1,6 @@
 import { useEffect } from "react";
-import { Button } from "../common/Button.jsx";
-import { useApp } from "../state/AppContext.jsx";
+import { Button } from "../components/Button.jsx";
+import { useApp } from "./AppContext.jsx";
 
 function messageIcon(type) {
   if (type === "error") {

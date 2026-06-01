@@ -1,5 +1,5 @@
 import { photoSrc } from "./Helpers.js";
-import { Button } from "./Button.jsx";
+import { Button } from "../components/Button.jsx";
 import { useRenderDebug } from "./useRenderDebug.js";
 
 function roleBorderColor(user) {

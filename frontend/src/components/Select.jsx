@@ -1,4 +1,4 @@
-import { valueOrEmpty } from "../Helpers.js";
+import { valueOrEmpty } from "../common/Helpers.js";
 
 function optionColor(color) {
   const normalizedColor = String(color || "").replace(/^#/, "");
